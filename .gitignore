@@ -1,12 +1,13 @@
 # Build outputs
 **/bin/
 **/obj/
+# For skeleton phase we commit a minimal runnable set in dist/ (exe + companions)
+# Later we can decide to .gitignore dist/ and rely purely on build.ps1
 dist/*.pdb
-dist/*.deps.json
-dist/*.runtimeconfig.json
-dist/*.dll
-# Keep the exe for initial placeholder convenience (can be rebuilt)
-# We ship dist/Velarium.exe in the skeleton so the project is runnable right after git clone.
+# dist/Velarium.deps.json
+# dist/Velarium.dll
+# dist/Velarium.runtimeconfig.json
+# Keep only pdb ignored for cleanliness. The others + exe make the placeholder runnable post-clone.
 
 # IDE / editor
 .vs/
