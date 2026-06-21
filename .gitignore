@@ -9,6 +9,9 @@ dist/*.pdb
 # dist/Velarium.runtimeconfig.json
 # Keep only pdb ignored for cleanliness. The others + exe make the placeholder runnable post-clone.
 
+# Inspiration / reference material — never commit (screenshots, PDFs, mood boards, etc.)
+INSP/
+
 # IDE / editor
 .vs/
 .vscode/
