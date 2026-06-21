@@ -1,0 +1,16 @@
+# Normalize line endings
+* text=auto
+
+# Shell / powershell keep native or LF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+# Source code - let git handle
+*.cs text
+*.md text
+*.json text
+
+# Binary
+*.exe binary
+*.dll binary
+*.pdb binary

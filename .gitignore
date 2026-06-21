@@ -1,0 +1,35 @@
+# Build outputs
+**/bin/
+**/obj/
+dist/*.pdb
+dist/*.deps.json
+dist/*.runtimeconfig.json
+dist/*.dll
+# Keep the exe for initial placeholder convenience (can be rebuilt)
+# We ship dist/Velarium.exe in the skeleton so the project is runnable right after git clone.
+
+# IDE / editor
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs / temp
+*.log
+*.tmp
+Session/
+DUMP/
+
+# Godot or other if added later (uncomment if used)
+# .import/
+# export.cfg
+# export_presets.cfg
+
+# Python / node if used
+__pycache__/
+*.py[cod]
+node_modules/
