@@ -14,14 +14,14 @@ This document will evolve. For the skeleton we only list major tracks.
 ## Current High-Level Backlog (all pending post-skeleton)
 
 ### Foundation & Tooling
-- [ ] Finalize language/engine choice (currently C# console placeholder)
+- [x] Finalize language/engine choice (C# console — staying for now)
 - [ ] Core project structure / data loading
 - [ ] Persistence (save/load)
 - [ ] Logging / debug tools
 - [ ] Build & CI pipeline
 
 ### Game Systems
-- [ ] Gladiator model + attributes
+- [x] Gladiator model + attributes
 - [ ] Ludus / facilities model
 - [ ] Economy & market
 - [ ] Event / calendar system
@@ -29,8 +29,8 @@ This document will evolve. For the skeleton we only list major tracks.
 - [ ] Reputation / favor / politics meters
 
 ### Presentation
-- [ ] Main menu flow
-- [ ] Roster screen
+- [-] Main menu flow
+- [x] Roster screen (console table)
 - [ ] Show planning screen
 - [ ] Event log / narrative text
 - [ ] Later: graphical / Godot / custom engine?

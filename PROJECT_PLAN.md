@@ -21,7 +21,7 @@ Core loops (to be detailed later):
 - [x] Set up organizer agent + subagent placeholders
 - [x] Produce a runnable exe placeholder
 - [x] README + build/run scripts
-- [ ] Commit initial state (upcoming)
+- [x] Commit initial state
 
 ## High-Level Phases (Outline Only)
 1. **Foundation** — Project setup, tooling, core data models, basic CLI or engine loop

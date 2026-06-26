@@ -1,25 +1,23 @@
 # Velarium Task Board
 
-**Last Updated:** Skeleton initialization (2026-06-21)
+**Last Updated:** M1 roster complete (2026-06-26)
 
 This is the live working board. Organizer updates it frequently.
 
-## Now (Skeleton / Setup)
-- [x] Initialize directory + git
-- [x] Create folder structure
-- [x] Project docs (plan, schedule, cycle)
-- [x] Agent roles (organizer + subagents)
-- [x] Runnable exe (C# placeholder)
-- [x] Build / run scripts
-- [ ] Commit skeleton + push
-- [ ] Human + Organizer decide first real work area
+## Now (M1 — Gladiator Roster)
+- [x] Gladiator model (type, stats, condition, victories) — `src/Velarium/Models/`
+- [x] LudusRoster with 3 starter fighters — `src/Velarium/Game/LudusRoster.cs`
+- [x] Menu option [2] View Ludus Roster
+- [x] Build + run verified
+- [ ] Commit M1 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
-- Foundation: decide final runtime/engine (keep console? move to Godot?)
-- Systems: basic Gladiator data model + roster
-- UI: improve the text menu into something more structured
+- Systems: recruit / train stubs on roster
+- Systems: simple denarii / economy counter
+- Systems: wire arena stub to pick a roster fighter
+- Foundation: persistence (save/load roster)
+- UI: structured sub-menus for ludus management
 - Content: first event table or starting scenario
-- Meta: improve organizer/subagent workflow with a real example task
 
 ## Backlog Areas
 See TASK_SCHEDULE.md for the full categorized list.
