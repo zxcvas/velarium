@@ -1,20 +1,20 @@
 # Velarium Task Board
 
-**Last Updated:** M2 ludus management complete (2026-06-26)
+**Last Updated:** M3 save/load complete (2026-06-26)
 
 This is the live working board. Organizer updates it frequently.
 
-## Now (M2 — Ludus Management)
-- [x] GameState with denarii economy — `src/Velarium/Game/GameState.cs`
-- [x] Manage Ludus sub-menu (roster, recruit, train)
-- [x] Arena wired to roster fighter picker
-- [x] Build + run verified
-- [x] Commit M2 + push to origin
+## Now (M3 — Save / Load)
+- [x] JSON save format + GameSaveService — `saves/velarium_save.json`
+- [x] Startup New/Load prompt when save exists
+- [x] Main menu Save [5] / Load [6]
+- [x] Build + round-trip verified
+- [ ] Commit M3 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
-- Foundation: save/load game state
 - Systems: injury/death after arena stub
 - Systems: ludus upkeep / facility costs
+- Foundation: multiple save slots or autosave
 - UI: polish sub-menus and status summaries
 - Content: first event table or starting scenario
 

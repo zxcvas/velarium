@@ -16,7 +16,7 @@ This document will evolve. For the skeleton we only list major tracks.
 ### Foundation & Tooling
 - [x] Finalize language/engine choice (C# console — staying for now)
 - [ ] Core project structure / data loading
-- [ ] Persistence (save/load)
+- [x] Persistence (save/load)
 - [ ] Logging / debug tools
 - [ ] Build & CI pipeline
 
