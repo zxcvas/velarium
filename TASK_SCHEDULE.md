@@ -23,9 +23,9 @@ This document will evolve. For the skeleton we only list major tracks.
 ### Game Systems
 - [x] Gladiator model + attributes
 - [ ] Ludus / facilities model
-- [ ] Economy & market
+- [-] Economy & market (denarii counter + arena payout stub)
 - [ ] Event / calendar system
-- [ ] Combat / spectacle resolution (multiple styles)
+- [-] Combat / spectacle resolution (arena picker + stub victory)
 - [ ] Reputation / favor / politics meters
 
 ### Presentation

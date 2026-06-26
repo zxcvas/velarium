@@ -4,9 +4,9 @@ namespace Velarium.Models
     {
         public string Name { get; init; } = "";
         public GladiatorType Type { get; init; }
-        public int Strength { get; init; }
-        public int Agility { get; init; }
-        public int Endurance { get; init; }
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Endurance { get; set; }
         public GladiatorCondition Condition { get; set; } = GladiatorCondition.Healthy;
         public int Victories { get; set; }
 

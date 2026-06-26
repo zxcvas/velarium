@@ -1,22 +1,21 @@
 # Velarium Task Board
 
-**Last Updated:** M1 roster complete (2026-06-26)
+**Last Updated:** M2 ludus management complete (2026-06-26)
 
 This is the live working board. Organizer updates it frequently.
 
-## Now (M1 — Gladiator Roster)
-- [x] Gladiator model (type, stats, condition, victories) — `src/Velarium/Models/`
-- [x] LudusRoster with 3 starter fighters — `src/Velarium/Game/LudusRoster.cs`
-- [x] Menu option [2] View Ludus Roster
+## Now (M2 — Ludus Management)
+- [x] GameState with denarii economy — `src/Velarium/Game/GameState.cs`
+- [x] Manage Ludus sub-menu (roster, recruit, train)
+- [x] Arena wired to roster fighter picker
 - [x] Build + run verified
-- [x] Commit M1 + push to origin
+- [ ] Commit M2 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
-- Systems: recruit / train stubs on roster
-- Systems: simple denarii / economy counter
-- Systems: wire arena stub to pick a roster fighter
-- Foundation: persistence (save/load roster)
-- UI: structured sub-menus for ludus management
+- Foundation: save/load game state
+- Systems: injury/death after arena stub
+- Systems: ludus upkeep / facility costs
+- UI: polish sub-menus and status summaries
 - Content: first event table or starting scenario
 
 ## Backlog Areas
