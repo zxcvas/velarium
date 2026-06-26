@@ -9,7 +9,7 @@ This is the live working board. Organizer updates it frequently.
 - [x] Manage Ludus sub-menu (roster, recruit, train)
 - [x] Arena wired to roster fighter picker
 - [x] Build + run verified
-- [ ] Commit M2 + push to origin
+- [x] Commit M2 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
 - Foundation: save/load game state
