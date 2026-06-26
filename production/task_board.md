@@ -9,7 +9,7 @@ This is the live working board. Organizer updates it frequently.
 - [x] LudusRoster with 3 starter fighters — `src/Velarium/Game/LudusRoster.cs`
 - [x] Menu option [2] View Ludus Roster
 - [x] Build + run verified
-- [ ] Commit M1 + push to origin
+- [x] Commit M1 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
 - Systems: recruit / train stubs on roster
