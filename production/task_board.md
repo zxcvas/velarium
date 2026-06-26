@@ -9,7 +9,7 @@ This is the live working board. Organizer updates it frequently.
 - [x] Startup New/Load prompt when save exists
 - [x] Main menu Save [5] / Load [6]
 - [x] Build + round-trip verified
-- [ ] Commit M3 + push to origin
+- [x] Commit M3 + push to origin
 
 ## Next Up (Candidates - do not start without dispatch)
 - Systems: injury/death after arena stub
