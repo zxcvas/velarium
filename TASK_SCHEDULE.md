@@ -32,8 +32,8 @@ This document will evolve. For the skeleton we only list major tracks.
 - [ ] Hosted munus with more than one pair
 
 ### Presentation
-- [ ] Main menu flow
-- [ ] Roster screen
+- [-] Main menu flow
+- [x] Roster screen (console table)
 - [ ] Show planning screen
 - [ ] Event log / narrative text
 - [ ] Later: graphical / Godot / custom engine?

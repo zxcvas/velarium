@@ -32,6 +32,9 @@ amphiteater_save.json
 Session/
 DUMP/
 
+# Local game saves
+saves/
+
 # Godot or other if added later (uncomment if used)
 # .import/
 # export.cfg

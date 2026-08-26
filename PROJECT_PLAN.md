@@ -22,6 +22,7 @@ Core loops:
 - [x] Set up organizer agent + subagent placeholders
 - [x] Runnable exe
 - [x] README + build/run scripts
+- [x] Commit initial state
 
 ### Ludus slice (M1) — current
 - [x] Console engine (Godot deferred)

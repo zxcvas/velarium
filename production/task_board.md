@@ -18,6 +18,7 @@
 
 ## Done this cycle
 - M0 skeleton (2026-06-21)
+- GitHub June path: roster / ludus stubs / save-load (M1–M3, 2026-06-26) — superseded by the playable slice
 - M1 ludus slice (2026-08-26)
 
 ## Blocked / Questions
