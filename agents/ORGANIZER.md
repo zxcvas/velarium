@@ -1,6 +1,6 @@
 # Organizer Agent
 
-The Organizer is the central coordinator for Velarium development.
+The Organizer is the central coordinator for Amphiteater development.
 
 ## Responsibilities
 - Maintain the global view (PROJECT_PLAN, TASK_SCHEDULE, task_board).

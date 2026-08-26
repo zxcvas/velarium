@@ -1,4 +1,4 @@
-# Velarium — Development Cycle
+# Amphiteater — Development Cycle
 
 This describes the intended repeatable workflow. We will refine it after using it on real work.
 

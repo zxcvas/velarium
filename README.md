@@ -1,17 +1,12 @@
-# Velarium
+# Amphiteater
 
-**The Awning of the Amphitheater**
-
-A game of Roman spectacle, strategy, and survival.
-
-> Placeholder skeleton only. Real development begins after this initial structure is committed.
+A game of Roman spectacle, strategy, and survival. You are a *lanista* in Capua: you own a gladiator school, not (yet) the games.
 
 ## Current Status
-- Project initialized
-- Git repo ready
-- Folder structure in place
-- Organizer + subagent scaffolding
-- Runnable placeholder exe in `dist/Velarium.exe`
+- **M1 ludus slice is playable**
+- C# console, .NET 10
+- Day loop: familia, drill, forum, rental fights, locked hosting
+- Save / load (`amphiteater_save.json` beside the exe)
 
 ## Quick Start
 
@@ -22,20 +17,16 @@ A game of Roman spectacle, strategy, and survival.
 # Run
 .\run.ps1
 # or directly
-.\dist\Velarium.exe
+.\dist\Amphiteater.exe
 ```
 
-## Project Philosophy (to be expanded)
-- Roman Empire themed (amphitheater / games focus)
-- Iterative agent-assisted development
-- Clear separation of planning, implementation, review
-- We commit the skeleton first, then flesh areas one by one
+## What you are
+A lanista. Infamis. You lease men to aediles and rich *editores* for a little coin if they walk out, and a lot if they do not. When the ludus has *fama* and a man with a *palma*, the duumviri may let you stage a munus of your own.
 
 See:
 - PROJECT_PLAN.md
-- TASK_SCHEDULE.md
-- DEVELOPMENT_CYCLE.md
+- docs/design/00_overview_stub.md
 - production/task_board.md
-- agents/ORGANIZER.md
+- QUICKSTART.md
 
 Vale.

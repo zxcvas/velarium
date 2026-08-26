@@ -4,9 +4,9 @@
 # For skeleton phase we commit a minimal runnable set in dist/ (exe + companions)
 # Later we can decide to .gitignore dist/ and rely purely on build.ps1
 dist/*.pdb
-# dist/Velarium.deps.json
-# dist/Velarium.dll
-# dist/Velarium.runtimeconfig.json
+# dist/Amphiteater.deps.json
+# dist/Amphiteater.dll
+# dist/Amphiteater.runtimeconfig.json
 # Keep only pdb ignored for cleanliness. The others + exe make the placeholder runnable post-clone.
 
 # Inspiration / reference material — never commit (screenshots, PDFs, mood boards, etc.)
@@ -25,6 +25,10 @@ Thumbs.db
 # Logs / temp
 *.log
 *.tmp
+velarium_save.json
+**/velarium_save.json
+amphiteater_save.json
+**/amphiteater_save.json
 Session/
 DUMP/
 

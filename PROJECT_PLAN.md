@@ -1,41 +1,47 @@
-# Velarium — Project Plan (Initial Skeleton)
+# Amphiteater — Project Plan
 
-**Project Name:** Velarium  
+**Project Name:** Amphiteater  
 **Theme:** Roman Empire — Amphitheater games, gladiators, spectacle, politics, and survival.  
 **Working Directory:** `amphiteater/`
 
 ## Vision (High Level)
-A game where the player acts as a **Lanista** / **Editor** managing a gladiator school and producing spectacular shows in the amphitheater. Balance finances, reputation, crowd favor, political favor, and the lives of your fighters.
+You are a **lanista** in Capua: you own a *ludus* and a *familia gladiatoria*. You train, feed, and rent gladiators to magistrates and rich *editores*. If the school earns *fama*, you may later stage *munera* yourself. Infamia closes the curia; the harena does not.
 
-Core loops (to be detailed later):
-- Recruit, train, equip gladiators
-- Manage ludus (school) facilities and staff
-- Design and execute *munera* (games/shows)
-- Navigate Roman social/political systems
-- Deal with random events, injuries, scandals, imperial attention
+Core loops:
+- Recruit, train, and treat gladiators
+- Pay the ludus (barley, oil, roof)
+- Lease men (*locatio*) under sweat-vs-death terms
+- Unlock and edit a munus of your own
+- Politics, rival lanistae, and imperial attention — later
 
-## Goals for Skeleton Phase (Current)
+## Goals
+### Skeleton (M0) — done
 - [x] Initialize git
 - [x] Define folder structure
 - [x] Create project plan + schedule + cycle docs
 - [x] Set up organizer agent + subagent placeholders
-- [x] Produce a runnable exe placeholder
+- [x] Runnable exe
 - [x] README + build/run scripts
-- [ ] Commit initial state (upcoming)
 
-## High-Level Phases (Outline Only)
-1. **Foundation** — Project setup, tooling, core data models, basic CLI or engine loop
-2. **Core Simulation** — Economy, gladiator roster, simple combat/time systems
-3. **Presentation** — UI, menus, flavor text / events
-4. **Depth** — Politics, narrative, multiple show types, progression
-5. **Polish & Content** — Art, audio, balancing, endings
+### Ludus slice (M1) — current
+- [x] Console engine (Godot deferred)
+- [x] Lanista role; hosting as progression
+- [x] Playable day loop + combat + save/load
+- [ ] Human playtest / balance pass
+
+## High-Level Phases
+1. **Foundation** — setup, console loop, data models (M0–M1)
+2. **Core Simulation** — economy, roster, combat, time (M1 in)
+3. **Presentation** — better text, edicta, events
+4. **Depth** — politics, rival familiae, multiple show types, *rudis*
+5. **Polish & Content** — art/audio only after the loop is loved
 6. **Release Prep**
 
 ## Non-Goals (for now)
-- Do not expand any area deeply until the workflow (organizer + subagents + cycle) is exercised on small, focused tasks.
-- No major art, audio, or full game design docs in this initial commit.
+- No engine switch until the console slice has been played.
+- No major art or audio in M1.
 
 ## Next
-After commit/push of this skeleton, each major area will be revisited one at a time with the team of agents.
+Play the slice. Then pick one: balance, a fuller hosted munus, or *rudis* discharge.
 
-See also: DEVELOPMENT_CYCLE.md, TASK_SCHEDULE.md
+See also: DEVELOPMENT_CYCLE.md, TASK_SCHEDULE.md, docs/design/00_overview_stub.md

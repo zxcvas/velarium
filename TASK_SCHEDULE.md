@@ -1,4 +1,4 @@
-# Velarium — Task Schedule (Initial)
+# Amphiteater — Task Schedule
 
 This document will evolve. For the skeleton we only list major tracks.
 
@@ -14,19 +14,22 @@ This document will evolve. For the skeleton we only list major tracks.
 ## Current High-Level Backlog (all pending post-skeleton)
 
 ### Foundation & Tooling
-- [ ] Finalize language/engine choice (currently C# console placeholder)
-- [ ] Core project structure / data loading
-- [ ] Persistence (save/load)
+- [x] Finalize language/engine choice (C# console for M1; Godot deferred)
+- [x] Core project structure / data loading
+- [x] Persistence (save/load)
 - [ ] Logging / debug tools
 - [ ] Build & CI pipeline
 
 ### Game Systems
-- [ ] Gladiator model + attributes
-- [ ] Ludus / facilities model
-- [ ] Economy & market
-- [ ] Event / calendar system
-- [ ] Combat / spectacle resolution (multiple styles)
-- [ ] Reputation / favor / politics meters
+- [x] Gladiator model + attributes
+- [x] Ludus / familia (thin)
+- [x] Economy & market (denarii, locatio, upkeep)
+- [x] Event / calendar system (Roman civil date + night events)
+- [x] Combat / spectacle (one pair, four armaturae)
+- [x] Reputation (fama ludi + personal fama)
+- [ ] Politics meters / patrons
+- [ ] Rudis / discharge
+- [ ] Hosted munus with more than one pair
 
 ### Presentation
 - [ ] Main menu flow

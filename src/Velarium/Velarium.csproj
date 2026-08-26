@@ -5,6 +5,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>Amphiteater</AssemblyName>
+    <Product>Amphiteater</Product>
+    <RootNamespace>Velarium</RootNamespace>
   </PropertyGroup>
 
 </Project>
