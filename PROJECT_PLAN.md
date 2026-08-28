@@ -45,4 +45,4 @@ Core loops:
 ## Next
 Play the slice. Then pick one: balance, a fuller hosted munus, or *rudis* discharge.
 
-See also: DEVELOPMENT_CYCLE.md, TASK_SCHEDULE.md, docs/design/00_overview_stub.md
+See also: DEVELOPMENT_CYCLE.md, TASK_SCHEDULE.md, docs/design/01_expansion.md, docs/research/ludus_sources.md

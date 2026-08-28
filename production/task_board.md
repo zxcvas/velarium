@@ -10,7 +10,8 @@
 - [x] Save / load
 
 ## Next Up (do not start without a word)
-- Playtest balance (upkeep vs sudore vs occisus)
+- Expansion design drafted: `docs/design/01_expansion.md` (Godot C#, courtyard builder, PixelLab)
+- Playtest balance (upkeep vs sudore vs occisus; Ville ~10% lethality)
 - A second fight in a hosted munus (best-of, or a damnatus opener)
 - Discharge (*rudis*) after enough palmae
 - Rival lanista as a named recurring familia

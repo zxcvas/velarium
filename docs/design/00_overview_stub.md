@@ -2,6 +2,9 @@
 
 Living high-level design. M1 is the playable console slice.
 
+**Expansion (Godot + ludus builder + PixelLab):** see [`01_expansion.md`](01_expansion.md).  
+**Citations:** [`../research/ludus_sources.md`](../research/ludus_sources.md).
+
 ## Core Fantasy
 You are a **lanista** in Capua: owner of a *familia gladiatoria*, barred from honour (*infamia*), not from profit. You train men, lease them to editors, and — if the ludus earns a name — you may one day stage a *munus* yourself.
 
