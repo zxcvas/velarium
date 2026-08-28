@@ -7,14 +7,30 @@
   "targets": {
     ".NETCoreApp,Version=v10.0": {
       "Amphiteater/1.0.0": {
+        "dependencies": {
+          "Amphiteater.Sim": "1.0.0"
+        },
         "runtime": {
           "Amphiteater.dll": {}
+        }
+      },
+      "Amphiteater.Sim/1.0.0": {
+        "runtime": {
+          "Amphiteater.Sim.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
   },
   "libraries": {
     "Amphiteater/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Amphiteater.Sim/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

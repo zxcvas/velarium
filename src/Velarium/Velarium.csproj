@@ -10,4 +10,9 @@
     <RootNamespace>Velarium</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Amphiteater.Sim\Amphiteater.Sim.csproj" />
+  </ItemGroup>
+
 </Project>
+

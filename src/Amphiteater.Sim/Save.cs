@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace Velarium;
 
-static class Save
+public static class Save
 {
     static readonly JsonSerializerOptions Opts = new()
     {

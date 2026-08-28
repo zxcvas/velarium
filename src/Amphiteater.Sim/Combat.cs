@@ -1,6 +1,6 @@
 namespace Velarium;
 
-static class Combat
+public static class Combat
 {
     public static Gladiator MakeFoe(Random rng, Armatura armatura, int daysPlayed)
     {

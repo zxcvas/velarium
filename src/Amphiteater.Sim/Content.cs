@@ -1,6 +1,6 @@
 namespace Velarium;
 
-static class Content
+public static class Content
 {
     public static readonly string[] GladiatorNames =
     {

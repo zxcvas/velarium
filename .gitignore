@@ -12,9 +12,15 @@ dist/*.pdb
 # Inspiration / reference material — never commit (screenshots, PDFs, mood boards, etc.)
 INSP/
 
+# Secrets (PixelLab token, etc.)
+.env
+.env.local
+pixellab.env
+
 # IDE / editor
 .vs/
 .vscode/
+.obsidian/
 *.user
 *.suo
 

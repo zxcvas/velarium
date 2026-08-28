@@ -1,6 +1,6 @@
 namespace Velarium;
 
-static class Calendar
+public static class Calendar
 {
     static readonly string[] MonthAcc =
     {
@@ -82,7 +82,7 @@ static class Calendar
     }
 }
 
-static class ToRoman
+public static class ToRoman
 {
     static readonly (int val, string sym)[] Map =
     {

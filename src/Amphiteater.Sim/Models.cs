@@ -1,6 +1,6 @@
 namespace Velarium;
 
-enum Armatura
+public enum Armatura
 {
     Murmillo,
     Thraex,
@@ -8,7 +8,7 @@ enum Armatura
     Secutor
 }
 
-enum GladiatorStatus
+public enum GladiatorStatus
 {
     Validus,
     Fessus,
@@ -17,7 +17,7 @@ enum GladiatorStatus
     Mortuus
 }
 
-enum DayOrder
+public enum DayOrder
 {
     None,
     Palus,
@@ -25,7 +25,7 @@ enum DayOrder
     Requies
 }
 
-enum FightOutcome
+public enum FightOutcome
 {
     Victoria,
     Stans,
@@ -34,7 +34,7 @@ enum FightOutcome
     VictoriaSineMissione
 }
 
-sealed class Gladiator
+public sealed class Gladiator
 {
     public int Id { get; set; }
     public string Name { get; set; } = "";
@@ -80,7 +80,7 @@ sealed class Gladiator
         => $"{Name} {Content.ArmaturaAbl(Armatura)} {Origin}, {Record()}";
 }
 
-sealed class Contract
+public sealed class Contract
 {
     public string EditorName { get; set; } = "";
     public string EditorOffice { get; set; } = "editor";
@@ -91,7 +91,7 @@ sealed class Contract
     public string RivalLanista { get; set; } = "";
 }
 
-sealed class GameState
+public sealed class GameState
 {
     public int Seed { get; set; }
     public int NextId { get; set; } = 1;
@@ -119,7 +119,7 @@ sealed class GameState
     public IEnumerable<Gladiator> Living => Familia.Where(g => g.Alive);
 }
 
-sealed class CombatReport
+public sealed class CombatReport
 {
     public FightOutcome Outcome { get; set; }
     public List<string> Beats { get; set; } = new();
