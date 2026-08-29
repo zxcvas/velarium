@@ -117,6 +117,7 @@ sealed class Game
                 "Forum (buy, medicus, rumors)",
                 OfferLabel(),
                 HostLabel(),
+                "Domus (rooms, household, night)",
                 "Finis diei (end the day)",
                 "Servare et abire (save and leave)"
             };
@@ -128,8 +129,9 @@ sealed class Game
                 case 3: ForumScreen(); break;
                 case 4: LocatioScreen(); break;
                 case 5: HostScreen(); break;
-                case 6: EndDayScreen(); break;
-                case 7: Autosave(); return;
+                case 6: DomusScreen(); break;
+                case 7: EndDayScreen(); break;
+                case 8: Autosave(); return;
             }
             if (s.Ended) ShowEnding();
         }
@@ -140,7 +142,11 @@ sealed class Game
         Ui.Title(s.LudusName + " — Capua");
         Ui.Header(s.FullName + ", lanista", Calendar.Format(s));
         int living = s.Living.Count();
-        Ui.Header($"Denarii: {s.Denarii}", $"Fama ludi: {s.Fama}    Familia: {living}");
+        Ui.Header($"Denarii: {s.Denarii}", $"Fama ludi: {s.Fama}    Familia: {living}/{Ludus.Beds(s)}");
+        int hands = Ludus.LivingWorkers(s).Count();
+        if (hands > 0 || s.Rival != null)
+            Console.WriteLine($"Household: {hands}    Night: {Content.NightNom(s.NightOrder)}" +
+                (s.Rival != null ? $"    Rival: {s.Rival.Name} ({s.Rival.City})" : ""));
         if (s.Offer != null && !s.OfferTakenToday)
             Console.WriteLine($"Today's locatio: {s.Offer.EditorName} wants a {Content.ArmaturaNom(s.Offer.Requested)}.");
         else if (s.OfferTakenToday)
@@ -245,16 +251,18 @@ sealed class Game
             Ui.Title("Forum of Capua");
             Ui.Wrap("Slave-dealers in the shade of the portico. Oil, barley, a medicus who has worked the ludi before. Somewhere an aedile's clerk is nailing an edictum muneris to a wall — a velarium promised, if the wind allows.");
             Console.WriteLine();
-            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, Ludus.CellCap - s.Living.Count())} of {Ludus.CellCap}.");
+            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, Ludus.Beds(s) - s.Living.Count())} of {Ludus.Beds(s)}.");
             int c = Ui.Menu("Forum", new[]
             {
                 "Gladiators for sale",
-                $"Medicus ({Ludus.MedicusFee} denarii a man — wounds and fever)",
+                "Household slaves (cooks, watch, hands)",
+                $"Medicus ({Ludus.TreatFee(s)} denarii a man — wounds and fever)",
                 "Rumors"
             });
             if (c == 0) return;
             if (c == 1) MarketScreen();
-            else if (c == 2) MedicusScreen();
+            else if (c == 2) LaborScreen();
+            else if (c == 3) MedicusScreen();
             else Rumors();
         }
     }
@@ -277,9 +285,9 @@ sealed class Game
             if (c == 0) return;
             var g = s.Market[c - 1];
             int price = g.Value();
-            if (s.Living.Count() >= Ludus.CellCap)
+            if (s.Living.Count() >= Ludus.Beds(s))
             {
-                Console.WriteLine("The cells are full. Eight is as many as this ludus will hold.");
+                Console.WriteLine($"The cells are full. {Ludus.Beds(s)} is as many as this ludus will hold.");
                 Ui.Pause();
                 continue;
             }
@@ -293,7 +301,7 @@ sealed class Game
             string? err = Ludus.Buy(s, c - 1);
             if (err == "full")
             {
-                Console.WriteLine("The cells are full. Eight is as many as this ludus will hold.");
+                Console.WriteLine($"The cells are full. {Ludus.Beds(s)} is as many as this ludus will hold.");
                 Ui.Pause();
                 continue;
             }
@@ -315,14 +323,16 @@ sealed class Game
         var need = s.Living.Where(Ludus.NeedsMedicus).ToList();
         Ui.Clear();
         Ui.Title("Medicus");
-        Ui.Wrap("He is not Galen. He is a man who has sewn more thighs than tunics. Fifteen denarii a head: wine, oil, a needle, and silence.");
+        Ui.Wrap(Ludus.Staffed(s, RoomKind.Medicus)
+            ? "Your stall, your attendant, oil and the ash-drink. Cheaper than a man from the forum."
+            : "He is not Galen. He is a man who has sewn more thighs than tunics. Coin a head: wine, oil, a needle, and silence.");
         if (need.Count == 0)
         {
             Console.WriteLine("No one needs him today.");
             Ui.Pause();
             return;
         }
-        int c = Ui.Menu("Treat whom?", need.Select(g => $"{g.Name} ({Content.StatusLat(g.Status)}, {g.Vigor}/{g.VigorMax}) — {Ludus.MedicusFee} den.").ToList());
+        int c = Ui.Menu("Treat whom?", need.Select(g => $"{g.Name} ({Content.StatusLat(g.Status)}, {g.Vigor}/{g.VigorMax}) — {Ludus.TreatFee(s)} den.").ToList());
         if (c == 0) return;
         var g = need[c - 1];
         if (!Ludus.Treat(s, g))
@@ -350,6 +360,16 @@ sealed class Game
             "Augustalis games at Puteoli next market-cycle. Editors will come as far as Capua looking for a murmillo who can stand."
         };
         Ui.Wrap(rum[rng.Next(rum.Length)]);
+        if (s.Rival != null)
+        {
+            Console.WriteLine();
+            Ui.Wrap($"Your named rival is {s.Rival.Name} of {s.Rival.City}. Night is for rest — or for the gate of his ludus.");
+            if (!string.IsNullOrEmpty(s.Rival.Intel))
+            {
+                Console.WriteLine();
+                Ui.Wrap("Last report: " + s.Rival.Intel);
+            }
+        }
         if (s.Offer != null && !s.OfferTakenToday)
         {
             Console.WriteLine();
@@ -404,6 +424,210 @@ sealed class Game
             return;
 
         PlayMunus(g, hosted: false);
+    }
+
+    void LaborScreen()
+    {
+        while (true)
+        {
+            Ui.Clear();
+            Ui.Title("Household for sale");
+            Ui.Wrap("Not gladiators. Cooks, porters, a boy for the gate. They eat less. They do not take a palma. Assign them in the Domus.");
+            if (s.LaborMarket.Count == 0)
+            {
+                Ui.Wrap("No hands today that you would want in the kitchen.");
+                Ui.Pause();
+                return;
+            }
+            var labels = s.LaborMarket.Select(w =>
+                $"{w.Name}, {w.Origin}, vigor {w.VigorMax}, {w.Value()} den.").ToList();
+            int c = Ui.Menu("Buy whom?", labels);
+            if (c == 0) return;
+            var w = s.LaborMarket[c - 1];
+            if (!Ui.Confirm($"Pay {w.Value()} denarii for {w.Name}?")) continue;
+            string? err = Ludus.BuyWorker(s, c - 1);
+            if (err == "full")
+            {
+                Console.WriteLine($"The household is full ({Ludus.HouseholdCap}).");
+                Ui.Pause();
+                continue;
+            }
+            if (err == "coin")
+            {
+                Console.WriteLine("The dealer laughs. Come back with coin, lanista.");
+                Ui.Pause();
+                continue;
+            }
+            if (err != null) continue;
+            Console.WriteLine($"{w.Name} is led to the kitchen yard. Assign him in the Domus.");
+            Autosave();
+            Ui.Pause();
+        }
+    }
+
+    void DomusScreen()
+    {
+        while (true)
+        {
+            Ui.Clear();
+            Ui.Title("Domus — " + s.LudusName);
+            Ui.Wrap("Courtyard, cells, hearth, one gate. Unlock rooms. Assign household. At night: rest, or send someone to the rival's porta.");
+            Console.WriteLine();
+            foreach (var room in s.Rooms)
+            {
+                var worker = Ludus.WorkerOn(s, room);
+                string staff = room.Kind is RoomKind.Palus or RoomKind.Cellae
+                    ? "—"
+                    : worker == null ? "unstaffed" : worker.Name + (worker.Detained ? " (held)" : "");
+                string pend = room.PendingUpgrade ? "  [work underway]" : "";
+                string built = room.Built ? $"lv {room.Level}" : "unbuilt";
+                Console.WriteLine($"  {Content.RoomNom(room.Kind),-28} {built,-8} {staff}{pend}");
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Beds {s.Living.Count()}/{Ludus.Beds(s)}. Household {Ludus.LivingWorkers(s).Count()}/{Ludus.HouseholdCap}.");
+            if (s.Rival != null)
+                Console.WriteLine($"Rival: {s.Rival.Name}, {s.Rival.City}. Night order: {Content.NightNom(s.NightOrder)}.");
+            var household = Ludus.LivingWorkers(s).ToList();
+            if (household.Count > 0)
+            {
+                Console.WriteLine();
+                foreach (var w in household)
+                {
+                    var post = s.Rooms.FirstOrDefault(r => r.AssignedWorkerId == w.Id);
+                    string job = post == null ? "idle" : Content.RoomNom(post.Kind);
+                    string hold = w.Detained ? " detained" : "";
+                    Console.WriteLine($"  {w.Name,-14} {w.Origin,-10} vig {w.Vigor}/{w.VigorMax}  {job}{hold}");
+                }
+            }
+            int c = Ui.Menu("Domus", new[]
+            {
+                "Assign a worker to a room",
+                "Build or upgrade a room",
+                "Night order (rest / spy / poison / sabotage)"
+            });
+            if (c == 0) return;
+            if (c == 1) AssignScreen();
+            else if (c == 2) UpgradeScreen();
+            else NightOrderScreen();
+        }
+    }
+
+    void AssignScreen()
+    {
+        var workers = Ludus.LivingWorkers(s).Where(w => w.CanWork).ToList();
+        if (workers.Count == 0)
+        {
+            Ui.Wrap("No one in the household can work. Buy hands at the forum.");
+            Ui.Pause();
+            return;
+        }
+        int w = Ui.Menu("Whose hands?", workers.Select(x => x.Name).ToList());
+        if (w == 0) return;
+        var rooms = s.Rooms.Where(r => r.Kind is not (RoomKind.Palus or RoomKind.Cellae)).ToList();
+        int r = Ui.Menu(workers[w - 1].Name + " — to which room?", rooms.Select(x =>
+        {
+            string extra = x.Built ? $"lv {x.Level}" : "unbuilt";
+            return $"{Content.RoomNom(x.Kind)} ({extra})";
+        }).ToList());
+        if (r == 0) return;
+        string? err = Ludus.AssignWorker(s, workers[w - 1].Id, rooms[r - 1].Kind);
+        Console.WriteLine(err switch
+        {
+            null => $"{workers[w - 1].Name} is posted to the {Content.RoomNom(rooms[r - 1].Kind)}.",
+            "unbuilt" => "That room is not standing yet. Begin the build first.",
+            _ => "They cannot be posted there."
+        });
+        Autosave();
+        Ui.Pause();
+    }
+
+    void UpgradeScreen()
+    {
+        int c = Ui.Menu("Raise which?", s.Rooms.Select(r =>
+        {
+            if (r.Level >= Ludus.MaxRoomLevel) return $"{Content.RoomNom(r.Kind)} — finished";
+            if (r.PendingUpgrade) return $"{Content.RoomNom(r.Kind)} — work underway";
+            int cost = Ludus.UpgradeCost(r);
+            string need = Ludus.NeedsLaborToUpgrade(r) ? ", needs a worker" : "";
+            string verb = r.Built ? "upgrade" : "build";
+            return $"{Content.RoomNom(r.Kind)} — {verb} to lv {r.Level + 1}, {cost} den.{need}";
+        }).ToList());
+        if (c == 0) return;
+        var room = s.Rooms[c - 1];
+        if (!Ui.Confirm($"Spend {Ludus.UpgradeCost(room)} denarii on the {Content.RoomNom(room.Kind)}? Work finishes at dusk."))
+            return;
+        string? err = Ludus.BeginUpgrade(s, room.Kind);
+        Console.WriteLine(err switch
+        {
+            null => "The work is marked. Dusk will tell.",
+            "coin" => "The purse will not stretch that far.",
+            "labor" => "Assign a household slave to that room first.",
+            "max" => "It will go no higher.",
+            "pending" => "They are already at it.",
+            _ => "Not today."
+        });
+        Autosave();
+        Ui.Pause();
+    }
+
+    void NightOrderScreen()
+    {
+        if (s.Rival == null)
+        {
+            Ui.Wrap("No rival worth the dark. Rest.");
+            Ui.Pause();
+            return;
+        }
+        Ui.Wrap($"{s.Rival.Name} keeps a ludus in {s.Rival.City}. Rest is safe. Spy, poison (wine at the gate — a concession), or sabotage send a body into the night. Prefer a household slave. A gladiator is quieter and more expensive to lose.");
+        int c = Ui.Menu("Tonight", new[]
+        {
+            "Requies — rest (yard events only)",
+            "Speculari — spy on the rival",
+            "Wine at their gate (poison the next foe)",
+            "Sabotage — they may miss tomorrow's editor"
+        });
+        if (c == 0) return;
+        s.NightOrder = c switch
+        {
+            2 => NightOrder.Spy,
+            3 => NightOrder.Poison,
+            4 => NightOrder.Sabotage,
+            _ => NightOrder.Rest
+        };
+        s.NightActorId = 0;
+        s.NightActorIsWorker = true;
+        if (s.NightOrder != NightOrder.Rest)
+        {
+            var hands = Ludus.LivingWorkers(s).Where(w => w.CanWork).ToList();
+            var blades = s.Living.Where(g => g.CanFight).ToList();
+            var labels = hands.Select(w => $"{w.Name} (household)").Concat(blades.Select(g => $"{g.Name} (gladiator — risk the asset)")).ToList();
+            if (labels.Count == 0)
+            {
+                Console.WriteLine("No one can go. The order is rest.");
+                s.NightOrder = NightOrder.Rest;
+                Ui.Pause();
+                return;
+            }
+            int a = Ui.Menu("Send whom?", labels);
+            if (a == 0)
+            {
+                s.NightOrder = NightOrder.Rest;
+                return;
+            }
+            if (a <= hands.Count)
+            {
+                s.NightActorIsWorker = true;
+                s.NightActorId = hands[a - 1].Id;
+            }
+            else
+            {
+                s.NightActorIsWorker = false;
+                s.NightActorId = blades[a - 1 - hands.Count].Id;
+            }
+        }
+        Console.WriteLine("Night order: " + Content.NightNom(s.NightOrder) + ".");
+        Autosave();
+        Ui.Pause();
     }
 
     void HostScreen()
@@ -543,7 +767,7 @@ sealed class Game
     {
         Console.WriteLine();
         Ui.Wrap($"He asks {bounty} denarii for the oath. Volunteers fight like men who chose the sand. Purse: {s.Denarii}.");
-        if (s.Denarii >= bounty && s.Living.Count() < Ludus.CellCap && Ui.Confirm("Pay the bounty and take his sacramentum?"))
+        if (s.Denarii >= bounty && s.Living.Count() < Ludus.Beds(s) && Ui.Confirm("Pay the bounty and take his sacramentum?"))
         {
             if (Ludus.AcceptAuctoratus(s, g, bounty))
                 Console.WriteLine($"{g.Name} is yours until the rudis, or the gate of Libitina.");

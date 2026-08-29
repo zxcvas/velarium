@@ -5,7 +5,7 @@ A game of Roman spectacle, strategy, and survival. You are a *lanista* in Capua:
 ## Current Status
 - **M1 ludus slice is playable**; rules live in `Amphiteater.Sim`
 - C# console, .NET 10
-- Day loop: familia, drill, forum, rental fights, locked hosting
+- Day loop: familia, drill, forum, rental fights, locked hosting, **domus** (rooms, household, night ops)
 - Save / load (`amphiteater_save.json` beside the exe)
 - Headless: `.\dist\Amphiteater.exe --report 200`
 

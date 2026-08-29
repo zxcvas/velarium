@@ -26,6 +26,9 @@ public static class Save
     {
         if (!File.Exists(path)) return null;
         string json = File.ReadAllText(path);
-        return JsonSerializer.Deserialize<GameState>(json, Opts);
+        var s = JsonSerializer.Deserialize<GameState>(json, Opts);
+        if (s != null)
+            Ludus.EnsureHouse(s, new Random(unchecked(s.Seed + s.DaysPlayed * 17)));
+        return s;
     }
 }

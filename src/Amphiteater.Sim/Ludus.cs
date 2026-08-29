@@ -35,7 +35,7 @@ public sealed class EndDayResult
     public int Bounty { get; init; }
 }
 
-public static class Ludus
+public static partial class Ludus
 {
     public const int StartDenarii = 620;
     public const int StartFama = 3;
@@ -47,7 +47,10 @@ public static class Ludus
     public const int CellCap = 8;
     public const int UpkeepRoof = 10;
     public const int UpkeepPerMouth = 6;
+    public const int WorkerUpkeep = 3;
+    public const int HouseholdCap = 6;
     public const int HostFamaNeed = 16;
+    public const int MaxRoomLevel = 3;
 
     public static int Upkeep(int mouths) => UpkeepRoof + mouths * UpkeepPerMouth;
 
@@ -74,6 +77,7 @@ public static class Ludus
             s.Familia.Add(MakeGladiator(s, rng, taken, a, tiro: true));
 
         RefreshMarket(s, rng);
+        EnsureHouse(s, rng);
         RefreshOffer(s, rng);
         return s;
     }
@@ -114,8 +118,11 @@ public static class Ludus
 
     public static void RefreshOffer(GameState s, Random rng)
     {
+        bool rivalMissed = s.Rival is { MissTomorrow: true };
+        if (s.Rival != null) s.Rival.MissTomorrow = false;
+
         // First two mornings always bring an editor so the core loop is visible.
-        if (s.DaysPlayed >= 2 && rng.Next(100) < 32)
+        if (!rivalMissed && s.DaysPlayed >= 2 && rng.Next(100) < 32)
         {
             s.Offer = null;
             return;
@@ -131,7 +138,7 @@ public static class Ludus
             Requested = req,
             PaySudore = sudore,
             PayOccisus = occisus,
-            RivalLanista = Content.RivalLanistae[rng.Next(Content.RivalLanistae.Length)]
+            RivalLanista = s.Rival?.Name ?? Content.RivalLanistae[rng.Next(Content.RivalLanistae.Length)]
         };
     }
 
@@ -140,9 +147,11 @@ public static class Ludus
 
     public static bool Treat(GameState s, Gladiator g)
     {
-        if (s.Denarii < MedicusFee) return false;
-        s.Denarii -= MedicusFee;
-        g.Vigor = Math.Min(g.VigorMax, g.Vigor + 6);
+        int fee = TreatFee(s);
+        if (s.Denarii < fee) return false;
+        s.Denarii -= fee;
+        int heal = 6 + (Staffed(s, RoomKind.Medicus) ? RoomOf(s, RoomKind.Medicus)!.Level : 0);
+        g.Vigor = Math.Min(g.VigorMax, g.Vigor + heal);
         if (g.Status is GladiatorStatus.Vulneratus or GladiatorStatus.Aeger)
             g.Status = g.Vigor >= g.VigorMax - 2 ? GladiatorStatus.Validus : GladiatorStatus.Fessus;
         return true;
@@ -151,7 +160,7 @@ public static class Ludus
     public static string? Buy(GameState s, int marketIndex)
     {
         if (marketIndex < 0 || marketIndex >= s.Market.Count) return "gone";
-        if (s.Living.Count() >= CellCap) return "full";
+        if (s.Living.Count() >= Beds(s)) return "full";
         var g = s.Market[marketIndex];
         int price = g.Value();
         if (s.Denarii < price) return "coin";
@@ -189,6 +198,13 @@ public static class Ludus
         var foe = Combat.MakeFoe(rng, foeType, s.DaysPlayed);
         if (!hosted && s.Offer != null && rng.Next(100) < 70)
             foe.Armatura = Content.ClassicFoe(s.Offer.Requested);
+        if (!hosted && s.Rival is { NextFoePoisoned: true })
+        {
+            foe.Status = GladiatorStatus.Vulneratus;
+            foe.Virtus = Math.Max(3, foe.Virtus - 2);
+            foe.Vigor = Math.Max(4, foe.VigorMax * 2 / 3);
+            s.Rival.NextFoePoisoned = false;
+        }
 
         var report = Combat.Fight(rng, g, foe);
 
@@ -375,7 +391,7 @@ public static class Ludus
                     }
                     break;
                 case DayOrder.Requies:
-                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 4);
+                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 4 + KitchenBonus(s));
                     if (g.Status is GladiatorStatus.Fessus or GladiatorStatus.Vulneratus or GladiatorStatus.Aeger)
                     {
                         if (rng.Next(100) < 55) g.Status = GladiatorStatus.Validus;
@@ -383,16 +399,20 @@ public static class Ludus
                     log.Add($"{g.Name} to requies. Barley, oil, sleep.");
                     break;
                 default:
-                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 1);
+                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 1 + KitchenBonus(s));
                     break;
             }
             g.Order = DayOrder.None;
         }
 
+        CompleteUpgrades(s, log);
+        RecoverDetained(s, rng, log);
+
         int mouths = s.Living.Count();
-        int upkeep = Upkeep(mouths);
+        int hands = LivingWorkers(s).Count();
+        int upkeep = Upkeep(s);
         s.Denarii -= upkeep;
-        log.Add($"Cibaria and the ludus: -{upkeep} denarii ({mouths} mouths + roof).");
+        log.Add($"Cibaria and the ludus: -{upkeep} denarii ({mouths} fighters, {hands} household, roof).");
 
         if (s.Denarii < 0)
         {
@@ -420,7 +440,12 @@ public static class Ludus
 
         Gladiator? volunteer = null;
         int bounty = 0;
-        if (rng.Next(100) < 34)
+        foreach (var line in ResolveNightOps(s, rng))
+            log.Add(line);
+        int nightChance = s.NightOrder == NightOrder.Rest ? 34 : 15;
+        s.NightOrder = NightOrder.Rest;
+        s.NightActorId = 0;
+        if (rng.Next(100) < nightChance)
         {
             var (text, vol, b) = NightEvent(s, rng);
             log.Add(text);
@@ -434,6 +459,7 @@ public static class Ludus
         foreach (var g in s.Familia) g.FoughtToday = false;
         s.OfferTakenToday = false;
         RefreshMarket(s, rng);
+        RefreshLaborMarket(s, rng);
         RefreshOffer(s, rng);
         Calendar.Next(s);
 
@@ -467,7 +493,7 @@ public static class Ludus
                 }
                 break;
             case 2:
-                if (s.Living.Count() < CellCap)
+                if (s.Living.Count() < Beds(s))
                 {
                     var taken = new HashSet<string>(s.Familia.Select(x => x.Name));
                     var g = MakeGladiator(s, rng, taken, RandomArmatura(rng), tiro: false);
@@ -506,7 +532,7 @@ public static class Ludus
 
     public static bool AcceptAuctoratus(GameState s, Gladiator g, int bounty)
     {
-        if (s.Denarii < bounty || s.Living.Count() >= CellCap) return false;
+        if (s.Denarii < bounty || s.Living.Count() >= Beds(s)) return false;
         s.Denarii -= bounty;
         g.Id = s.NextId++;
         s.Familia.Add(g);

@@ -77,6 +77,46 @@ public static class Content
         "Marcus Tettienus", "a lanista out of Puteoli", "the ludus of the Julii"
     };
 
+    public static readonly string[] RivalCities =
+    {
+        "Puteoli", "Nola", "Neapolis", "Atella"
+    };
+
+    public static readonly string[] HouseholdNames =
+    {
+        "Davus", "Geta", "Syrus", "Pallas", "Trophimus", "Stabilio",
+        "Olympio", "Phileros", "Barna", "Dama", "Hylas", "Cerdon",
+        "Midas", "Lydus", "Sosias", "Trupo"
+    };
+
+    public static string RoomNom(RoomKind k) => k switch
+    {
+        RoomKind.Palus => "palus (yard stake)",
+        RoomKind.Cellae => "cellae (cells)",
+        RoomKind.Kitchen => "culina (kitchen)",
+        RoomKind.Porta => "porta (gate / watch)",
+        RoomKind.Medicus => "medicus stall",
+        _ => k.ToString().ToLowerInvariant()
+    };
+
+    public static string NightNom(NightOrder o) => o switch
+    {
+        NightOrder.Spy => "speculari (spy)",
+        NightOrder.Poison => "wine at the rival's gate",
+        NightOrder.Sabotage => "sabotage",
+        _ => "requies (rest)"
+    };
+
+    public static string UniqueHouseholdName(Random rng, HashSet<string> taken)
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            string n = HouseholdNames[rng.Next(HouseholdNames.Length)].ToUpperInvariant();
+            if (!taken.Contains(n)) return n;
+        }
+        return (HouseholdNames[rng.Next(HouseholdNames.Length)] + " " + Origins[rng.Next(Origins.Length)]).ToUpperInvariant();
+    }
+
     public sealed record LanistaPreset(string Praenomen, string Nomen, string Cognomen, string Bio);
 
     public static readonly LanistaPreset[] Presets =

@@ -34,6 +34,59 @@ public enum FightOutcome
     VictoriaSineMissione
 }
 
+public enum RoomKind
+{
+    Palus,
+    Cellae,
+    Kitchen,
+    Porta,
+    Medicus
+}
+
+public enum NightOrder
+{
+    Rest,
+    Spy,
+    Poison,
+    Sabotage
+}
+
+public sealed class Room
+{
+    public RoomKind Kind { get; set; }
+    public int Level { get; set; }
+    public int AssignedWorkerId { get; set; }
+    public bool PendingUpgrade { get; set; }
+
+    public bool Built => Level > 0;
+}
+
+public sealed class Worker
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public string Origin { get; set; } = "";
+    public int Vigor { get; set; }
+    public int VigorMax { get; set; }
+    public bool Alive { get; set; } = true;
+    public bool Detained { get; set; }
+
+    public bool CanWork => Alive && !Detained && Vigor >= 2;
+
+    public int Value() => Math.Max(28, 28 + VigorMax * 2);
+}
+
+public sealed class RivalLudus
+{
+    public string Name { get; set; } = "";
+    public string City { get; set; } = "Puteoli";
+    public int Fama { get; set; } = 8;
+    public int Hostility { get; set; }
+    public bool MissTomorrow { get; set; }
+    public bool NextFoePoisoned { get; set; }
+    public string Intel { get; set; } = "";
+}
+
 public sealed class Gladiator
 {
     public int Id { get; set; }
@@ -114,6 +167,13 @@ public sealed class GameState
     public List<Gladiator> Market { get; set; } = new();
     public List<string> AdLibitinam { get; set; } = new();
     public Contract? Offer { get; set; }
+    public List<Room> Rooms { get; set; } = new();
+    public List<Worker> Household { get; set; } = new();
+    public List<Worker> LaborMarket { get; set; } = new();
+    public RivalLudus? Rival { get; set; }
+    public NightOrder NightOrder { get; set; }
+    public int NightActorId { get; set; }
+    public bool NightActorIsWorker { get; set; } = true;
 
     public string FullName => $"{Praenomen} {Nomen} {Cognomen}".Trim();
     public IEnumerable<Gladiator> Living => Familia.Where(g => g.Alive);

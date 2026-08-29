@@ -30,9 +30,9 @@ This document will evolve. For the skeleton we only list major tracks.
 - [x] Combat / spectacle (one pair, four armaturae)
 - [x] Reputation (fama ludi + personal fama)
 - [x] Rules extracted to `Ludus` (console is a host)
-- [ ] Ludus rooms + upgrades
-- [ ] Household slave workforce
-- [ ] Night ops (spy / poison / sabotage) vs a rival camp
+- [x] Ludus rooms + upgrades
+- [x] Household slave workforce
+- [x] Night ops (spy / poison / sabotage) vs a rival camp
 - [ ] Politics meters / patrons
 - [ ] Rudis / discharge
 - [ ] Hosted munus with more than one pair

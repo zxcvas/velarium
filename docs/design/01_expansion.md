@@ -245,6 +245,7 @@ Each PR is independently playable. Console build is required on all of them.
 
 ### PR1.6 — M2 rooms, household, night ops (console)
 - **Depends on:** PR1.5
+- **Status:** done 2026-08-29
 - **Files:** Sim room/worker/rival models; forum + ludus + night menus in Velarium
 - **What:** Unlock/upgrade rooms; assign household slaves; spy/poison/sabotage vs one rival. Still no Godot.
 

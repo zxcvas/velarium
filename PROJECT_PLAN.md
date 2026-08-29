@@ -32,11 +32,11 @@ Core loops:
 - [x] Rules in `Amphiteater.Sim.Ludus` + `--report` harness
 - [ ] Human playtest / balance pass (use `--report` too)
 
-### House and night (M2) — next
-- [ ] Rooms: unlock/upgrade cellae, kitchen, medicus, porta
-- [ ] Household slaves assigned to rooms
-- [ ] Night ops vs a named rival: spy / poison / sabotage
-- [ ] PixelLab only after those verbs exist
+### House and night (M2) — current
+- [x] Rooms: unlock/upgrade cellae, kitchen, medicus, porta
+- [x] Household slaves assigned to rooms
+- [x] Night ops vs a named rival: spy / poison / sabotage
+- [ ] PixelLab only after those verbs exist (loop is now on the console)
 
 ## High-Level Phases
 1. **Foundation** — setup, console loop, data models (M0–M1)
@@ -51,7 +51,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-M2 on the console: rooms + household labor + night ops. Godot / PixelLab / Android wait until that loop is playable.
+Play the M2 console loop (domus + night). Then PixelLab tiles for those rooms, or a balance pass. Godot / Android wait.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

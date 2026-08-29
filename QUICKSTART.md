@@ -22,7 +22,7 @@ dist\Amphiteater.exe
 - Pick a Roman name (or compose *praenomen + nomen + cognomen*)
 - A ludus in Capua, Kalends of May, a.u.c. DCCLXXXII
 - Three *tiros*: murmillo, thraex, retiarius
-- A day menu: familia, exercitia, forum, locatio, edere munus (locked), end day
+- A day menu: familia, exercitia, forum, locatio, edere munus (locked), **domus** (rooms / household / night), end day
 
 Day one an editor will usually be at the gate. Send the type he asked for.
 
@@ -38,3 +38,5 @@ Headless balance dump (no UI):
 
 ## Keys
 Menus are numbers. `0` goes back. `s` / `n` confirm. Enter pages.
+
+Domus: buy household slaves at the forum, assign them to kitchen / porta / medicus, spend coin to upgrade cells. Night order: rest, spy, poison, or sabotage a named rival.
