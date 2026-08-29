@@ -1,7 +1,7 @@
 # Amphiteater — Expansion Design
 
-**Status:** Draft  
-**Date:** 2026-08-26  
+**Status:** Draft (PR1 + PR1.5 landed 2026-08-28/29; M2 household/night ops specified)  
+**Date:** 2026-08-26; revised 2026-08-29  
 **Audience:** the implementer (us) and a future reader who has not seen the chat  
 **Citations:** only `docs/research/ludus_sources.md`. Anything else is **Gameplay concession**.
 
@@ -91,7 +91,7 @@ flowchart LR
   night --> next[Calendar.Next]
 ```
 
-No separate combat game. The harena is a staged resolution of `Combat.Fight` (`src/Velarium/Combat.cs`).
+No separate combat game. The harena is a staged resolution of `Combat.Fight` (`src/Amphiteater.Sim/Combat.cs`). Day rules live in `Ludus` (`src/Amphiteater.Sim/Ludus.cs`); the console is a host.
 
 ### Base = the ludus plan
 
@@ -108,6 +108,16 @@ Start (small Capuan ludus): porta, palus in a dirt yard, 3–4 *cellae*, kitchen
 | Watch / porta | Single guarded entrance | Escape / Spartacus-memory events |
 
 **Layout constraint:** cells open onto a portico around a courtyard. PixelLab tilesets must match. This is not SimCity.
+
+**M2 (console, before Godot):** rooms are a menu. Unlock/upgrade costs denarii and a worker-day. Kitchen/medicus/porta bonuses apply only if a **household slave** is assigned. Gladiators do not cook.
+
+### Household slaves (M2)
+
+Separate stock from the familia gladiatoria. Bought cheap at the forum. Cannot fight, take a palma, or go on locatio. Lower upkeep than a gladiator. Assign 1:1 to a room. Idle mouths still eat.
+
+### Night ops vs a rival camp (M2)
+
+One named rival at Start (already flavor in `Content.RivalLanistae`). Night is a **choice**: Rest (current RNG), Spy, Poison (foe enters `Vulneratus` — Gameplay concession: wine at the gate), Sabotage (rival misses a day / fama hit). Default actor: a household slave. A gladiator is allowed, higher success, you may lose the asset. Caught: fine, hostility, or the agent does not return. Grit line unchanged: no sexual violence, no child fighters.
 
 ### Familia and body
 
@@ -160,7 +170,7 @@ Sim owns denarii, rooms, familia, combat math. Godot owns camera, clicks, sprite
 - API: `https://api.pixellab.ai/v2` (Pixflux / style-reference / tiles / characters).
 - **Style lock:** one reference sheet — ochre, soot, iron, dirty linen, fresco-limited palette, no comic abs, no Lorica as gladiator kit. Pompeii helmets and *galerus*.
 - Log: `assets/art/prompts/` next to each PNG (prompt, size, seed, endpoint).
-- First pack: courtyard tiles, cell interior, palus, porta, four *armatura* idles, wax-tablet UI.
+- First pack (generate **after** M2 verbs exist): courtyard dirt, cell, kitchen hearth, porta, palus; four *armatura* idles; one household slave (tunic, no helm); night: two figures at a rival gate.
 
 ### Security
 
@@ -212,7 +222,7 @@ Console stays the integration test. Each Godot PR must still `dotnet build src/V
 ## References
 
 All citations: `docs/research/ludus_sources.md`.  
-M1 code: `src/Velarium/Game.cs`, `Models.cs`, `Combat.cs`, `Content.cs`, `Calendar.cs`, `Save.cs`.  
+M1/PR1.5 code: `src/Amphiteater.Sim/` (`Ludus.cs`, `Combat.cs`, `Models.cs`, …); host `src/Velarium/Game.cs`.  
 Prior law: `production/decisions/001_console_ludus.md`, `docs/design/00_overview_stub.md`.
 
 ---
@@ -223,8 +233,20 @@ Each PR is independently playable. Console build is required on all of them.
 
 ### PR1 — Extract Amphiteater.Sim
 - **Depends on:** none
-- **Files:** new `src/Amphiteater.Sim/`; `src/Velarium` becomes a host
-- **What:** Move Models, Combat, Content, Calendar, GameState, Save DTO into a classlib. Console still runs M1.
+- **Status:** done 2026-08-28
+- **Files:** `src/Amphiteater.Sim/`; `src/Velarium` is a host
+- **What:** Models, Combat, Content, Calendar, GameState, Save DTO.
+
+### PR1.5 — Ludus rules + `--report`
+- **Depends on:** PR1
+- **Status:** done 2026-08-29
+- **Files:** `Ludus.cs`, `CareerSim.cs`; Game.cs UI-only; `Amphiteater.Sim.Tests`
+- **What:** Start / locatio / EndDay in Sim. Headless Ville/Gaius report. No new verbs.
+
+### PR1.6 — M2 rooms, household, night ops (console)
+- **Depends on:** PR1.5
+- **Files:** Sim room/worker/rival models; forum + ludus + night menus in Velarium
+- **What:** Unlock/upgrade rooms; assign household slaves; spy/poison/sabotage vs one rival. Still no Godot.
 
 ### PR2 — Godot 4 C# shell
 - **Depends on:** PR1

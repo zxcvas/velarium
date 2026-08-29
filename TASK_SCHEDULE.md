@@ -17,8 +17,10 @@ This document will evolve. For the skeleton we only list major tracks.
 - [x] Finalize language/engine choice (C# console for M1; Godot deferred)
 - [x] Core project structure / data loading
 - [x] Persistence (save/load)
+- [x] Headless career report (`--report`)
+- [x] Sim test project
 - [ ] Logging / debug tools
-- [ ] Build & CI pipeline
+- [ ] Build & CI pipeline (local `dotnet test` in `build.ps1`)
 
 ### Game Systems
 - [x] Gladiator model + attributes
@@ -27,6 +29,10 @@ This document will evolve. For the skeleton we only list major tracks.
 - [x] Event / calendar system (Roman civil date + night events)
 - [x] Combat / spectacle (one pair, four armaturae)
 - [x] Reputation (fama ludi + personal fama)
+- [x] Rules extracted to `Ludus` (console is a host)
+- [ ] Ludus rooms + upgrades
+- [ ] Household slave workforce
+- [ ] Night ops (spy / poison / sabotage) vs a rival camp
 - [ ] Politics meters / patrons
 - [ ] Rudis / discharge
 - [ ] Hosted munus with more than one pair
@@ -52,8 +58,8 @@ This document will evolve. For the skeleton we only list major tracks.
 - [ ] Music direction
 
 ### Quality & Release
-- [ ] Test harness / scenarios
-- [ ] Balancing passes
+- [x] Test harness / scenarios (`Amphiteater.Sim.Tests` + `--report`)
+- [ ] Balancing passes (Ville lethality, Gaius cashflow)
 - [ ] Documentation
 - [ ] Steam / distribution prep (later)
 

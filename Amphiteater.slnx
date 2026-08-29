@@ -2,5 +2,6 @@
   <Folder Name="/src/">
     <Project Path="src/Amphiteater.Sim/Amphiteater.Sim.csproj" />
     <Project Path="src/Velarium/Velarium.csproj" />
+    <Project Path="src/Amphiteater.Sim.Tests/Amphiteater.Sim.Tests.csproj" />
   </Folder>
 </Solution>

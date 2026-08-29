@@ -28,5 +28,13 @@ Day one an editor will usually be at the gate. Send the type he asked for.
 
 Saves write to `dist/amphiteater_save.json` (ignored by git). Continue from the title screen.
 
+Exit: title `[4] Vale`. In a day: `[7] Servare et abire` (save and leave), then Vale.
+
+Headless balance dump (no UI):
+
+```powershell
+.\dist\Amphiteater.exe --report 200
+```
+
 ## Keys
 Menus are numbers. `0` goes back. `s` / `n` confirm. Enter pages.

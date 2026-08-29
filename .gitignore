@@ -41,6 +41,9 @@ DUMP/
 # Local game saves
 saves/
 
+# Scratch build output (when dist/ is locked by a running exe)
+dist-pr15/
+
 # Godot or other if added later (uncomment if used)
 # .import/
 # export.cfg

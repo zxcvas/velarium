@@ -117,6 +117,7 @@ public sealed class GameState
 
     public string FullName => $"{Praenomen} {Nomen} {Cognomen}".Trim();
     public IEnumerable<Gladiator> Living => Familia.Where(g => g.Alive);
+    public bool HostingUnlocked => Fama >= Ludus.HostFamaNeed && Living.Any(g => g.Palmae >= 1);
 }
 
 public sealed class CombatReport

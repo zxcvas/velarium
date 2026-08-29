@@ -62,28 +62,7 @@ sealed class Game
 
         int seed = Environment.TickCount;
         rng = new Random(seed);
-        s = new GameState
-        {
-            Seed = seed,
-            YearAuc = 782,
-            Month = 5,
-            Day = 1,
-            Praenomen = pra,
-            Nomen = nom,
-            Cognomen = cog,
-            LudusName = "Ludus " + nom,
-            Denarii = 620,
-            Fama = 3,
-            NextId = 1
-        };
-
-        var taken = new HashSet<string>();
-        Armatura[] kit = { Armatura.Murmillo, Armatura.Thraex, Armatura.Retiarius };
-        foreach (var a in kit)
-            s.Familia.Add(MakeGladiator(taken, a, tiro: true));
-
-        RefreshMarket();
-        RefreshOffer();
+        s = Ludus.Start(rng, seed, pra, nom, cog);
 
         Ui.Clear();
         Ui.Title(s.LudusName);
@@ -115,7 +94,7 @@ sealed class Game
         if (loaded == null) return false;
         s = loaded;
         rng = new Random(unchecked(s.Seed + s.DaysPlayed * 997));
-        if (s.Market.Count == 0) RefreshMarket();
+        if (s.Market.Count == 0) Ludus.RefreshMarket(s, rng);
         return true;
     }
 
@@ -149,7 +128,7 @@ sealed class Game
                 case 3: ForumScreen(); break;
                 case 4: LocatioScreen(); break;
                 case 5: HostScreen(); break;
-                case 6: EndDay(); break;
+                case 6: EndDayScreen(); break;
                 case 7: Autosave(); return;
             }
             if (s.Ended) ShowEnding();
@@ -168,7 +147,7 @@ sealed class Game
             Console.WriteLine("The munus for today is done.");
         else
             Console.WriteLine("No editor came to the ludus this morning.");
-        if (HostingUnlocked())
+        if (s.HostingUnlocked)
             Console.WriteLine("The duumviri will hear a petition to edit a munus of your own.");
         Ui.Rule();
     }
@@ -179,12 +158,9 @@ sealed class Game
             : "Locatio (no editor today)";
 
     string HostLabel()
-        => HostingUnlocked()
+        => s.HostingUnlocked
             ? "Edere munus (host games — unlocked)"
             : "Edere munus (locked — fama and a palma needed)";
-
-    bool HostingUnlocked()
-        => s.Fama >= 16 && s.Living.Any(g => g.Palmae >= 1);
 
     void FamiliaScreen()
     {
@@ -269,11 +245,11 @@ sealed class Game
             Ui.Title("Forum of Capua");
             Ui.Wrap("Slave-dealers in the shade of the portico. Oil, barley, a medicus who has worked the ludi before. Somewhere an aedile's clerk is nailing an edictum muneris to a wall — a velarium promised, if the wind allows.");
             Console.WriteLine();
-            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, 8 - s.Living.Count())} of 8.");
+            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, Ludus.CellCap - s.Living.Count())} of {Ludus.CellCap}.");
             int c = Ui.Menu("Forum", new[]
             {
                 "Gladiators for sale",
-                "Medicus (15 denarii a man — wounds and fever)",
+                $"Medicus ({Ludus.MedicusFee} denarii a man — wounds and fever)",
                 "Rumors"
             });
             if (c == 0) return;
@@ -300,13 +276,13 @@ sealed class Game
             int c = Ui.Menu("Buy whom?", labels);
             if (c == 0) return;
             var g = s.Market[c - 1];
-            if (s.Living.Count() >= 8)
+            int price = g.Value();
+            if (s.Living.Count() >= Ludus.CellCap)
             {
                 Console.WriteLine("The cells are full. Eight is as many as this ludus will hold.");
                 Ui.Pause();
                 continue;
             }
-            int price = g.Value();
             if (s.Denarii < price)
             {
                 Console.WriteLine("The dealer laughs. Come back with coin, lanista.");
@@ -314,11 +290,20 @@ sealed class Game
                 continue;
             }
             if (!Ui.Confirm($"Pay {price} denarii for {g.Name}?")) continue;
-            s.Denarii -= price;
-            g.Id = s.NextId++;
-            g.Order = DayOrder.None;
-            s.Familia.Add(g);
-            s.Market.RemoveAt(c - 1);
+            string? err = Ludus.Buy(s, c - 1);
+            if (err == "full")
+            {
+                Console.WriteLine("The cells are full. Eight is as many as this ludus will hold.");
+                Ui.Pause();
+                continue;
+            }
+            if (err == "coin")
+            {
+                Console.WriteLine("The dealer laughs. Come back with coin, lanista.");
+                Ui.Pause();
+                continue;
+            }
+            if (err != null) continue;
             Console.WriteLine($"{g.Name} is led through the porta of the ludus. The familia has a new mouth to feed.");
             Autosave();
             Ui.Pause();
@@ -327,7 +312,7 @@ sealed class Game
 
     void MedicusScreen()
     {
-        var need = s.Living.Where(g => g.Status is GladiatorStatus.Vulneratus or GladiatorStatus.Aeger || g.Vigor < g.VigorMax).ToList();
+        var need = s.Living.Where(Ludus.NeedsMedicus).ToList();
         Ui.Clear();
         Ui.Title("Medicus");
         Ui.Wrap("He is not Galen. He is a man who has sewn more thighs than tunics. Fifteen denarii a head: wine, oil, a needle, and silence.");
@@ -337,19 +322,15 @@ sealed class Game
             Ui.Pause();
             return;
         }
-        int c = Ui.Menu("Treat whom?", need.Select(g => $"{g.Name} ({Content.StatusLat(g.Status)}, {g.Vigor}/{g.VigorMax}) — 15 den.").ToList());
+        int c = Ui.Menu("Treat whom?", need.Select(g => $"{g.Name} ({Content.StatusLat(g.Status)}, {g.Vigor}/{g.VigorMax}) — {Ludus.MedicusFee} den.").ToList());
         if (c == 0) return;
         var g = need[c - 1];
-        if (s.Denarii < 15)
+        if (!Ludus.Treat(s, g))
         {
             Console.WriteLine("The medicus packs his bag. Coin first.");
             Ui.Pause();
             return;
         }
-        s.Denarii -= 15;
-        g.Vigor = Math.Min(g.VigorMax, g.Vigor + 6);
-        if (g.Status is GladiatorStatus.Vulneratus or GladiatorStatus.Aeger)
-            g.Status = g.Vigor >= g.VigorMax - 2 ? GladiatorStatus.Validus : GladiatorStatus.Fessus;
         Console.WriteLine($"{g.Name} is bound and dosed. He will live to cost you more barley.");
         Autosave();
         Ui.Pause();
@@ -406,8 +387,7 @@ sealed class Game
         {
             Console.WriteLine();
             Ui.Wrap("No one in the familia can stand. The editor's clerk makes a mark against your name.");
-            s.Fama = Math.Max(0, s.Fama - 1);
-            s.OfferTakenToday = true;
+            Ludus.DeclineOfferNoFighter(s);
             Ui.Pause();
             return;
         }
@@ -423,14 +403,14 @@ sealed class Game
         if (g.Status != GladiatorStatus.Validus && !Ui.Confirm($"{g.Name} is {Content.StatusLat(g.Status)}. Send him anyway?"))
             return;
 
-        ResolveMunus(g, hosted: false);
+        PlayMunus(g, hosted: false);
     }
 
     void HostScreen()
     {
         Ui.Clear();
         Ui.Title("Edere munus");
-        if (!HostingUnlocked())
+        if (!s.HostingUnlocked)
         {
             Ui.Wrap("The duumviri will not grant you the staging of a munus. A lanista is infamis; an editor is a public man. Raise the fama of the ludus (need 16) and return with a man who has taken a palma. Then they may pretend not to see what you are.");
             Console.WriteLine();
@@ -445,10 +425,9 @@ sealed class Game
             return;
         }
 
-        const int cost = 220;
         Ui.Wrap("You petition to edit a modest munus in a wooden arena at the edge of Capua. You pay for the sand, the trumpets, a pair of officials, and a damnatus or hired foe for the other corner. Your man fights. You — not a magistrate — take the palm of the editor: mitte or iugula is yours if the other falls. The crowd will remember who gave them the show.");
         Console.WriteLine();
-        Console.WriteLine($"Cost: {cost} denarii. Purse: {s.Denarii}.");
+        Console.WriteLine($"Cost: {Ludus.HostCost} denarii. Purse: {s.Denarii}.");
         var able = s.Living.Where(g => g.CanFight).ToList();
         if (able.Count == 0)
         {
@@ -456,161 +435,82 @@ sealed class Game
             Ui.Pause();
             return;
         }
-        if (s.Denarii < cost)
+        if (s.Denarii < Ludus.HostCost)
         {
             Console.WriteLine("The magistrates require the money first.");
             Ui.Pause();
             return;
         }
         if (!Ui.Confirm("Stage the munus?")) return;
-        s.Denarii -= cost;
+        Ludus.TryPayHost(s);
 
         int c = Ui.Menu("Which of yours takes the sand?", able.Select(g =>
             $"{g.Name}, {Content.ArmaturaNom(g.Armatura)}, virtus {g.Virtus}, {g.Rank()}").ToList());
         if (c == 0)
         {
-            s.Denarii += cost;
+            Ludus.RefundHost(s);
             return;
         }
-        ResolveMunus(able[c - 1], hosted: true);
-        s.HasHosted = true;
+        PlayMunus(able[c - 1], hosted: true);
     }
 
-    void ResolveMunus(Gladiator g, bool hosted)
+    void PlayMunus(Gladiator g, bool hosted)
     {
-        Armatura foeType = hosted
-            ? Content.ClassicFoe(g.Armatura)
-            : (rng.Next(100) < 80 ? s.Offer!.Requested : Content.ClassicFoe(g.Armatura));
-        // If renting, opponent is the complement of the requested pairing.
-        if (!hosted && s.Offer != null)
-            foeType = Content.ClassicFoe(s.Offer.Requested);
-
-        var foe = Combat.MakeFoe(rng, foeType, s.DaysPlayed);
-        if (!hosted && s.Offer != null && rng.Next(100) < 70)
-            foe.Armatura = Content.ClassicFoe(s.Offer.Requested);
+        var bout = Ludus.RunBout(s, rng, g, hosted);
+        var foe = bout.Foe;
 
         Ui.Clear();
         Ui.Title(hosted ? "Munus — you are editor" : "Munus — locatio");
-        if (!hosted && s.Offer != null)
+        if (!hosted && bout.Offer != null)
         {
-            Ui.Wrap($"{s.Offer.Venue}. Editor: {s.Offer.EditorName}. Your {g.Name} ({Content.ArmaturaNom(g.Armatura)}) is led in from the porta sanavivaria. Opposite: {foe.Name}, {Content.ArmaturaNom(foe.Armatura)} of {s.Offer.RivalLanista}.");
+            Ui.Wrap($"{bout.Offer.Venue}. Editor: {bout.Offer.EditorName}. Your {g.Name} ({Content.ArmaturaNom(g.Armatura)}) is led in from the porta sanavivaria. Opposite: {foe.Name}, {Content.ArmaturaNom(foe.Armatura)} of {bout.Offer.RivalLanista}.");
         }
         else
         {
             Ui.Wrap($"A wooden arena at Capua. Your edict promised a pair. {g.Name} ({Content.ArmaturaNom(g.Armatura)}) enters. The other corner is {foe.Name}, {Content.ArmaturaNom(foe.Armatura)}, bought cheap for the day.");
         }
-        if (!hosted && s.Offer != null && g.Armatura != s.Offer.Requested)
-            Ui.Wrap($"The clerk frowns: they asked for a {Content.ArmaturaNom(s.Offer.Requested)}. The crowd will know the pairing is wrong.");
+        if (bout.WrongType && bout.Offer != null)
+            Ui.Wrap($"The clerk frowns: they asked for a {Content.ArmaturaNom(bout.Offer.Requested)}. The crowd will know the pairing is wrong.");
         if (Content.ClassicPair(g.Armatura, foe.Armatura))
             Ui.Wrap("A proper pairing. The old men in the first seats nod.");
         Console.WriteLine();
         Ui.Wrap("Trumpets. Sand. Heat. The awning is drawn as far as the masts allow.");
         Ui.Pause("The first pass — [Enter]");
 
-        var report = Combat.Fight(rng, g, foe);
-        foreach (var beat in report.Beats)
+        foreach (var beat in bout.Report.Beats)
         {
             Console.WriteLine();
             Ui.Wrap(beat);
         }
 
-        g.Pugnat++;
-        g.FoughtToday = true;
-        g.Vigor = Math.Max(1, report.PlayerVigorAfter);
-        if (g.Vigor < g.VigorMax / 2) g.Status = GladiatorStatus.Fessus;
-
-        bool wrongType = !hosted && s.Offer != null && g.Armatura != s.Offer.Requested;
-        int pay = 0;
-        int famaDelta = 0;
-
-        Console.WriteLine();
-        Ui.Rule();
-
-        if (report.Outcome == FightOutcome.Stans)
+        var ownFallen = IugulaChoice.SimRolls;
+        var foeFallen = IugulaChoice.SimRolls;
+        if (hosted)
         {
-            g.Stantes++;
-            g.Virtus = Math.Min(18, g.Virtus + (rng.Next(2) == 0 ? 1 : 0));
-            g.Fama++;
-            pay = hosted ? rng.Next(90, 140) : Sudore(wrongType);
-            famaDelta = report.Spectacular ? 2 : 1;
-            Ui.Wrap($"Stans. Both leave the sand. The crowd is divided; the clerks are not. Pro sudore: {pay} denarii.");
-        }
-        else if (report.Outcome == FightOutcome.Victoria || report.Outcome == FightOutcome.VictoriaSineMissione)
-        {
-            bool killFoe = false;
-            if (hosted)
+            if (bout.Report.Outcome is FightOutcome.Victoria or FightOutcome.VictoriaSineMissione)
             {
                 Console.WriteLine();
                 Ui.Wrap($"{foe.Name} is at your mercy. The crowd's noise is a weather. You are editor today.");
                 int h = Ui.Menu("The fallen foe", new[] { "Mitte — spare him", "Iugula — have him killed" }, zeroBack: false);
-                killFoe = h == 2;
+                foeFallen = h == 2 ? IugulaChoice.Iugula : IugulaChoice.Mitte;
             }
-            else
-            {
-                killFoe = report.CrowdBloodlust >= 3 && rng.Next(100) < 40;
-                Ui.Wrap(killFoe
-                    ? $"The crowd wants the sword. The editor does not lift his hand. {foe.Name} is finished."
-                    : $"Shouts of mitte. The editor waves the wooden staff. {foe.Name} lives to be rented again.");
-            }
-
-            g.Palmae++;
-            g.Virtus = Math.Min(18, g.Virtus + 1);
-            g.Fama += killFoe ? 2 : 1;
-            g.Vigor = Math.Max(g.Vigor, 3);
-            pay = hosted
-                ? rng.Next(160, 280) + (killFoe ? 40 : 0) + (report.Spectacular ? 30 : 0)
-                : Sudore(wrongType) + 25 + g.Palmae * 2;
-            famaDelta = (killFoe ? 2 : 1) + (report.Spectacular ? 1 : 0) + (hosted ? 3 : 0);
-            if (wrongType) famaDelta = Math.Max(0, famaDelta - 1);
-            Ui.Wrap($"{g.Name} takes the palma. {(hosted ? "Gate and gifts" : "The editor's purse")}: {pay} denarii.");
-        }
-        else
-        {
-            // player down or yielded — missio or mors
-            bool iugula;
-            if (hosted)
+            else if (bout.Report.Outcome is not FightOutcome.Stans)
             {
                 Ui.Wrap("Your man is down. The crowd is a throat. You may still refuse them — he is your property.");
                 int h = Ui.Menu(g.Name + " fallen", new[] { "Mitte — he is worth more alive", "Give him up (the crowd will love you, briefly)" }, zeroBack: false);
-                iugula = h == 2;
-            }
-            else
-            {
-                int chance = 25 + report.CrowdBloodlust * 10 - g.Fama * 4 - g.Palmae * 3;
-                if (report.Spectacular) chance -= 10;
-                iugula = rng.Next(100) < Math.Clamp(chance, 8, 70);
-                Ui.Wrap(iugula
-                    ? "Iugula. The editor's hand turns. A man with a blade walks out from the porta libitinensis."
-                    : "Mitte. The crowd has a use for him yet. He is dragged toward the gate of the living.");
-            }
-
-            if (iugula)
-            {
-                pay = hosted ? rng.Next(40, 90) : Occisus(wrongType);
-                famaDelta = hosted ? 1 : 0;
-                Ui.Wrap($"{g.Name} dies on the sand. {(hosted ? "The crowd has its death. Your purse has a hole." : $"Compensation for a destroyed man: {pay} denarii. You have sold more than sweat.")}");
-                Kill(g);
-            }
-            else
-            {
-                g.Missiones++;
-                g.Status = GladiatorStatus.Vulneratus;
-                g.Vigor = Math.Max(1, g.VigorMax / 4);
-                g.Virtus = Math.Min(18, g.Virtus + (rng.Next(3) == 0 ? 1 : 0));
-                pay = hosted ? rng.Next(70, 120) : Sudore(wrongType) * 2 / 3;
-                famaDelta = report.Spectacular ? 1 : 0;
-                Ui.Wrap($"Missio. {g.Name} will eat barley on his back for a while. Pay: {pay} denarii.");
+                ownFallen = h == 2 ? IugulaChoice.Iugula : IugulaChoice.Mitte;
             }
         }
 
-        s.Denarii += pay;
-        s.Fama = Math.Clamp(s.Fama + famaDelta, 0, 99);
-        s.OfferTakenToday = true;
-        if (!hosted) s.Offer = null;
+        Console.WriteLine();
+        Ui.Rule();
+        var settled = Ludus.SettleBout(s, rng, bout, ownFallen, foeFallen);
+        foreach (var line in settled.Lines)
+            Ui.Wrap(line);
 
         Console.WriteLine();
         Console.WriteLine($"Purse: {s.Denarii} denarii. Fama ludi: {s.Fama}.");
-        if (!s.HasHosted && HostingUnlocked())
+        if (settled.HostingJustUnlocked)
         {
             Console.WriteLine();
             Ui.Wrap("A note from the duumviri: they will hear a petition to edit a munus. Infamia is not erased. It is papered over with sand.");
@@ -619,231 +519,40 @@ sealed class Game
         Ui.Pause();
     }
 
-    int Sudore(bool wrong) => Math.Max(12, (s.Offer?.PaySudore ?? 28) - (wrong ? 8 : 0));
-    int Occisus(bool wrong) => Math.Max(80, (s.Offer?.PayOccisus ?? 420) - (wrong ? 40 : 0));
-
-    void Kill(Gladiator g)
-    {
-        g.Status = GladiatorStatus.Mortuus;
-        g.Vigor = 0;
-        s.AdLibitinam.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()}");
-    }
-
-    void EndDay()
+    void EndDayScreen()
     {
         Ui.Clear();
         Ui.Title("Vespera");
-        var log = new List<string>();
+        var night = Ludus.EndDay(s, rng);
 
-        foreach (var g in s.Living.ToList())
-        {
-            if (g.FoughtToday)
-            {
-                log.Add($"{g.Name} fought today; the palus goes unused.");
-                g.Order = DayOrder.None;
-                if (g.Status == GladiatorStatus.Validus) g.Status = GladiatorStatus.Fessus;
-                continue;
-            }
-            switch (g.Order)
-            {
-                case DayOrder.Palus:
-                    if (rng.Next(100) < 55 && g.Virtus < 18) { g.Virtus++; log.Add($"{g.Name} works the palus. Virtus grows."); }
-                    else log.Add($"{g.Name} sweats at the stake. No sudden art.");
-                    g.Vigor = Math.Max(1, g.Vigor - 1);
-                    if (rng.Next(100) < 8)
-                    {
-                        g.Status = GladiatorStatus.Vulneratus;
-                        g.Vigor = Math.Max(1, g.Vigor - 2);
-                        log.Add($"A slip. {g.Name} is nicked. The doctor of the yard is not a medicus.");
-                    }
-                    break;
-                case DayOrder.Sparring:
-                    if (g.Virtus < 18)
-                    {
-                        int gain = rng.Next(100) < 25 ? 2 : 1;
-                        g.Virtus = Math.Min(18, g.Virtus + gain);
-                        log.Add($"{g.Name} spars with the rudis. The familia watches. Virtus +{gain}.");
-                    }
-                    if (rng.Next(100) < 16)
-                    {
-                        g.Status = GladiatorStatus.Vulneratus;
-                        g.Vigor = Math.Max(1, g.Vigor - 3);
-                        log.Add($"The wooden sword is still a sword. {g.Name} will not stand tomorrow.");
-                    }
-                    else
-                    {
-                        g.Vigor = Math.Max(1, g.Vigor - 2);
-                    }
-                    break;
-                case DayOrder.Requies:
-                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 4);
-                    if (g.Status is GladiatorStatus.Fessus or GladiatorStatus.Vulneratus or GladiatorStatus.Aeger)
-                    {
-                        if (rng.Next(100) < 55) g.Status = GladiatorStatus.Validus;
-                    }
-                    log.Add($"{g.Name} to requies. Barley, oil, sleep.");
-                    break;
-                default:
-                    g.Vigor = Math.Min(g.VigorMax, g.Vigor + 1);
-                    break;
-            }
-            g.Order = DayOrder.None;
-        }
-
-        int mouths = s.Living.Count();
-        int upkeep = 10 + mouths * 6;
-        s.Denarii -= upkeep;
-        log.Add($"Cibaria and the ludus: -{upkeep} denarii ({mouths} mouths + roof).");
-
-        if (s.Denarii < 0)
-        {
-            log.Add("The purse is empty. The hordearii eat thin. Men lose vigor.");
-            foreach (var g in s.Living)
-            {
-                g.Vigor = Math.Max(1, g.Vigor - 2);
-                if (g.Status == GladiatorStatus.Validus) g.Status = GladiatorStatus.Fessus;
-            }
-            if (s.Living.Any() && rng.Next(100) < 40)
-            {
-                var taken = s.Living.OrderBy(g => g.Value()).First();
-                log.Add($"A creditor takes {taken.Name} in lieu of coin. The cell is opened; it is not opened for him.");
-                Kill(taken);
-                s.Denarii = 0;
-            }
-            else
-            {
-                s.Denarii = 0;
-            }
-        }
-
-        foreach (var g in s.Living.Where(x => x.Status == GladiatorStatus.Fessus && x.Vigor >= x.VigorMax - 1).ToList())
-            g.Status = GladiatorStatus.Validus;
-
-        Gladiator? volunteer = null;
-        int bounty = 0;
-        if (rng.Next(100) < 34)
-        {
-            var (text, vol, b) = NightEvent();
-            log.Add(text);
-            volunteer = vol;
-            bounty = b;
-        }
-
-        if (s.DaysPlayed + 1 == 12 && s.HasHosted && s.Living.Any())
-            log.Add("Twelve days, and you have edited a munus. The ludus still stands. Infamia is not erased. The barley is paid. That is a kind of victory.");
-
-        foreach (var g in s.Familia) g.FoughtToday = false;
-        s.OfferTakenToday = false;
-        RefreshMarket();
-        RefreshOffer();
-        Calendar.Next(s);
-
-        foreach (var line in log)
+        foreach (var line in night.Log)
         {
             Ui.Wrap("• " + line);
             Console.WriteLine();
         }
 
-        if (volunteer != null)
-            HandleAuctoratus(volunteer, bounty);
+        if (night.Volunteer != null)
+            HandleAuctoratus(night.Volunteer, night.Bounty);
 
         Console.WriteLine($"Tomorrow: {Calendar.Format(s)}    Purse: {s.Denarii}    Fama: {s.Fama}");
-        CheckEnd();
         Autosave();
         Ui.Pause();
-    }
-
-    (string text, Gladiator? volunteer, int bounty) NightEvent()
-    {
-        int n = rng.Next(8);
-        switch (n)
-        {
-            case 0:
-                if (s.Living.Any())
-                {
-                    var g = PickLiving();
-                    g.Status = GladiatorStatus.Aeger;
-                    g.Vigor = Math.Max(1, g.Vigor - 3);
-                    return ($"Fever in the cells. {g.Name} is aeger. The medicus would want coin you may not have.", null, 0);
-                }
-                break;
-            case 1:
-                if (s.Living.Count() >= 2)
-                {
-                    var a = PickLiving();
-                    var b = s.Living.Where(x => x.Id != a.Id).OrderBy(_ => rng.Next()).First();
-                    a.Status = GladiatorStatus.Vulneratus;
-                    a.Vigor = Math.Max(1, a.Vigor - 2);
-                    return ($"A quarrel after the barley. {a.Name} and {b.Name}. Only {a.Name} bleeds. Juvenal would not be surprised: you quarter the light-armed too near the heavies.", null, 0);
-                }
-                break;
-            case 2:
-                if (s.Living.Count() < 8)
-                {
-                    var taken = new HashSet<string>(s.Familia.Select(x => x.Name));
-                    var g = MakeGladiator(taken, RandomArmatura(), tiro: false);
-                    g.Source = "auctoratus";
-                    g.Virtus = Math.Min(12, g.Virtus + 2);
-                    int bounty = 40 + g.Virtus * 5;
-                    return ($"An auctoratus waits at the gate: {g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}. He sells himself — a citizen's disgrace, a ludus's gain.", g, bounty);
-                }
-                break;
-            case 3:
-                s.Fama = Math.Min(99, s.Fama + 1);
-                return ("An augustalis in Puteoli has heard the name of your ludus. Fama +1. He has not invited you to dine.", null, 0);
-            case 4:
-                int fine = Math.Min(s.Denarii, rng.Next(8, 22));
-                s.Denarii -= fine;
-                return ($"A watchman remembers that lanistae are infames. A fine of {fine} denarii for a door left unbarred. Or for existing.", null, 0);
-            case 5:
-                if (s.Living.Any(g => g.Fama >= 3 || g.Palmae >= 2))
-                {
-                    var star = s.Living.OrderByDescending(g => g.Fama + g.Palmae).First();
-                    int gift = rng.Next(12, 30);
-                    s.Denarii += gift;
-                    star.Fama++;
-                    return ($"A woman of no inscription leaves {gift} denarii at the gate for {star.Name}. The graffiti will follow.", null, 0);
-                }
-                return ("Night passes over the palus. Dogs. A cart on the via.", null, 0);
-            case 6:
-                return ("Someone chalks SPARTACUS on the outside wall. You have it washed before the watch sees. Capua has a long memory.", null, 0);
-            default:
-                if (s.Offer != null)
-                    return ($"A boy from {s.Offer.EditorName} confirms the terms for tomorrow's light. Have a man ready.", null, 0);
-                return ("Oil lamps gutter. The familia sleeps as prisoners sleep.", null, 0);
-        }
-        return ("The night is quiet. That too is a kind of omen.", null, 0);
     }
 
     void HandleAuctoratus(Gladiator g, int bounty)
     {
         Console.WriteLine();
         Ui.Wrap($"He asks {bounty} denarii for the oath. Volunteers fight like men who chose the sand. Purse: {s.Denarii}.");
-        if (s.Denarii >= bounty && s.Living.Count() < 8 && Ui.Confirm("Pay the bounty and take his sacramentum?"))
+        if (s.Denarii >= bounty && s.Living.Count() < Ludus.CellCap && Ui.Confirm("Pay the bounty and take his sacramentum?"))
         {
-            s.Denarii -= bounty;
-            g.Id = s.NextId++;
-            s.Familia.Add(g);
-            Console.WriteLine($"{g.Name} is yours until the rudis, or the gate of Libitina.");
+            if (Ludus.AcceptAuctoratus(s, g, bounty))
+                Console.WriteLine($"{g.Name} is yours until the rudis, or the gate of Libitina.");
+            else
+                Console.WriteLine($"{g.Name} goes to another lanista. You will meet him on the sand, perhaps.");
         }
         else
         {
             Console.WriteLine($"{g.Name} goes to another lanista. You will meet him on the sand, perhaps.");
-        }
-    }
-
-    Gladiator PickLiving() => s.Living.ElementAt(rng.Next(s.Living.Count()));
-
-    void CheckEnd()
-    {
-        bool noMen = !s.Living.Any();
-        bool broke = s.Denarii <= 0;
-        int cheapest = s.Market.Count > 0 ? s.Market.Min(g => g.Value()) : 9999;
-        if (noMen && (broke || s.Denarii < cheapest))
-        {
-            s.Ended = true;
-            s.EndTitle = "Ludus clausus";
-            s.EndMessage = "The cells are empty and the purse is dead. Creditors take the palus, the rudes, the name on the gate. You are a lanista no longer. Infamia remains.";
         }
     }
 
@@ -863,63 +572,6 @@ sealed class Game
         }
         try { File.Delete(savePath); } catch { /* keep going */ }
         Ui.Pause();
-    }
-
-    void RefreshMarket()
-    {
-        s.Market.Clear();
-        int n = rng.Next(1, 3);
-        var taken = new HashSet<string>(s.Familia.Select(g => g.Name));
-        for (int i = 0; i < n; i++)
-            s.Market.Add(MakeGladiator(taken, RandomArmatura(), tiro: rng.Next(100) < 60));
-    }
-
-    void RefreshOffer()
-    {
-        // First two mornings always bring an editor so the core loop is visible.
-        if (s.DaysPlayed >= 2 && rng.Next(100) < 32)
-        {
-            s.Offer = null;
-            return;
-        }
-        var req = RandomArmatura();
-        int sudore = rng.Next(22, 38);
-        int occisus = rng.Next(360, 520);
-        s.Offer = new Contract
-        {
-            EditorName = Content.EditorNames[rng.Next(Content.EditorNames.Length)],
-            EditorOffice = Content.EditorOffices[rng.Next(Content.EditorOffices.Length)],
-            Venue = Content.Venues[rng.Next(Content.Venues.Length)],
-            Requested = req,
-            PaySudore = sudore,
-            PayOccisus = occisus,
-            RivalLanista = Content.RivalLanistae[rng.Next(Content.RivalLanistae.Length)]
-        };
-    }
-
-    Armatura RandomArmatura() => (Armatura)rng.Next(4);
-
-    Gladiator MakeGladiator(HashSet<string> taken, Armatura a, bool tiro)
-    {
-        string name = Content.UniqueName(rng, taken);
-        taken.Add(name);
-        var g = new Gladiator
-        {
-            Id = s.NextId++,
-            Name = name,
-            Origin = Content.Origins[rng.Next(Content.Origins.Length)],
-            Armatura = a,
-            VigorMax = rng.Next(14, 19),
-            Virtus = tiro ? rng.Next(4, 8) : rng.Next(7, 12),
-            Fama = tiro ? 0 : rng.Next(0, 4),
-            Palmae = tiro ? 0 : rng.Next(0, 3),
-            Pugnat = tiro ? 0 : rng.Next(1, 6),
-            Status = GladiatorStatus.Validus,
-            Source = rng.Next(8) == 0 ? "auctoratus" : "servus"
-        };
-        g.Vigor = g.VigorMax;
-        if (!tiro && g.Palmae > g.Pugnat) g.Pugnat = g.Palmae + rng.Next(0, 3);
-        return g;
     }
 
     void About()

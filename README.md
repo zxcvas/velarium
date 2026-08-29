@@ -3,10 +3,11 @@
 A game of Roman spectacle, strategy, and survival. You are a *lanista* in Capua: you own a gladiator school, not (yet) the games.
 
 ## Current Status
-- **M1 ludus slice is playable**
+- **M1 ludus slice is playable**; rules live in `Amphiteater.Sim`
 - C# console, .NET 10
 - Day loop: familia, drill, forum, rental fights, locked hosting
 - Save / load (`amphiteater_save.json` beside the exe)
+- Headless: `.\dist\Amphiteater.exe --report 200`
 
 ## Quick Start
 

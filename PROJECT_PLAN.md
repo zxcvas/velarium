@@ -12,7 +12,8 @@ Core loops:
 - Pay the ludus (barley, oil, roof)
 - Lease men (*locatio*) under sweat-vs-death terms
 - Unlock and edit a munus of your own
-- Politics, rival lanistae, and imperial attention — later
+- (M2) Expand the house; assign household slaves; night ops vs a rival camp
+- Politics and imperial attention — later
 
 ## Goals
 ### Skeleton (M0) — done
@@ -24,11 +25,18 @@ Core loops:
 - [x] README + build/run scripts
 - [x] Commit initial state
 
-### Ludus slice (M1) — current
+### Ludus slice (M1) — done
 - [x] Console engine (Godot deferred)
 - [x] Lanista role; hosting as progression
 - [x] Playable day loop + combat + save/load
-- [ ] Human playtest / balance pass
+- [x] Rules in `Amphiteater.Sim.Ludus` + `--report` harness
+- [ ] Human playtest / balance pass (use `--report` too)
+
+### House and night (M2) — next
+- [ ] Rooms: unlock/upgrade cellae, kitchen, medicus, porta
+- [ ] Household slaves assigned to rooms
+- [ ] Night ops vs a named rival: spy / poison / sabotage
+- [ ] PixelLab only after those verbs exist
 
 ## High-Level Phases
 1. **Foundation** — setup, console loop, data models (M0–M1)
@@ -43,6 +51,8 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Play the slice. Then pick one: balance, a fuller hosted munus, or *rudis* discharge.
+M2 on the console: rooms + household labor + night ops. Godot / PixelLab / Android wait until that loop is playable.
+
+Headless: `.\dist\Amphiteater.exe --report 200`
 
 See also: DEVELOPMENT_CYCLE.md, TASK_SCHEDULE.md, docs/design/01_expansion.md, docs/research/ludus_sources.md
