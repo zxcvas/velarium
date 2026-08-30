@@ -168,9 +168,9 @@ Sim owns denarii, rooms, familia, combat math. Godot owns camera, clicks, sprite
 
 - Token: `PIXELLAB_API_TOKEN` in gitignored `.env`. Never in repo or chat.
 - API: `https://api.pixellab.ai/v2` (Pixflux / style-reference / tiles / characters).
-- **Style lock:** one reference sheet — ochre, soot, iron, dirty linen, fresco-limited palette, no comic abs, no Lorica as gladiator kit. Pompeii helmets and *galerus*.
+- **Style lock:** NES / SNES chunky pixels (`assets/art/STYLE.md`). Pompeii kit, cartoon KO. Not painterly, not isometric.
 - Log: `assets/art/prompts/` next to each PNG (prompt, size, seed, endpoint).
-- First pack (generate **after** M2 verbs exist): courtyard dirt, cell, kitchen hearth, porta, palus; four *armatura* idles; one household slave (tunic, no helm); night: two figures at a rival gate.
+- **Map:** `assets/art/ASSET_MAP.md` — waves, frame counts, PixelLab endpoints. Generate only after wave 0 lock.
 
 ### Security
 

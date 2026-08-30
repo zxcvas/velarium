@@ -13,9 +13,10 @@
 - [x] M2: rooms, household slaves, night ops (spy / poison / sabotage)
 
 ## Next Up
-- Playtest the M2 console loop (assign a cook, raise cellae, one night spy)
-- Balance pass (`--report`; try SimRolls on own fallen for Ville)
-- PixelLab style sheet + tiles for kitchen / cell / porta / palus + household idle
+- PixelLab **wave 0** after token works: NES palette + sample dirt + sample murmillo (`assets/art/ASSET_MAP.md`)
+- Then wave 1 tileset/props, wave 2 4-dir idles, wave 3a south walk/attack
+- Playtest the M2 console loop
+- Balance pass (`--report`; SimRolls on own fallen for Ville)
 - A second fight in a hosted munus
 - Discharge (*rudis*)
 - Godot courtyard, then Android export
