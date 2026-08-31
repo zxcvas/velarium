@@ -1,0 +1,43 @@
+{
+  "id": "tileset_ludus",
+  "endpoint": "/create-tileset",
+  "seed": 785,
+  "image_size": {
+    "width": 32,
+    "height": 32
+  },
+  "view": "high top-down",
+  "direction": null,
+  "no_background": false,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "Wang tileset: courtyard dirt (lower) to cracked plaster portico (upper).",
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "tileset_id": "094c676e-9793-4309-b289-52e83b945fa3",
+  "files": {
+    "t_wang_13": "tiles/ludus/t_wang_13.png",
+    "t_wang_10": "tiles/ludus/t_wang_10.png",
+    "t_wang_4": "tiles/ludus/t_wang_4.png",
+    "t_wang_12": "tiles/ludus/t_wang_12.png",
+    "t_wang_6": "tiles/ludus/t_wang_6.png",
+    "t_wang_8": "tiles/ludus/t_wang_8.png",
+    "lower": "tiles/ludus/lower.png",
+    "t_wang_1": "tiles/ludus/t_wang_1.png",
+    "t_wang_11": "tiles/ludus/t_wang_11.png",
+    "t_wang_3": "tiles/ludus/t_wang_3.png",
+    "t_wang_2": "tiles/ludus/t_wang_2.png",
+    "t_wang_5": "tiles/ludus/t_wang_5.png",
+    "upper": "tiles/ludus/upper.png",
+    "t_wang_14": "tiles/ludus/t_wang_14.png",
+    "t_wang_9": "tiles/ludus/t_wang_9.png",
+    "t_wang_7": "tiles/ludus/t_wang_7.png",
+    "sheet": "tiles/ludus/sheet.png"
+  },
+  "tile_count": 16,
+  "transition_size": 0.0
+}

@@ -11,7 +11,26 @@
 - Characters: **32×32** or **48×48** 4-direction (PixelLab floor). Display chunky.
 - FX: **32×32**
 
-**Palette:** one master strip, ~16 colours, NES-hard. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Forced on every call via `color_image`. No gradients that aren't dither. No gold leaf, no neon.
+**Palette:** authored 64×16 strip `tiles/palette_nes.png` (16× 4px bars). Pixflux drew a scene; do not regenerate this via API. Forced on every call via `color_image`. No gradients that aren't dither. No gold leaf, no neon.
+
+| name | hex |
+|---|---|
+| soot | `#221F22` |
+| charcoal_deep | `#372E31` |
+| charcoal | `#444548` |
+| iron | `#505455` |
+| packed_dirt | `#684335` |
+| iron_rust | `#876C57` |
+| dirty_linen | `#B7A181` |
+| pale_linen | `#E8DCC0` |
+| ochre | `#BB8715` |
+| pompeii_red | `#A44A3E` |
+| dark_pompeii | `#5B2D2D` |
+| sea_green | `#4A8B7A` |
+| cold_iron | `#7F99B0` |
+| bronze | `#C4964A` |
+| skin | `#C8A87A` |
+| outline | `#0A0808` |
 
 **Line / shade:** 1px dark outline or cluster outline; flat + one shadow step. High-contrast silhouettes at 32px.
 
@@ -31,4 +50,4 @@
 - Runtime PixelLab from the game
 - Commit tokens
 
-**Pipeline:** `python tools/pixellab_gen.py` once `pixellab.env` returns 200 on `GET /balance`. Imagine comps in the session folder are **mood only**, not production.
+**Pipeline:** `python tools/pixellab_gen.py` (default wave 0) once `pixellab.env` returns 200 on `GET /balance`. Force palette via `tiles/palette_nes.png`, never the Imagine `style_lock.png`. Imagine comps are **mood only**, not production.

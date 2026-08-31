@@ -1,0 +1,28 @@
+{
+  "id": "sample_murmillo_s",
+  "endpoint": "/create-character-with-4-directions",
+  "seed": 784,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Murmillo gladiator idle, SNES 3/4 low top-down like A Link to the Past. Bronze galea with a metal fish-shaped crest (dorsal fish-fin ridge along the helm, two eye slits). NOT a red horsehair mohawk, NOT a centurion plume. Big scutum, short gladius, manica on the sword arm, one greave. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": null,
+  "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+  "background_job_id": null,
+  "files": {
+    "south": "characters/murmillo_s_idle_00.png",
+    "east": "characters/murmillo_e_idle_00.png",
+    "north": "characters/murmillo_n_idle_00.png",
+    "west": "characters/murmillo_w_idle_00.png"
+  },
+  "force_colors": true,
+  "proportions": "cartoon"
+}

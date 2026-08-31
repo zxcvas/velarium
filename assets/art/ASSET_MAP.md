@@ -1,11 +1,11 @@
 # Amphiteater — PixelLab asset map
 
-**Status:** map only. Do not generate until style lock + token work.  
+**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Squint before wave 2.  
 **Engine:** PixelLab v2 only for production art.  
 **Consumers:** later Godot; console stays text.  
 **Style:** `STYLE.md` — NES/SNES, cartoon KO, Pompeii kit.
 
-PixelLab `GET /balance` last tried **401**. Refresh `pixellab.env` before wave 0.
+PixelLab `GET /balance` **200** (2026-08-31): token valid. USD 0; Tier 1 subscription generations pay for pixflux. Run `python tools/pixellab_gen.py --check`.
 
 Session Imagine stills are reference, not the pack.
 
@@ -53,9 +53,9 @@ Prove palette and chunkiness **before** a tileset.
 
 | id | PixelLab | Size | Out |
 |---|---|---|---|
-| `palette_nes` | pixflux + keep as `color_image` forever | 32×16 or 64×16 strip | `tiles/palette_nes.png` |
+| `palette_nes` | **authored** 16-bar strip (pixflux made a scene) | 64×16 | `tiles/palette_nes.png` |
 | `sample_dirt` | pixflux, high top-down, seamless dirt | 32×32 | `tiles/sample_dirt.png` |
-| `sample_murmillo_s` | pixflux, south idle, no bg | 32×32 or 48×48 | `characters/sample_murmillo_s.png` |
+| `sample_murmillo_s` | **4-dir** (`POST /create-character-with-4-directions`), south copied to lock | 48×48 | `characters/sample_murmillo_s.png` + `murmillo_{n,e,s,w}_idle_00.png` |
 
 **Stop and look.** If it looks like a painting, tighten palette and size. If it looks like ALttP dirt and a toy soldier, continue.
 
@@ -65,7 +65,7 @@ Prove palette and chunkiness **before** a tileset.
 
 | id | Kind | PixelLab | Frames | Notes |
 |---|---|---|---|---|
-| `tileset_ludus` | tileset | `POST /create-tileset` 16px | static | **Lower:** packed dirt. **Upper:** cracked plaster / portico. Transition dirt↔plaster. |
+| `tileset_ludus` | tileset | `POST /create-tileset` **32px** (16px rejected the 32px dirt reference) | static | Lower should be packed dirt; PixelLab trends brick. Prefer `sample_dirt` as yard fill. Upper is plaster floor. |
 | `prop_palus` | object 1-dir | pixflux / map-object | 1 | Wooden stake. |
 | `prop_hearth` | object 1-dir | same | 1 | Sooty brick + pot. No text on sacks. |
 | `prop_porta` | object 1-dir | same | 1 | One gate, iron bands. |
@@ -180,7 +180,7 @@ Example: `murmillo_s_walk_02.png`
 ## Prompt rules (every PixelLab call)
 
 1. Prefix: `NES SNES era pixel art, 16 color, chunky pixels, 1px outline, transparent background.`
-2. Attach `palette_nes` as `color_image`.
+2. Attach authored `tiles/palette_nes.png` as `color_image`. Never the Imagine `style_lock.png`.
 3. Size ≤ 48 for characters; 16 or 32 for tiles.
 4. Negative in description: `not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass.`
 5. Log JSON next to PNG: endpoint, seed, size, character_id, frames requested vs kept.
@@ -213,6 +213,8 @@ Crowd is a **tile** of heads, not a sim of pollice verso.
 
 ## Next action (human)
 
-1. New PixelLab token in `pixellab.env` (current one 401s).
-2. Say **go wave 0** — three lock images, then we stop and look.
+1. Token works. `python tools/pixellab_gen.py` (default wave 0) writes `palette_nes`, `sample_dirt`, `sample_murmillo_s`.
+2. Stop and look. If it looks like a painting, tighten palette and size. If it looks like ALttP dirt and a toy soldier, continue.
 3. Then tileset, then 4-dir murmillo, then the rest.
+
+Imagine `assets/art/style_lock.png` is mood only — never `color_image`.

@@ -1,0 +1,21 @@
+{
+  "id": "sample_dirt",
+  "endpoint": "/create-image-pixflux",
+  "seed": 783,
+  "image_size": {
+    "width": 32,
+    "height": 32
+  },
+  "view": "high top-down",
+  "direction": null,
+  "no_background": false,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Seamless high top-down packed Capuan courtyard dirt tile. Pale dust, tiny stones, even density. Pattern continues off every edge. No landmark rock, no footprints, no directional shadow, no grass. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  }
+}

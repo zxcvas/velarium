@@ -1,0 +1,21 @@
+{
+  "id": "prop_palus",
+  "endpoint": "/create-image-pixflux",
+  "seed": 786,
+  "image_size": {
+    "width": 32,
+    "height": 32
+  },
+  "view": "low top-down",
+  "direction": null,
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Isolated wooden palus training stake, scarred post, SNES low top-down. No ground shadow, no dirt tile, no people. Transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  }
+}

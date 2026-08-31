@@ -11,6 +11,7 @@ dist/*.pdb
 
 # Inspiration / reference material — never commit (screenshots, PDFs, mood boards, etc.)
 INSP/
+assets/art/style_lock.png
 
 # Secrets (PixelLab token, etc.)
 .env

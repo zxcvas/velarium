@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-08-29 (M2 domus + night)
+**Last Updated:** 2026-08-31 (wave 0 locked; wave 1 courtyard)
 
 ## Now
 - [x] Engine: keep console for first demo
@@ -13,8 +13,9 @@
 - [x] M2: rooms, household slaves, night ops (spy / poison / sabotage)
 
 ## Next Up
-- PixelLab **wave 0** after token works: NES palette + sample dirt + sample murmillo (`assets/art/ASSET_MAP.md`)
-- Then wave 1 tileset/props, wave 2 4-dir idles, wave 3a south walk/attack
+- Squint PixelLab **wave 1** (`assets/art/tiles/ludus/`, `assets/art/props/`)
+- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household) — murmillo already exists
+- Wave 2 4-dir idles, wave 3a south walk/attack
 - Playtest the M2 console loop
 - Balance pass (`--report`; SimRolls on own fallen for Ville)
 - A second fight in a hosted munus
@@ -30,4 +31,5 @@
 - M2 rooms / household / night ops (2026-08-29)
 
 ## Blocked / Questions
+Wave 0 locked. Wave 1 on disk. Tileset lower is brick-ish (use `sample_dirt` for yard fill). Props look SNES. Crest still a red plume; accepted.
 `--report 50` (pre-M2 AI, always mitte): 16% ruin, combatant death 0.13, own deaths 0, purse 621→75 by day 30. Not unplayable.

@@ -1,0 +1,21 @@
+{
+  "id": "prop_porta_night",
+  "endpoint": "/create-image-pixflux",
+  "seed": 789,
+  "image_size": {
+    "width": 32,
+    "height": 32
+  },
+  "view": "low top-down",
+  "direction": null,
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. The same isolated ludus gate at night, one torch on the jamb, darker soot palette. Keep the gate shape. No people. Transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  }
+}

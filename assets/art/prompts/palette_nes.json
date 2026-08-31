@@ -1,0 +1,84 @@
+{
+  "id": "palette_nes",
+  "endpoint": "authored",
+  "seed": 782,
+  "image_size": {
+    "width": 64,
+    "height": 16
+  },
+  "view": null,
+  "direction": null,
+  "no_background": false,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": false,
+  "description": "Authored 16-swatch NES strip. Not pixflux.",
+  "usage": null,
+  "swatches": [
+    {
+      "name": "soot",
+      "hex": "#221F22"
+    },
+    {
+      "name": "charcoal_deep",
+      "hex": "#372E31"
+    },
+    {
+      "name": "charcoal",
+      "hex": "#444548"
+    },
+    {
+      "name": "iron",
+      "hex": "#505455"
+    },
+    {
+      "name": "packed_dirt",
+      "hex": "#684335"
+    },
+    {
+      "name": "iron_rust",
+      "hex": "#876C57"
+    },
+    {
+      "name": "dirty_linen",
+      "hex": "#B7A181"
+    },
+    {
+      "name": "pale_linen",
+      "hex": "#E8DCC0"
+    },
+    {
+      "name": "ochre",
+      "hex": "#BB8715"
+    },
+    {
+      "name": "pompeii_red",
+      "hex": "#A44A3E"
+    },
+    {
+      "name": "dark_pompeii",
+      "hex": "#5B2D2D"
+    },
+    {
+      "name": "sea_green",
+      "hex": "#4A8B7A"
+    },
+    {
+      "name": "cold_iron",
+      "hex": "#7F99B0"
+    },
+    {
+      "name": "bronze",
+      "hex": "#C4964A"
+    },
+    {
+      "name": "skin",
+      "hex": "#C8A87A"
+    },
+    {
+      "name": "outline",
+      "hex": "#0A0808"
+    }
+  ]
+}
