@@ -36,7 +36,8 @@ Core loops:
 - [x] Rooms: unlock/upgrade cellae, kitchen, medicus, porta
 - [x] Household slaves assigned to rooms
 - [x] Night ops vs a named rival: spy / poison / sabotage
-- [ ] PixelLab only after those verbs exist (loop is now on the console)
+- [x] PixelLab wave 0–1 (palette, dirt, 4-dir murmillo, courtyard props)
+- [ ] Human playtest of the M2 console loop (`production/playtest_m2.md`)
 
 ## High-Level Phases
 1. **Foundation** — setup, console loop, data models (M0–M1)
@@ -51,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Play the M2 console loop (domus + night). Then PixelLab tiles for those rooms, or a balance pass. Godot / Android wait.
+Play 12 days (`production/playtest_m2.md`). `--report 200` is off-band on cash, not unplayable; no retune until that verdict. Godot waits.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

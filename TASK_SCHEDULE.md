@@ -52,14 +52,14 @@ This document will evolve. For the skeleton we only list major tracks.
 - [ ] Multiple endings / legacies
 
 ### Art & Audio
-- [ ] Style guide
-- [ ] Core sprites / UI
+- [x] Style guide (NES/SNES lock)
+- [-] Core sprites (wave 0–1 in; wave 2 bodies next)
 - [ ] Sound design direction
 - [ ] Music direction
 
 ### Quality & Release
 - [x] Test harness / scenarios (`Amphiteater.Sim.Tests` + `--report`)
-- [ ] Balancing passes (Ville lethality, Gaius cashflow)
+- [-] Balancing passes (Ville ~0.12 on `--report 200`; cash drain noted; wait on human playtest)
 - [ ] Documentation
 - [ ] Steam / distribution prep (later)
 

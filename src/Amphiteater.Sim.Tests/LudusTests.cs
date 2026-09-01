@@ -104,4 +104,11 @@ public class LudusTests
         Assert.True(r.Bouts >= 0);
         Assert.True(r.RuinedPct < 100);
     }
+
+    [Fact]
+    public void RunCareer_some_careers_staff_kitchen_by_day_twelve()
+    {
+        var r = CareerSim.RunMany(20, maxDays: 12);
+        Assert.True(r.StaffedKitchenBy30 > 0, "locatio-first AI should hire a cook in at least one of 20 careers");
+    }
 }

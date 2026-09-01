@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-08-31 (wave 0 locked; wave 1 courtyard)
+**Last Updated:** 2026-09-01 (M2 playtest sprint; --report house-aware)
 
 ## Now
 - [x] Engine: keep console for first demo
@@ -13,11 +13,9 @@
 - [x] M2: rooms, household slaves, night ops (spy / poison / sabotage)
 
 ## Next Up
-- Squint PixelLab **wave 1** (`assets/art/tiles/ludus/`, `assets/art/props/`)
-- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household) — murmillo already exists
-- Wave 2 4-dir idles, wave 3a south walk/attack
-- Playtest the M2 console loop
-- Balance pass (`--report`; SimRolls on own fallen for Ville)
+- **You:** 12-day M2 playtest (`production/playtest_m2.md`)
+- After verdict: Godot courtyard if holds; systems beat if dull; balance-only if broke
+- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household)
 - A second fight in a hosted munus
 - Discharge (*rudis*)
 - Godot courtyard, then Android export
@@ -29,7 +27,9 @@
 - Sim extract + expansion design (2026-08-28)
 - PR1.5 Ludus rules + career report (2026-08-29)
 - M2 rooms / household / night ops (2026-08-29)
+- PixelLab NES wave 0–1 (2026-08-31)
+- CareerSim kitchen AI + `--report 200` refresh (2026-09-01)
 
 ## Blocked / Questions
-Wave 0 locked. Wave 1 on disk. Tileset lower is brick-ish (use `sample_dirt` for yard fill). Props look SNES. Crest still a red plume; accepted.
-`--report 50` (pre-M2 AI, always mitte): 16% ruin, combatant death 0.13, own deaths 0, purse 621→75 by day 30. Not unplayable.
+`--report 200` (2026-09-01, locatio-first + cook, never hosts, mitte own): 21.5% ruin, mean days 56.4/60, combatant death 0.122 (Ville ~0.10), own deaths 0, kitchen 100%, hosting 100% by day 30, purse 585→316→146→79. Off-band cash, **not unplayable — no retune**. Human 12-day playtest still open.
+Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill). Crest still a red plume; accepted.

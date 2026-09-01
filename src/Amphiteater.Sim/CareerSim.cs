@@ -13,6 +13,7 @@ public sealed class CareerStats
     public int OccisusCount { get; set; }
     public bool Ruined { get; set; }
     public bool HostingUnlockedBy30 { get; set; }
+    public bool StaffedKitchenBy30 { get; set; }
     public int? DenariiDay1 { get; set; }
     public int? DenariiDay7 { get; set; }
     public int? DenariiDay12 { get; set; }
@@ -31,6 +32,7 @@ public sealed class AggregateReport
     public int SudoreCount { get; init; }
     public int OccisusCount { get; init; }
     public int HostingUnlockedBy30 { get; init; }
+    public int StaffedKitchenBy30 { get; init; }
     public double? MeanDenariiDay1 { get; init; }
     public double? MeanDenariiDay7 { get; init; }
     public double? MeanDenariiDay12 { get; init; }
@@ -40,6 +42,7 @@ public sealed class AggregateReport
     public double OwnDeathRate => Bouts == 0 ? 0 : OwnDeaths / (double)Bouts;
     public double RuinedPct => Careers == 0 ? 0 : 100.0 * Ruined / Careers;
     public double HostingPct => Careers == 0 ? 0 : 100.0 * HostingUnlockedBy30 / Careers;
+    public double KitchenPct => Careers == 0 ? 0 : 100.0 * StaffedKitchenBy30 / Careers;
 }
 
 public static class CareerSim
@@ -56,6 +59,7 @@ public static class CareerSim
         {
             MorningTreat(s);
             MorningOrders(s);
+            MorningKitchen(s);
             TryLocatio(s, rng, stats);
 
             var night = Ludus.EndDay(s, rng);
@@ -69,6 +73,8 @@ public static class CareerSim
             Snapshot(s, stats);
             if (s.DaysPlayed <= 30 && s.HostingUnlocked)
                 stats.HostingUnlockedBy30 = true;
+            if (s.DaysPlayed <= 30 && Ludus.Staffed(s, RoomKind.Kitchen))
+                stats.StaffedKitchenBy30 = true;
         }
 
         stats.Days = s.DaysPlayed;
@@ -101,6 +107,7 @@ public static class CareerSim
             SudoreCount = list.Sum(c => c.SudoreCount),
             OccisusCount = list.Sum(c => c.OccisusCount),
             HostingUnlockedBy30 = list.Count(c => c.HostingUnlockedBy30),
+            StaffedKitchenBy30 = list.Count(c => c.StaffedKitchenBy30),
             MeanDenariiDay1 = MeanNullable(list, c => c.DenariiDay1),
             MeanDenariiDay7 = MeanNullable(list, c => c.DenariiDay7),
             MeanDenariiDay12 = MeanNullable(list, c => c.DenariiDay12),
@@ -114,13 +121,15 @@ public static class CareerSim
         sb.AppendLine("AMPHITEATER — headless career report");
         sb.AppendLine("Ville target: ~10% of combatants die per bout (deaths / (2 * bouts) ≈ 0.10).");
         sb.AppendLine("Gaius: sweat cheap, corpse dear. Start 620 denarii. Upkeep 10 + 6/mouth.");
-        sb.AppendLine("AI: locatio-first, never hosts, mitte on own fallen man (so own-death stays 0).");
+        sb.AppendLine("AI: locatio-first, never hosts, mitte on own fallen (own-death stays 0).");
+        sb.AppendLine("    Buys a cook if purse > 120 and kitchen empty. Night is rest.");
         sb.AppendLine();
         sb.AppendLine($"Careers:              {r.Careers}");
         sb.AppendLine($"Ruined:               {r.Ruined}  ({r.RuinedPct:0.0}%)");
         sb.AppendLine($"Mean days survived:   {r.MeanDays:0.0}");
         sb.AppendLine($"Mean fama (end):      {r.MeanFama:0.0}");
         sb.AppendLine($"Hosting unlocked ≤30: {r.HostingUnlockedBy30}  ({r.HostingPct:0.0}%)");
+        sb.AppendLine($"Kitchen staffed ≤30:  {r.StaffedKitchenBy30}  ({r.KitchenPct:0.0}%)");
         sb.AppendLine();
         sb.AppendLine($"Bouts:                {r.Bouts}");
         sb.AppendLine($"Own deaths:           {r.OwnDeaths}");
@@ -166,6 +175,41 @@ public static class CareerSim
             else
                 g.Order = DayOrder.Sparring;
         }
+    }
+
+    const int CookPurseNeed = 120;
+    const int CookCushion = 50;
+
+    static void MorningKitchen(GameState s)
+    {
+        if (Ludus.Staffed(s, RoomKind.Kitchen)) return;
+        if (s.Denarii <= CookPurseNeed) return;
+
+        var idle = Ludus.LivingWorkers(s).FirstOrDefault(w =>
+            w.CanWork && s.Rooms.All(r => r.AssignedWorkerId != w.Id));
+        if (idle != null)
+        {
+            Ludus.AssignWorker(s, idle.Id, RoomKind.Kitchen);
+            return;
+        }
+
+        if (s.LaborMarket.Count == 0) return;
+        int best = 0;
+        int bestPrice = int.MaxValue;
+        for (int i = 0; i < s.LaborMarket.Count; i++)
+        {
+            int price = s.LaborMarket[i].Value();
+            if (price < bestPrice)
+            {
+                bestPrice = price;
+                best = i;
+            }
+        }
+        if (s.Denarii < bestPrice + CookCushion) return;
+        if (Ludus.BuyWorker(s, best) != null) return;
+        var hired = Ludus.LivingWorkers(s).LastOrDefault(w => w.CanWork);
+        if (hired != null)
+            Ludus.AssignWorker(s, hired.Id, RoomKind.Kitchen);
     }
 
     static void TryLocatio(GameState s, Random rng, CareerStats stats)
