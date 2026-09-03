@@ -37,7 +37,7 @@ Core loops:
 - [x] Household slaves assigned to rooms
 - [x] Night ops vs a named rival: spy / poison / sabotage
 - [x] PixelLab wave 0–1 (palette, dirt, 4-dir murmillo, courtyard props)
-- [ ] Human playtest of the M2 console loop (`production/playtest_m2.md`)
+- [x] Human playtest of the M2 console loop (`production/playtest_m2.md`) — holds; empty purse now ends
 
 ## High-Level Phases
 1. **Foundation** — setup, console loop, data models (M0–M1)
@@ -52,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Play 12 days (`production/playtest_m2.md`). `--report 200` is off-band on cash, not unplayable; no retune until that verdict. Godot waits.
+Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Godot courtyard is next unless we take kitchen-*thermopolium* first.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

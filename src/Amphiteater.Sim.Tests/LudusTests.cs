@@ -38,6 +38,30 @@ public class LudusTests
     }
 
     [Fact]
+    public void CheckEnd_empty_purse_closes_ludus_even_with_men()
+    {
+        var s = Fresh();
+        Assert.True(s.Living.Any());
+        s.Denarii = 0;
+        Ludus.CheckEnd(s);
+        Assert.True(s.Ended);
+        Assert.Equal("Ludus clausus", s.EndTitle);
+    }
+
+    [Fact]
+    public void EndDay_overspend_closes_at_dusk()
+    {
+        var rng = new Random(1);
+        var s = Ludus.Start(rng, 1, "Lucius", "Atinius", "Strabo");
+        foreach (var g in s.Living)
+            g.Order = DayOrder.None;
+        s.Denarii = 5;
+        Ludus.EndDay(s, rng);
+        Assert.True(s.Ended);
+        Assert.Equal(0, s.Denarii);
+    }
+
+    [Fact]
     public void Treat_deducts_fee_and_raises_vigor()
     {
         var s = Fresh();

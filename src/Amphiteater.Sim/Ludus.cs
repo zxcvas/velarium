@@ -545,12 +545,16 @@ public static partial class Ludus
     {
         bool noMen = !s.Living.Any();
         bool broke = s.Denarii <= 0;
-        int cheapest = s.Market.Count > 0 ? s.Market.Min(g => g.Value()) : 9999;
-        if (noMen && (broke || s.Denarii < cheapest))
+        if (!broke && !noMen) return;
+        if (broke || noMen)
         {
             s.Ended = true;
             s.EndTitle = "Ludus clausus";
-            s.EndMessage = "The cells are empty and the purse is dead. Creditors take the palus, the rudes, the name on the gate. You are a lanista no longer. Infamia remains.";
+            s.EndMessage = noMen && broke
+                ? "The cells are empty and the purse is dead. Creditors take the palus, the rudes, the name on the gate. You are a lanista no longer. Infamia remains."
+                : noMen
+                    ? "The cells are empty. No tiro will come to a lanista who cannot feed the last one. Infamia remains."
+                    : "The purse is empty. Creditors do not wait on tomorrow's locatio. The palus, the rudes, the name on the gate are forfeit. Infamia remains.";
         }
     }
 }
