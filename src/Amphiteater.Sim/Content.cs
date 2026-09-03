@@ -107,6 +107,38 @@ public static class Content
         _ => "requies (rest)"
     };
 
+    public sealed record Dish(DishKind Kind, string Nom, string Blurb, int Cost, int Sale);
+
+    public static readonly Dish[] Dishes =
+    {
+        new(DishKind.Puls, "puls (barley porridge)",
+            "The hordearii eat this in the yard. The street window sells the same pot, thinner.", 1, 3),
+        new(DishKind.Lentil, "lentil stew",
+            "Legumes, oil, a little onion. Lösch's C3 bowl, not a banquet.", 2, 5),
+        new(DishKind.Moretum, "moretum",
+            "Herb cheese pounded with garlic. Dearer; fewer bowls.", 2, 6),
+        new(DishKind.Posca, "posca",
+            "Sour wine and water. Cheap, quick, no honor in it.", 1, 3)
+    };
+
+    public static Dish GetDish(DishKind kind)
+        => Dishes.FirstOrDefault(d => d.Kind == kind) ?? Dishes[0];
+
+    public static string FoodRumorLine(GameState s)
+    {
+        if (!s.FoodRumorActive) return "";
+        var d = GetDish(s.FoodRumorDish);
+        if (s.FoodRumorDemand > 0 && s.FoodRumorPrice >= 0)
+            return $"The vicus is hungry for {d.Nom}. Queue at any window that has it.";
+        if (s.FoodRumorDemand < 0)
+            return $"{d.Nom} sits. Barley is dear, or the smell is off.";
+        if (s.FoodRumorPrice > 0)
+            return $"A clerk says {d.Nom} is fetching more than usual on the Capuan street.";
+        if (s.FoodRumorPrice < 0)
+            return $"Too much {d.Nom} in the insulae. They will not pay last week's price.";
+        return $"Talk of {d.Nom} in the forum. Demand is ordinary.";
+    }
+
     public static string UniqueHouseholdName(Random rng, HashSet<string> taken)
     {
         for (int i = 0; i < 40; i++)

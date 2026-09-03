@@ -51,6 +51,14 @@ public enum NightOrder
     Sabotage
 }
 
+public enum DishKind
+{
+    Puls,
+    Lentil,
+    Moretum,
+    Posca
+}
+
 public sealed class Room
 {
     public RoomKind Kind { get; set; }
@@ -174,6 +182,11 @@ public sealed class GameState
     public NightOrder NightOrder { get; set; }
     public int NightActorId { get; set; }
     public bool NightActorIsWorker { get; set; } = true;
+    public DishKind StallDish { get; set; }
+    public bool FoodRumorActive { get; set; }
+    public DishKind FoodRumorDish { get; set; }
+    public int FoodRumorDemand { get; set; }
+    public int FoodRumorPrice { get; set; }
 
     public string FullName => $"{Praenomen} {Nomen} {Cognomen}".Trim();
     public IEnumerable<Gladiator> Living => Familia.Where(g => g.Alive);

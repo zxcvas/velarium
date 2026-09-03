@@ -64,6 +64,66 @@ public class HouseTests
     }
 
     [Fact]
+    public void Kitchen_level_two_staffed_pays_stall()
+    {
+        var rng = new Random(5);
+        var s = Ludus.Start(rng, 5, "Lucius", "Atinius", "Strabo");
+        Ludus.RoomOf(s, RoomKind.Kitchen)!.Level = 2;
+        var w = Ludus.MakeWorker(s, rng, new HashSet<string>());
+        s.Household.Add(w);
+        Assert.Null(Ludus.AssignWorker(s, w.Id, RoomKind.Kitchen));
+        foreach (var g in s.Living) g.Order = DayOrder.None;
+        var night = Ludus.EndDay(s, rng);
+        Assert.Contains(night.Log, line => line.Contains("Thermopolium"));
+    }
+
+    [Fact]
+    public void Kitchen_level_two_unstaffed_has_no_stall()
+    {
+        var rng = new Random(6);
+        var s = Ludus.Start(rng, 6, "Lucius", "Atinius", "Strabo");
+        Ludus.RoomOf(s, RoomKind.Kitchen)!.Level = 2;
+        foreach (var g in s.Living) g.Order = DayOrder.None;
+        var night = Ludus.EndDay(s, rng);
+        Assert.DoesNotContain(night.Log, line => line.Contains("Thermopolium"));
+    }
+
+    [Fact]
+    public void Kitchen_level_one_has_no_stall()
+    {
+        var rng = new Random(7);
+        var s = Ludus.Start(rng, 7, "Lucius", "Atinius", "Strabo");
+        var w = Ludus.MakeWorker(s, rng, new HashSet<string>());
+        s.Household.Add(w);
+        Assert.Null(Ludus.AssignWorker(s, w.Id, RoomKind.Kitchen));
+        foreach (var g in s.Living) g.Order = DayOrder.None;
+        var night = Ludus.EndDay(s, rng);
+        Assert.DoesNotContain(night.Log, line => line.Contains("Thermopolium"));
+    }
+
+    [Fact]
+    public void Kitchen_level_three_uses_dish_margin()
+    {
+        var rng = new Random(8);
+        var s = Ludus.Start(rng, 8, "Lucius", "Atinius", "Strabo");
+        s.FoodRumorActive = false;
+        Ludus.RoomOf(s, RoomKind.Kitchen)!.Level = 3;
+        s.StallDish = DishKind.Moretum;
+        var w = Ludus.MakeWorker(s, rng, new HashSet<string>());
+        s.Household.Add(w);
+        Assert.Null(Ludus.AssignWorker(s, w.Id, RoomKind.Kitchen));
+        var (cost, sale, nom) = Ludus.StallPrices(s);
+        Assert.Equal(2, cost);
+        Assert.Equal(6, sale);
+        Assert.Contains("moretum", nom, StringComparison.OrdinalIgnoreCase);
+        int clients = Ludus.StallClients(s);
+        Assert.True(clients > 0);
+        foreach (var g in s.Living) g.Order = DayOrder.None;
+        var night = Ludus.EndDay(s, rng);
+        Assert.Contains(night.Log, line => line.Contains("Thermopolium") && line.Contains("moretum"));
+    }
+
+    [Fact]
     public void BuyWorker_fails_when_household_is_full()
     {
         var s = Fresh();

@@ -51,6 +51,10 @@ public static partial class Ludus
     public const int HouseholdCap = 6;
     public const int HostFamaNeed = 16;
     public const int MaxRoomLevel = 3;
+    public const int StallBowlsPerLevel = 4;
+    public const int StallBaseClientsPerLevel = 2;
+    public const int StallAnonCost = 1;
+    public const int StallAnonSale = 3;
 
     public static int Upkeep(int mouths) => UpkeepRoof + mouths * UpkeepPerMouth;
 
@@ -407,6 +411,7 @@ public static partial class Ludus
 
         CompleteUpgrades(s, log);
         RecoverDetained(s, rng, log);
+        SettleStall(s, log);
 
         int mouths = s.Living.Count();
         int hands = LivingWorkers(s).Count();
@@ -461,6 +466,7 @@ public static partial class Ludus
         RefreshMarket(s, rng);
         RefreshLaborMarket(s, rng);
         RefreshOffer(s, rng);
+        RefreshFoodRumor(s, rng);
         Calendar.Next(s);
 
         CheckEnd(s);

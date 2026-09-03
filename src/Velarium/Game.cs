@@ -110,6 +110,7 @@ sealed class Game
         {
             Ui.Clear();
             PrintStatus();
+            bool thermo = Ludus.KitchenLevel(s) >= 3;
             var items = new List<string>
             {
                 "Familia gladiatoria",
@@ -117,22 +118,23 @@ sealed class Game
                 "Forum (buy, medicus, rumors)",
                 OfferLabel(),
                 HostLabel(),
-                "Domus (rooms, household, night)",
-                "Finis diei (end the day)",
-                "Servare et abire (save and leave)"
+                "Domus (rooms, household, night)"
             };
+            if (thermo) items.Add("Thermopolium (today's dish)");
+            items.Add("Finis diei (end the day)");
+            items.Add("Servare et abire (save and leave)");
             int c = Ui.Menu(null!, items, zeroBack: false);
-            switch (c)
-            {
-                case 1: FamiliaScreen(); break;
-                case 2: OrdersScreen(); break;
-                case 3: ForumScreen(); break;
-                case 4: LocatioScreen(); break;
-                case 5: HostScreen(); break;
-                case 6: DomusScreen(); break;
-                case 7: EndDayScreen(); break;
-                case 8: Autosave(); return;
-            }
+            int endDay = thermo ? 8 : 7;
+            int save = thermo ? 9 : 8;
+            if (c == 1) FamiliaScreen();
+            else if (c == 2) OrdersScreen();
+            else if (c == 3) ForumScreen();
+            else if (c == 4) LocatioScreen();
+            else if (c == 5) HostScreen();
+            else if (c == 6) DomusScreen();
+            else if (thermo && c == 7) ThermopoliumScreen();
+            else if (c == endDay) EndDayScreen();
+            else if (c == save) { Autosave(); return; }
             if (s.Ended) ShowEnding();
         }
     }
@@ -155,6 +157,9 @@ sealed class Game
             Console.WriteLine("No editor came to the ludus this morning.");
         if (s.HostingUnlocked)
             Console.WriteLine("The duumviri will hear a petition to edit a munus of your own.");
+        string stall = Ludus.StallStatusLine(s);
+        if (stall.Length > 0)
+            Console.WriteLine(stall);
         Ui.Rule();
     }
 
@@ -241,6 +246,32 @@ sealed class Game
             Console.WriteLine($"{g.Name}: {Content.OrderLat(g.Order)}.");
             Ui.Pause();
         }
+    }
+
+    void ThermopoliumScreen()
+    {
+        Ui.Clear();
+        Ui.Title("Thermopolium");
+        Ui.Wrap("A street window on the ludus wall. Barley-men eat in the yard; the vicus buys the same pot. Pick tomorrow's dish. Cost and sale are per bowl. Dusk settles the queue.");
+        Console.WriteLine();
+        Console.WriteLine(Ludus.StallStatusLine(s));
+        if (s.FoodRumorActive)
+            Ui.Wrap(Content.FoodRumorLine(s));
+        Console.WriteLine();
+        var labels = Content.Dishes.Select(d =>
+        {
+            int sale = d.Sale;
+            if (s.FoodRumorActive && s.FoodRumorDish == d.Kind)
+                sale = Math.Max(d.Cost + 1, d.Sale + s.FoodRumorPrice);
+            string mark = d.Kind == s.StallDish ? " ← today" : "";
+            return $"{d.Nom}  cost {d.Cost}  sale {sale}  margin {sale - d.Cost}{mark}";
+        }).ToList();
+        int c = Ui.Menu("Tonight's pot", labels);
+        if (c == 0) return;
+        s.StallDish = Content.Dishes[c - 1].Kind;
+        Console.WriteLine("The cook is told. The window will sell " + Content.GetDish(s.StallDish).Nom + ".");
+        Autosave();
+        Ui.Pause();
     }
 
     void ForumScreen()
@@ -360,6 +391,12 @@ sealed class Game
             "Augustalis games at Puteoli next market-cycle. Editors will come as far as Capua looking for a murmillo who can stand."
         };
         Ui.Wrap(rum[rng.Next(rum.Length)]);
+        string food = Content.FoodRumorLine(s);
+        if (food.Length > 0)
+        {
+            Console.WriteLine();
+            Ui.Wrap(food);
+        }
         if (s.Rival != null)
         {
             Console.WriteLine();

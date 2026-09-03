@@ -28,6 +28,85 @@ public static partial class Ludus
     public static int KitchenBonus(GameState s)
         => Staffed(s, RoomKind.Kitchen) ? RoomOf(s, RoomKind.Kitchen)!.Level : 0;
 
+    public static int KitchenLevel(GameState s)
+        => RoomOf(s, RoomKind.Kitchen)?.Level ?? 0;
+
+    public static bool StallOpen(GameState s)
+        => KitchenLevel(s) >= 2 && Staffed(s, RoomKind.Kitchen);
+
+    public static int StallCap(GameState s)
+        => KitchenLevel(s) < 2 ? 0 : StallBowlsPerLevel * KitchenLevel(s);
+
+    public static int StallClients(GameState s)
+    {
+        if (!StallOpen(s)) return 0;
+        int n = StallBaseClientsPerLevel * KitchenLevel(s) + s.Fama / 4;
+        if (s.FoodRumorActive) n += s.FoodRumorDemand;
+        return Math.Clamp(n, 0, StallCap(s));
+    }
+
+    public static (int cost, int sale, string nom) StallPrices(GameState s)
+    {
+        if (KitchenLevel(s) >= 3)
+        {
+            var d = Content.GetDish(s.StallDish);
+            int sale = d.Sale;
+            if (s.FoodRumorActive && s.FoodRumorDish == s.StallDish)
+                sale = Math.Max(d.Cost + 1, d.Sale + s.FoodRumorPrice);
+            return (d.Cost, sale, d.Nom);
+        }
+        return (StallAnonCost, StallAnonSale, "bowls from the street window");
+    }
+
+    public static string StallStatusLine(GameState s)
+    {
+        int lv = KitchenLevel(s);
+        if (lv < 2) return "";
+        if (!Staffed(s, RoomKind.Kitchen))
+            return "Thermopolium: shuttered (no cook).";
+        var (cost, sale, nom) = StallPrices(s);
+        int clients = StallClients(s);
+        return $"Thermopolium: {nom}, cost {cost} / sale {sale}, ~{clients} bowls today.";
+    }
+
+    public static int SettleStall(GameState s, List<string> log)
+    {
+        int clients = StallClients(s);
+        if (clients <= 0) return 0;
+        var (cost, sale, nom) = StallPrices(s);
+        int can = cost <= 0 ? clients : s.Denarii / cost;
+        int sold = Math.Min(clients, Math.Max(0, can));
+        if (sold <= 0)
+        {
+            log.Add("The thermopolium has no grain left to boil. The window stays shuttered.");
+            return 0;
+        }
+        int spend = sold * cost;
+        int take = sold * sale;
+        s.Denarii -= spend;
+        s.Denarii += take;
+        int profit = take - spend;
+        log.Add($"Thermopolium ({nom}): {sold} bowls. Grain -{spend}, street +{take}. Net {profit} denarii.");
+        if (sold < clients)
+            log.Add("The queue outlasted the pot. More grain — or another pair of hands — would have sold the rest.");
+        return profit;
+    }
+
+    public static void RefreshFoodRumor(GameState s, Random rng)
+    {
+        if (rng.Next(100) >= 40)
+        {
+            s.FoodRumorActive = false;
+            s.FoodRumorDemand = 0;
+            s.FoodRumorPrice = 0;
+            return;
+        }
+        s.FoodRumorActive = true;
+        s.FoodRumorDish = (DishKind)rng.Next(Content.Dishes.Length);
+        s.FoodRumorDemand = rng.Next(-2, 4);
+        s.FoodRumorPrice = rng.Next(-1, 2);
+    }
+
     public static int Upkeep(GameState s)
     {
         int mouths = s.Living.Count();

@@ -105,23 +105,25 @@ Beds = `max(8, 6 + 2×cellae level)`.
 
 There is **no** food/ingredient market. The only “price” rolls are locatio *pro sudore* / *pro occiso* (`RefreshOffer`) and hosted gate gifts (`SettleBout`). Rumors in the forum do not move those numbers.
 
-## Thermopolium (proposed — not implemented)
+## Thermopolium (implemented)
 
-Playtest: kitchen as a street-facing *thermopolium* after level 2; own day-menu subsystem after level 3.
+Street window on the ludus wall. Staffed cook required. Settles at dusk **before** upkeep. Must not out-earn a locatio palma.
 
-| Proposed knob | Sketch | Notes |
+| Knob | Value | Code |
 |---|---|---|
-| Unlock stall | kitchen level ≥ 2 | Income line at dusk, no extra menu |
-| Unlock dishes | kitchen level ≥ 3 | Day menu: pick one authentic dish |
-| Clients | `base + fama/N + rumor` | More fama → more bowls; may need extra staff |
-| Dish card | name, cost/unit, sale/unit, margin | Show clearly before confirm |
-| Rumor | ±% on one ingredient or dish | Forum rumor already exists as flavor; hook it here |
-| Staff | 1 cook at lv2; +1 per demand band | Empty kitchen = no sales |
-| Cap | kitchen level × bowls/day | Upgrade or hire to raise |
+| Stall unlock | kitchen level ≥ 2 | `StallOpen` |
+| Dish menu | kitchen level ≥ 3 | day menu item |
+| Bowls cap | 4 × kitchen level | `StallBowlsPerLevel` |
+| Base clients | 2 × kitchen level + fama/4 ± rumor demand | `StallBaseClientsPerLevel` |
+| Lv2 anonymous bowl | cost 1, sale 3 | `StallAnonCost` / `StallAnonSale` |
+| *Puls* | cost 1, sale 3 | `Content.Dishes` |
+| Lentil stew | cost 2, sale 5 | |
+| *Moretum* | cost 2, sale 6 | |
+| *Posca* | cost 1, sale 3 | |
+| Food rumor | 40% of mornings; demand −2..+3, price −1..+1 on one dish | `RefreshFoodRumor` |
+| Unstaffed | no sales (and no diet bonus) | |
 
-Dishes to research when we build it (not Hollywood): barley *puls*, *moretum*, lentil stew, cheap *isicia*, posca — Campanian street food, not a banquet.
-
-Until this ships, kitchen only cuts fighter upkeep.
+Empty kitchen = shuttered. If purse < cost×clients, sell only what grain you can buy.
 
 ## Other playtest wishes (not implemented)
 

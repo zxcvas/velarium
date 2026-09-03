@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-01 (M2 playtest filled; empty-purse ruin)
+**Last Updated:** 2026-09-01 (thermopolium lv2/lv3)
 
 ## Now
 - [x] Engine: keep console for first demo
@@ -13,8 +13,7 @@
 - [x] M2: rooms, household slaves, night ops (spy / poison / sabotage)
 
 ## Next Up
-- Godot courtyard (verdict **holds**) — after empty-purse close is in
-- Kitchen as *thermopolium* (playtest: income after lv2, dish menu after lv3) — not this patch
+- Godot courtyard (verdict **holds**)
 - ASCII / arrow-key UI
 - Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household)
 - A second fight in a hosted munus
@@ -30,8 +29,9 @@
 - PixelLab NES wave 0–1 (2026-08-31)
 - CareerSim kitchen AI + `--report 200` refresh (2026-09-01)
 - Human 12-day M2 playtest filled (holds; 0 denarii did not end)
+- Kitchen thermopolium lv2 stall + lv3 dishes (2026-09-01)
 
 ## Blocked / Questions
-Playtest **holds**. Spy often “nothing useful”. ~120/fight was hosted palma, not locatio sweat (22–37). Knobs: `production/economy.md` (thermopolium proposed, **no food market in code yet**).
-Empty purse **closes at dusk**. `--report 200` after that: **100% ruin**, mean **20 days**, death 0.120, kitchen 100%, hosting 91% by day 30. The locatio-only AI always drains to 0; a human who hosts can last longer. Arrow-key UI not this patch.
+Playtest **holds**. Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
+Empty purse closes at dusk. Locatio-only `--report` still ~100% ruin by day ~20. AI does not upgrade the kitchen, so stall income is mostly a human path.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
