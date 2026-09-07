@@ -45,10 +45,9 @@ saves/
 # Scratch build output (when dist/ is locked by a running exe)
 dist-pr15/
 
-# Godot or other if added later (uncomment if used)
-# .import/
-# export.cfg
-# export_presets.cfg
+# Godot editor (unzip locally; never commit)
+tools/godot-editor/
+godot/.godot/
 
 # Python / node if used
 __pycache__/

@@ -67,7 +67,14 @@ static class Ui
     {
         Console.WriteLine();
         Console.Write(msg + " ");
-        Console.ReadLine();
+        if (CanUseKeys())
+        {
+            try { Console.ReadKey(true); }
+            catch { Console.ReadLine(); }
+        }
+        else
+            Console.ReadLine();
+        Console.WriteLine();
     }
 
     public static bool Eof { get; private set; }
@@ -85,6 +92,83 @@ static class Ui
     }
 
     public static int Menu(string title, IReadOnlyList<string> options, bool zeroBack = true)
+    {
+        if (options.Count == 0) return 0;
+        if (!CanUseKeys())
+            return MenuTyped(title, options, zeroBack);
+
+        int sel = 0;
+        bool hide = true;
+        try { Console.CursorVisible = false; }
+        catch { hide = false; }
+        Console.WriteLine();
+        int top;
+        try { top = Console.CursorTop; }
+        catch { return MenuTyped(title, options, zeroBack); }
+
+        while (!Eof)
+        {
+            try { Console.SetCursorPosition(0, top); }
+            catch { return MenuTyped(title, options, zeroBack); }
+            PaintMenu(title, options, sel, zeroBack);
+            ConsoleKeyInfo key;
+            try { key = Console.ReadKey(true); }
+            catch { Eof = true; return 0; }
+
+            if (key.Key is ConsoleKey.Enter or ConsoleKey.Spacebar)
+                return FinishMenu(hide, sel + 1);
+            if (zeroBack && (key.Key is ConsoleKey.Escape or ConsoleKey.Backspace or ConsoleKey.Q
+                || key.KeyChar == '0'))
+                return FinishMenu(hide, 0);
+            if (key.Key is ConsoleKey.UpArrow or ConsoleKey.K)
+                sel = (sel - 1 + options.Count) % options.Count;
+            else if (key.Key is ConsoleKey.DownArrow or ConsoleKey.Tab or ConsoleKey.J)
+                sel = (sel + 1) % options.Count;
+            else if (key.Key == ConsoleKey.Home)
+                sel = 0;
+            else if (key.Key == ConsoleKey.End)
+                sel = options.Count - 1;
+            else if (key.KeyChar >= '1' && key.KeyChar <= '9')
+            {
+                int n = key.KeyChar - '0';
+                if (n <= options.Count) return FinishMenu(hide, n);
+            }
+        }
+        return FinishMenu(hide, 0);
+    }
+
+    static int FinishMenu(bool hide, int value)
+    {
+        if (hide)
+        {
+            try { Console.CursorVisible = true; }
+            catch { /* ignore */ }
+        }
+        Console.WriteLine();
+        return value;
+    }
+
+    static void PaintMenu(string title, IReadOnlyList<string> options, int sel, bool zeroBack)
+    {
+        int inner = Width - 4;
+        if (!string.IsNullOrEmpty(title))
+            Console.WriteLine(title.PadRight(Width));
+        Console.WriteLine("+" + new string('-', Width - 2) + "+");
+        for (int i = 0; i < options.Count; i++)
+        {
+            string mark = i == sel ? ">" : " ";
+            string body = $"{mark} [{i + 1}] {options[i]}";
+            if (body.Length > inner) body = body[..inner];
+            Console.WriteLine("| " + body.PadRight(inner) + " |");
+        }
+        Console.WriteLine("+" + new string('-', Width - 2) + "+");
+        string hint = zeroBack
+            ? "arrows/tab  Enter  1-9  Esc/0 back"
+            : "arrows/tab  Enter  1-9";
+        Console.WriteLine(hint.PadRight(Width));
+    }
+
+    static int MenuTyped(string title, IReadOnlyList<string> options, bool zeroBack)
     {
         if (!string.IsNullOrEmpty(title))
         {
@@ -110,9 +194,32 @@ static class Ui
         return 0;
     }
 
+    static bool CanUseKeys()
+    {
+        try
+        {
+            return !Console.IsInputRedirected && !Console.IsOutputRedirected;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static bool Confirm(string q)
     {
         Console.Write($"{q} (s/n) > ");
+        if (CanUseKeys())
+        {
+            try
+            {
+                var key = Console.ReadKey(true);
+                Console.WriteLine(key.KeyChar);
+                char c = char.ToLowerInvariant(key.KeyChar);
+                return c is 's' or 'y';
+            }
+            catch { /* fall through */ }
+        }
         string r = (Console.ReadLine() ?? "").Trim().ToLowerInvariant();
         return r is "s" or "y" or "yes" or "sic" or "ita";
     }

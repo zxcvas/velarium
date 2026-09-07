@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-01 (thermopolium lv2/lv3)
+**Last Updated:** 2026-09-01 (arrow-key menus; Godot blocked on net8)
 
 ## Now
 - [x] Engine: keep console for first demo
@@ -13,8 +13,7 @@
 - [x] M2: rooms, household slaves, night ops (spy / poison / sabotage)
 
 ## Next Up
-- Godot courtyard (verdict **holds**)
-- ASCII / arrow-key UI
+- Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
 - Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household)
 - A second fight in a hosted munus
 - Discharge (*rudis*)
@@ -30,8 +29,10 @@
 - CareerSim kitchen AI + `--report 200` refresh (2026-09-01)
 - Human 12-day M2 playtest filled (holds; 0 denarii did not end)
 - Kitchen thermopolium lv2 stall + lv3 dishes (2026-09-01)
+- Console menus: arrows / tab / Enter / Esc (numbers still work)
 
 ## Blocked / Questions
 Playtest **holds**. Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. Locatio-only `--report` still ~100% ruin by day ~20. AI does not upgrade the kitchen, so stall income is mostly a human path.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
+Godot 4.6 C# courtyard is blocked: this SDK is net10-only; Godot still wants net8. Mono zip is in Downloads. See `godot/README.md`.
