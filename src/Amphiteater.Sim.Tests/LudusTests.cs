@@ -104,6 +104,31 @@ public class LudusTests
     }
 
     [Fact]
+    public void Two_hosted_bouts_charge_the_gate_once()
+    {
+        var rng = new Random(9);
+        var s = Ludus.Start(rng, 9, "Lucius", "Atinius", "Strabo");
+        s.Fama = 20;
+        foreach (var g in s.Living)
+        {
+            g.Palmae = 1;
+            g.Vigor = g.VigorMax;
+            g.Status = GladiatorStatus.Validus;
+        }
+        int purse = s.Denarii;
+        Assert.True(Ludus.TryPayHost(s));
+        Assert.Equal(purse - Ludus.HostCost, s.Denarii);
+        var first = s.Living.First(g => g.CanFight);
+        var b1 = Ludus.RunBout(s, rng, first, hosted: true);
+        Ludus.SettleBout(s, rng, b1, IugulaChoice.Mitte, IugulaChoice.Mitte);
+        var second = s.Living.First(g => g.CanFight && g.Id != first.Id);
+        var b2 = Ludus.RunBout(s, rng, second, hosted: true);
+        Ludus.SettleBout(s, rng, b2, IugulaChoice.Mitte, IugulaChoice.Mitte);
+        Assert.True(s.HasHosted);
+        Assert.True(s.Denarii >= purse - Ludus.HostCost);
+    }
+
+    [Fact]
     public void RunCareer_seed_1_is_deterministic()
     {
         var a = CareerSim.RunCareer(1, maxDays: 5);

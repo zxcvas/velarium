@@ -46,7 +46,7 @@ Playtest note: ~120/fight was likely a **hosted** palma (160–280) or stans (90
 | Knob | Value | Code |
 |---|---|---|
 | Unlock | fama ≥ 16 **and** a living palma | `HostFamaNeed` |
-| Gate cost | 220 | `HostCost` |
+| Gate cost | 220 once per afternoon (covers **two** pairs) | `HostCost` |
 | Palma pay | 160–279 + 40 if *iugula* + 30 if spectacular | `SettleBout` |
 | Stans pay | 90–139 | |
 | Missio pay | 70–119 | |

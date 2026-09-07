@@ -15,7 +15,7 @@
 ## Next Up
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
 - Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household)
-- A second fight in a hosted munus
+- Spy intel that pays (playtest: “nothing of value”)
 - Discharge (*rudis*)
 
 ## Done this cycle
@@ -30,6 +30,7 @@
 - Human 12-day M2 playtest filled (holds; 0 denarii did not end)
 - Kitchen thermopolium lv2 stall + lv3 dishes (2026-09-01)
 - Console menus: arrows / tab / Enter / Esc (numbers still work)
+- Hosted munus: two pairs, one gate fee
 
 ## Blocked / Questions
 Playtest **holds**. Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.

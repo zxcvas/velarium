@@ -686,7 +686,7 @@ sealed class Game
             return;
         }
 
-        Ui.Wrap("You petition to edit a modest munus in a wooden arena at the edge of Capua. You pay for the sand, the trumpets, a pair of officials, and a damnatus or hired foe for the other corner. Your man fights. You — not a magistrate — take the palm of the editor: mitte or iugula is yours if the other falls. The crowd will remember who gave them the show.");
+        Ui.Wrap("You petition to edit a modest munus in a wooden arena at the edge of Capua. You pay for the sand, the trumpets, officials, and two cheap foes. Two pairs if you have two men who can stand. You — not a magistrate — take mitte or iugula when a man falls.");
         Console.WriteLine();
         Console.WriteLine($"Cost: {Ludus.HostCost} denarii. Purse: {s.Denarii}.");
         var able = s.Living.Where(g => g.CanFight).ToList();
@@ -705,14 +705,41 @@ sealed class Game
         if (!Ui.Confirm("Stage the munus?")) return;
         Ludus.TryPayHost(s);
 
-        int c = Ui.Menu("Which of yours takes the sand?", able.Select(g =>
-            $"{g.Name}, {Content.ArmaturaNom(g.Armatura)}, virtus {g.Virtus}, {g.Rank()}").ToList());
-        if (c == 0)
+        if (!PickAndPlayHosted("First pair — who takes the sand?"))
         {
             Ludus.RefundHost(s);
             return;
         }
+
+        var remaining = s.Living.Where(g => g.CanFight).ToList();
+        if (remaining.Count == 0)
+        {
+            Ui.Wrap("The edict promised two pairs. You have no one left who can stand. The crowd goes home early.");
+            Ui.Pause();
+            return;
+        }
+        if (!Ui.Confirm("Stage a second pair? (gate is already paid)"))
+        {
+            Ui.Wrap("One pair, then the trumpets. The cheap seats grumble.");
+            Ui.Pause();
+            return;
+        }
+        if (!PickAndPlayHosted("Second pair — who takes the sand?"))
+        {
+            Ui.Wrap("No second pair. The edict is short.");
+            Ui.Pause();
+        }
+    }
+
+    bool PickAndPlayHosted(string prompt)
+    {
+        var able = s.Living.Where(g => g.CanFight).ToList();
+        if (able.Count == 0) return false;
+        int c = Ui.Menu(prompt, able.Select(g =>
+            $"{g.Name}, {Content.ArmaturaNom(g.Armatura)}, virtus {g.Virtus}, {g.Rank()}").ToList());
+        if (c == 0) return false;
         PlayMunus(able[c - 1], hosted: true);
+        return true;
     }
 
     void PlayMunus(Gladiator g, bool hosted)
