@@ -1,8 +1,9 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-01 (arrow-key menus; Godot blocked on net8)
+**Last Updated:** 2026-09-08 (PixelLab wave 2 tooling claim)
 
 ## Now
+- [ ] PixelLab wave 2 tooling — claimed `pixellab-wave2-tooling` (register WAVE2; no API / no PNGs)
 - [x] Engine: keep console for first demo
 - [x] Role: lanista first, host munera as progression
 - [x] Playable day loop (familia, drill, forum, locatio, hosting unlock)
@@ -14,7 +15,7 @@
 
 ## Next Up
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
-- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household)
+- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household) — run `--wave 2` once tooling lands
 - Spy intel that pays (playtest: “nothing of value”)
 - Discharge (*rudis*)
 

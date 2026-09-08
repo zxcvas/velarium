@@ -83,6 +83,7 @@ WAVE0 = [
         "id": "sample_murmillo_s",
         "path": "characters/sample_murmillo_s.png",
         "kind": "character4",
+        "slug": "murmillo",
         "seed": 784,
         "w": 48,
         "h": 48,
@@ -213,7 +214,89 @@ WAVE1 = [
     },
 ]
 
-WAVES: dict[int, list[dict]] = {0: WAVE0, 1: WAVE1}
+# Wave 2: remaining 4-dir idle bodies (murmillo shipped in wave 0).
+WAVE2 = [
+    {
+        "id": "char_thraex",
+        "path": "characters/thraex_s_idle_00.png",
+        "kind": "character4",
+        "slug": "thraex",
+        "seed": 792,
+        "w": 48,
+        "h": 48,
+        "view": "low top-down",
+        "direction": "south",
+        "no_bg": True,
+        "description": (
+            PREFIX
+            + "Thraex gladiator idle, SNES 3/4 low top-down like A Link to the Past. "
+            "Griffin helm (bird-of-prey griffin head on the crown, two eye slits). "
+            "Small parmula, curved sica, long greaves. "
+            "Stocky toy soldier, chunky 48px sprite, transparent background. "
+            + NEG
+        ),
+    },
+    {
+        "id": "char_retiarius",
+        "path": "characters/retiarius_s_idle_00.png",
+        "kind": "character4",
+        "slug": "retiarius",
+        "seed": 793,
+        "w": 48,
+        "h": 48,
+        "view": "low top-down",
+        "direction": "south",
+        "no_bg": True,
+        "description": (
+            PREFIX
+            + "Retiarius gladiator idle, SNES 3/4 low top-down like A Link to the Past. "
+            "Bare head, no helm. Galerus on the shoulder, net and trident, short tunic. "
+            "Stocky toy soldier, chunky 48px sprite, transparent background. "
+            + NEG
+        ),
+    },
+    {
+        "id": "char_secutor",
+        "path": "characters/secutor_s_idle_00.png",
+        "kind": "character4",
+        "slug": "secutor",
+        "seed": 794,
+        "w": 48,
+        "h": 48,
+        "view": "low top-down",
+        "direction": "south",
+        "no_bg": True,
+        "description": (
+            PREFIX
+            + "Secutor gladiator idle, SNES 3/4 low top-down like A Link to the Past. "
+            "Smooth round helm with two eye-holes only. NOT a fish crest, NOT a griffin, NOT a plume. "
+            "Big scutum, short gladius. "
+            "Stocky toy soldier, chunky 48px sprite, transparent background. "
+            + NEG
+        ),
+    },
+    {
+        "id": "char_household",
+        "path": "characters/household_s_idle_00.png",
+        "kind": "character4",
+        "slug": "household",
+        "seed": 795,
+        "w": 48,
+        "h": 48,
+        "view": "low top-down",
+        "direction": "south",
+        "no_bg": True,
+        "description": (
+            PREFIX
+            + "Household slave idle, SNES 3/4 low top-down like A Link to the Past. "
+            "Undyed dirty-linen tunic, bare head, no helm, no weapon, no armor. "
+            "Stocky toy soldier, chunky 48px sprite, transparent background. "
+            + NEG
+        ),
+    },
+]
+
+WAVES: dict[int, list[dict]] = {0: WAVE0, 1: WAVE1, 2: WAVE2}
 
 
 def token() -> str:
@@ -379,6 +462,17 @@ def write_murmillo_south_init(dest: Path) -> None:
 DIR_SHORT = {"south": "s", "east": "e", "north": "n", "west": "w"}
 
 
+def character_slug(item: dict) -> str:
+    """Role stem for `{slug}_{n,e,s,w}_idle_00.png`. Wave 0 murmillo if omitted."""
+    slug = item.get("slug")
+    if slug:
+        return str(slug)
+    ident = str(item.get("id") or "")
+    if ident.startswith("char_"):
+        return ident.removeprefix("char_")
+    return "murmillo"
+
+
 def api_bytes(path: str) -> bytes:
     req = urllib.request.Request(
         API + path,
@@ -431,7 +525,7 @@ def pull_character4(item: dict, char_id: str, job: dict | None = None) -> None:
         if not member:
             continue
         png = zf.read(member)
-        rel = f"characters/murmillo_{short}_idle_00.png"
+        rel = f"characters/{character_slug(item)}_{short}_idle_00.png"
         save_image(rel, png)
         files[direction] = rel
         if direction == "south":
