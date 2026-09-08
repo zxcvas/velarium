@@ -1,6 +1,6 @@
 # Amphiteater — PixelLab asset map
 
-**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Squint before wave 2.  
+**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Wave 2 **pending** (tooling registered; no bodies generated yet).  
 **Engine:** PixelLab v2 only for production art.  
 **Consumers:** later Godot; console stays text.  
 **Style:** `STYLE.md` — NES/SNES, cartoon KO, Pompeii kit.
@@ -77,17 +77,20 @@ No worker-in-kitchen unique building interiors in wave 1 — the posted slave is
 
 ---
 
-## Wave 2 — bodies (4-dir idle only)
+## Wave 2 — bodies (4-dir idle only) — **pending**
 
-`POST /create-character-with-4-directions`. Persist PixelLab `character_id` in the prompt log (not secrets).
+`POST /create-character-with-4-directions`. 48×48, low top-down, cartoon mannequin, palette `tiles/palette_nes.png`. Idle only. Persist PixelLab `character_id` in the prompt log (not secrets).
 
-| id | Who | Dirs | Still frames |
+Murmillo 4-dir idle shipped in wave 0 (`murmillo_{n,e,s,w}_idle_00.png`). Remaining jobs — **not generated**:
+
+| id | Seed | Who | Out |
 |---|---|---|---|
-| `char_murmillo` | murmillo | N S E W | 4 |
-| `char_thraex` | thraex | 4 | 4 |
-| `char_retiarius` | retiarius | 4 | 4 |
-| `char_secutor` | secutor | 4 | 4 |
-| `char_household` | household slave | 4 | 4 |
+| `char_thraex` | 792 | thraex: griffin helm, parmula, sica, long greaves | `characters/thraex_{n,e,s,w}_idle_00.png` |
+| `char_retiarius` | 793 | retiarius: bare head, galerus, net+trident, tunic | `characters/retiarius_{n,e,s,w}_idle_00.png` |
+| `char_secutor` | 794 | secutor: smooth two-eyehole helm, scutum, no fish crest | `characters/secutor_{n,e,s,w}_idle_00.png` |
+| `char_household` | 795 | household: undyed tunic, no helm/weapon | `characters/household_{n,e,s,w}_idle_00.png` |
+
+Run (token required, not this PR): `python tools/pixellab_gen.py --wave 2` or `--only char_thraex` / `char_retiarius` / `char_secutor` / `char_household`.
 
 Foes on the sand **reuse** the four *armaturae* (palette swap later if we want rival tint).
 
@@ -213,8 +216,8 @@ Crowd is a **tile** of heads, not a sim of pollice verso.
 
 ## Next action (human)
 
-1. Token works. `python tools/pixellab_gen.py` (default wave 0) writes `palette_nes`, `sample_dirt`, `sample_murmillo_s`.
-2. Stop and look. If it looks like a painting, tighten palette and size. If it looks like ALttP dirt and a toy soldier, continue.
-3. Then tileset, then 4-dir murmillo, then the rest.
+1. Wave 0–1 are in. Token: `python tools/pixellab_gen.py --check`.
+2. Wave 2 tooling is registered but **not generated**. With a token: `python tools/pixellab_gen.py --wave 2`.
+3. Stop and look at the four 4-dir idles before wave 3 motion.
 
 Imagine `assets/art/style_lock.png` is mood only — never `color_image`.
