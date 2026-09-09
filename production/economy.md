@@ -125,7 +125,22 @@ Street window on the ludus wall. Staffed cook required. Settles at dusk **before
 
 Empty kitchen = shuttered. If purse < cost×clients, sell only what grain you can buy.
 
-## Other playtest wishes (not implemented)
+## Spy intel (`GrantSpyIntel`)
 
-- ASCII / arrow-key / tab UI (numbers stay until then)
-- Spy that always returns usable intel (success still has a “dogs, barred porta” miss)
+Success is never flavor-only. Miss (dogs, barred porta) and caught (fine / detain / death) stay. Knobs in `Ludus.House.cs` / `Ludus.cs`.
+
+| Knob | Value | Code |
+|---|---|---|
+| Spy catch (base) | 22% | `ResolveNightOps` |
+| Spy miss given not caught | 28% | `successNeed` |
+| Intel: next locatio kit | ~35% of successes | `SpyIntelKind.TomorrowArmatura` |
+| Intel: thin purse | ~25% | `PurseThin` |
+| Intel: rival misses morning | ~20% | `RivalMisses` (sets `MissTomorrow`) |
+| Intel: weak roster | ~20% | `WeakRoster` (`NextFoeWeak`) |
+| Match a kit you can send | 70% | `SpyMatchRosterPct` |
+| Lifted purse | 12–24 | `SpyPurseLiftMin` / `Max` |
+| High *pro sudore* | 32–37 (normal 22–37) | `SpyHighSudoreMin` / `Max` |
+| High *pro occiso* | 450–519 | `SpyHighOccisusMin` / `Max` |
+| Weak foe | *fessus*, virtus −1, vigor 5/6 | `RunBout` (poison still outranks) |
+
+Poison and sabotage are unchanged. Career AI (`--report`) still rests at night.

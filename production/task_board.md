@@ -1,8 +1,9 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-09 (PixelLab wave 2 bodies — claimed `art-wave2-bodies`)
+**Last Updated:** 2026-09-09 (spy intel that pays — claimed `spy-intel-pays`)
 
 ## Now
+- [ ] Spy intel that pays — claimed `spy-intel-pays` (`cursor/spy-intel-pays-f234`)
 - [x] Wave 2 remaining 4-dir idle bodies (thraex, retiarius, secutor, household) — claimed `art-wave2-bodies` (`cursor/art-wave2-bodies-7dba`)
 - [x] Engine: keep console for first demo
 - [x] Role: lanista first, host munera as progression
@@ -15,7 +16,6 @@
 
 ## Next Up
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
-- Spy intel that pays (playtest: “nothing of value”)
 - Discharge (*rudis*)
 
 ## Done this cycle

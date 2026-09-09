@@ -379,9 +379,12 @@ public static partial class Ludus
         switch (s.NightOrder)
         {
             case NightOrder.Spy:
-                s.Rival.Intel = $"{s.Rival.Name} in {s.Rival.City}: fama {s.Rival.Fama}, hostility {s.Rival.Hostility}. A star murmillo is rumored; they hire often.";
-                log.Add($"{actorName} listens at the rival's porta. {s.Rival.Intel}");
+            {
+                var kind = RollSpyIntel(rng);
+                string report = GrantSpyIntel(s, rng, kind);
+                log.Add($"{actorName} listens at the rival's porta. {report}");
                 break;
+            }
             case NightOrder.Poison:
                 s.Rival.NextFoePoisoned = true;
                 log.Add($"Wine is left at the gate of {s.Rival.Name}. Tomorrow their man may enter the sand already sick. (Gameplay concession.)");
@@ -394,5 +397,86 @@ public static partial class Ludus
         }
 
         return log;
+    }
+
+    public static SpyIntelKind RollSpyIntel(Random rng)
+    {
+        int n = rng.Next(100);
+        if (n < 35) return SpyIntelKind.TomorrowArmatura;
+        if (n < 60) return SpyIntelKind.PurseThin;
+        if (n < 80) return SpyIntelKind.RivalMisses;
+        return SpyIntelKind.WeakRoster;
+    }
+
+    public static string GrantSpyIntel(GameState s, Random rng, SpyIntelKind kind)
+    {
+        s.Rival ??= MakeRival(rng);
+        var r = s.Rival;
+        ClearSpyOfferSeeds(r);
+        r.MissTomorrow = false;
+        r.NextFoeWeak = false;
+        r.IntelKind = kind;
+
+        string report = kind switch
+        {
+            SpyIntelKind.TomorrowArmatura => SeedTomorrowArmatura(s, rng, r),
+            SpyIntelKind.PurseThin => SeedPurseThin(s, rng, r),
+            SpyIntelKind.RivalMisses => SeedRivalMisses(r),
+            SpyIntelKind.WeakRoster => SeedWeakRoster(r),
+            _ => "The night yields no report."
+        };
+        r.Intel = report;
+        return report;
+    }
+
+    static void ClearSpyOfferSeeds(RivalLudus r)
+    {
+        r.HasSeededOffer = false;
+        r.SeededSudore = 0;
+        r.SeededOccisus = 0;
+    }
+
+    static Armatura PickIntelArmatura(GameState s, Random rng)
+    {
+        var kits = s.Living.Where(g => g.CanFight).Select(g => g.Armatura).Distinct().ToList();
+        if (kits.Count > 0 && rng.Next(100) < SpyMatchRosterPct)
+            return kits[rng.Next(kits.Count)];
+        return RandomArmatura(rng);
+    }
+
+    static string SeedTomorrowArmatura(GameState s, Random rng, RivalLudus r)
+    {
+        var kit = PickIntelArmatura(s, rng);
+        int sudore = rng.Next(22, 38);
+        int occisus = rng.Next(360, 520);
+        r.HasSeededOffer = true;
+        r.SeededArmatura = kit;
+        r.SeededSudore = sudore;
+        r.SeededOccisus = occisus;
+        string nom = Content.ArmaturaNom(kit);
+        return $"Dawn locatio: they want a {nom} — about {sudore} denarii pro sudore ({occisus} if occisus). Send that kit; the clerk docks a wrong type.";
+    }
+
+    static string SeedPurseThin(GameState s, Random rng, RivalLudus r)
+    {
+        int lift = rng.Next(SpyPurseLiftMin, SpyPurseLiftMax);
+        int sudore = rng.Next(SpyHighSudoreMin, SpyHighSudoreMax);
+        int occisus = rng.Next(SpyHighOccisusMin, SpyHighOccisusMax);
+        s.Denarii += lift;
+        r.SeededSudore = sudore;
+        r.SeededOccisus = occisus;
+        return $"His strongbox is thin (under ~200 denarii). Dawn's editor will pay high to fill the card — about {sudore} pro sudore. You lift {lift} denarii from a purse by the gate.";
+    }
+
+    static string SeedRivalMisses(RivalLudus r)
+    {
+        r.MissTomorrow = true;
+        return "They have no man for the morning editor. The contract will come to your porta. Keep someone who can stand.";
+    }
+
+    static string SeedWeakRoster(RivalLudus r)
+    {
+        r.NextFoeWeak = true;
+        return "Their yard is thin: a man on the straw, another wrapping a wrist. Whoever they send next enters already off (fessus). A tiro can take that sand.";
     }
 }

@@ -51,6 +51,15 @@ public enum NightOrder
     Sabotage
 }
 
+public enum SpyIntelKind
+{
+    None,
+    TomorrowArmatura,
+    PurseThin,
+    RivalMisses,
+    WeakRoster
+}
+
 public enum DishKind
 {
     Puls,
@@ -92,6 +101,12 @@ public sealed class RivalLudus
     public int Hostility { get; set; }
     public bool MissTomorrow { get; set; }
     public bool NextFoePoisoned { get; set; }
+    public bool NextFoeWeak { get; set; }
+    public bool HasSeededOffer { get; set; }
+    public Armatura SeededArmatura { get; set; }
+    public int SeededSudore { get; set; }
+    public int SeededOccisus { get; set; }
+    public SpyIntelKind IntelKind { get; set; }
     public string Intel { get; set; } = "";
 }
 

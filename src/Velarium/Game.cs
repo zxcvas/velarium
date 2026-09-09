@@ -150,11 +150,13 @@ sealed class Game
             Console.WriteLine($"Household: {hands}    Night: {Content.NightNom(s.NightOrder)}" +
                 (s.Rival != null ? $"    Rival: {s.Rival.Name} ({s.Rival.City})" : ""));
         if (s.Offer != null && !s.OfferTakenToday)
-            Console.WriteLine($"Today's locatio: {s.Offer.EditorName} wants a {Content.ArmaturaNom(s.Offer.Requested)}.");
+            Console.WriteLine($"Today's locatio: {s.Offer.EditorName} wants a {Content.ArmaturaNom(s.Offer.Requested)} ({s.Offer.PaySudore} den. pro sudore).");
         else if (s.OfferTakenToday)
             Console.WriteLine("The munus for today is done.");
         else
             Console.WriteLine("No editor came to the ludus this morning.");
+        if (s.Rival != null && !string.IsNullOrWhiteSpace(s.Rival.Intel))
+            Console.WriteLine("Intel: " + s.Rival.Intel);
         if (s.HostingUnlocked)
             Console.WriteLine("The duumviri will hear a petition to edit a munus of your own.");
         string stall = Ludus.StallStatusLine(s);
@@ -438,6 +440,11 @@ sealed class Game
         Ui.Wrap($"Terms, in the manner of the jurists: {o.PaySudore} denarii pro sudore if he leaves the harena whole; {o.PayOccisus} if occisus or broken. You are not the editor. You rent the man. The crowd will shout mitte or iugula; the editor decides.");
         Console.WriteLine();
         Ui.Wrap($"The other corner: a man of {o.RivalLanista}.");
+        if (s.Rival != null && !string.IsNullOrWhiteSpace(s.Rival.Intel))
+        {
+            Console.WriteLine();
+            Ui.Wrap("Last night's report: " + s.Rival.Intel);
+        }
 
         var able = s.Living.Where(g => g.CanFight).ToList();
         if (able.Count == 0)
@@ -523,7 +530,11 @@ sealed class Game
             Console.WriteLine();
             Console.WriteLine($"Beds {s.Living.Count()}/{Ludus.Beds(s)}. Household {Ludus.LivingWorkers(s).Count()}/{Ludus.HouseholdCap}.");
             if (s.Rival != null)
+            {
                 Console.WriteLine($"Rival: {s.Rival.Name}, {s.Rival.City}. Night order: {Content.NightNom(s.NightOrder)}.");
+                if (!string.IsNullOrWhiteSpace(s.Rival.Intel))
+                    Console.WriteLine("Last report: " + s.Rival.Intel);
+            }
             var household = Ludus.LivingWorkers(s).ToList();
             if (household.Count > 0)
             {
@@ -615,11 +626,11 @@ sealed class Game
             Ui.Pause();
             return;
         }
-        Ui.Wrap($"{s.Rival.Name} keeps a ludus in {s.Rival.City}. Rest is safe. Spy, poison (wine at the gate — a concession), or sabotage send a body into the night. Prefer a household slave. A gladiator is quieter and more expensive to lose.");
+        Ui.Wrap($"{s.Rival.Name} keeps a ludus in {s.Rival.City}. Rest is safe. Spy, poison (wine at the gate — a concession), or sabotage send a body into the night. Prefer a household slave. A gladiator is quieter and more expensive to lose. A successful spy brings something you can use at dawn: the next locatio kit, a thin purse and high pay, a missed editor, or a weak foe.");
         int c = Ui.Menu("Tonight", new[]
         {
             "Requies — rest (yard events only)",
-            "Speculari — spy on the rival",
+            "Speculari — spy (kit, purse, a miss, or a weak foe)",
             "Wine at their gate (poison the next foe)",
             "Sabotage — they may miss tomorrow's editor"
         });
@@ -752,6 +763,8 @@ sealed class Game
         if (!hosted && bout.Offer != null)
         {
             Ui.Wrap($"{bout.Offer.Venue}. Editor: {bout.Offer.EditorName}. Your {g.Name} ({Content.ArmaturaNom(g.Armatura)}) is led in from the porta sanavivaria. Opposite: {foe.Name}, {Content.ArmaturaNom(foe.Armatura)} of {bout.Offer.RivalLanista}.");
+            if (foe.Status is GladiatorStatus.Fessus or GladiatorStatus.Vulneratus)
+                Ui.Wrap($"{foe.Name} enters already {Content.StatusLat(foe.Status)}. The night's report was true.");
         }
         else
         {
@@ -823,6 +836,10 @@ sealed class Game
             HandleAuctoratus(night.Volunteer, night.Bounty);
 
         Console.WriteLine($"Tomorrow: {Calendar.Format(s)}    Purse: {s.Denarii}    Fama: {s.Fama}");
+        if (s.Offer != null)
+            Console.WriteLine($"Morning locatio: {s.Offer.EditorName} wants a {Content.ArmaturaNom(s.Offer.Requested)} ({s.Offer.PaySudore} den. pro sudore).");
+        else
+            Console.WriteLine("Morning locatio: no editor.");
         Autosave();
         Ui.Pause();
     }
