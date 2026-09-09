@@ -1,0 +1,28 @@
+{
+  "id": "char_secutor",
+  "endpoint": "/create-character-with-4-directions",
+  "seed": 794,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Secutor gladiator idle, SNES 3/4 low top-down like A Link to the Past. Smooth round helm with two eye-holes only. NOT a fish crest, NOT a griffin, NOT a plume. Big scutum, short gladius. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": null,
+  "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+  "background_job_id": null,
+  "files": {
+    "south": "characters/secutor_s_idle_00.png",
+    "east": "characters/secutor_e_idle_00.png",
+    "north": "characters/secutor_n_idle_00.png",
+    "west": "characters/secutor_w_idle_00.png"
+  },
+  "force_colors": true,
+  "proportions": "cartoon"
+}

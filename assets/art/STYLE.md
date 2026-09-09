@@ -41,6 +41,8 @@
 - Secutor: smooth helm, two eye-holes, scutum
 - Household: undyed tunic, no helm, no weapon
 
+**Wave 2 bodies:** 4-dir idle only (`{n,e,s,w}_idle_00.png`) for thraex, retiarius, secutor, household. Murmillo idle shipped in wave 0 — skip it. Re-pull existing PixelLab `character_id`s from `prompts/char_*.json` (`--from-character-id`); do not re-bill create. NES/Pompeii palette above stays locked.
+
 **Gore language:** 2–4 red pixels, a puff, stars, X-eyes, prone. *Streets of Rage*, not autopsy. *Iugula* is a cartoon KO.
 
 **Do not**
@@ -49,5 +51,6 @@
 - Child fighters, sexual content
 - Runtime PixelLab from the game
 - Commit tokens
+- Write Infected or Latifundium assets into this tree
 
 **Pipeline:** `python tools/pixellab_gen.py` (default wave 0) once `pixellab.env` returns 200 on `GET /balance`. Force palette via `tiles/palette_nes.png`, never the Imagine `style_lock.png`. Imagine comps are **mood only**, not production.

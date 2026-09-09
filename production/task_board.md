@@ -1,9 +1,9 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-08 (PixelLab wave 2 tooling claim)
+**Last Updated:** 2026-09-09 (PixelLab wave 2 bodies — claimed `art-wave2-bodies`)
 
 ## Now
-- [ ] PixelLab wave 2 tooling — claimed `pixellab-wave2-tooling` (register WAVE2; no API / no PNGs)
+- [x] Wave 2 remaining 4-dir idle bodies (thraex, retiarius, secutor, household) — claimed `art-wave2-bodies` (`cursor/art-wave2-bodies-7dba`)
 - [x] Engine: keep console for first demo
 - [x] Role: lanista first, host munera as progression
 - [x] Playable day loop (familia, drill, forum, locatio, hosting unlock)
@@ -15,11 +15,12 @@
 
 ## Next Up
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
-- Wave 2 remaining 4-dir bodies (thraex, retiarius, secutor, household) — run `--wave 2` once tooling lands
 - Spy intel that pays (playtest: “nothing of value”)
 - Discharge (*rudis*)
 
 ## Done this cycle
+- PixelLab wave 2 4-dir idle bodies (2026-09-09) — thraex, retiarius, secutor, household; murmillo skipped
+- PixelLab wave 2 tooling (2026-09-08) — WAVE2 jobs registered; no generate in that PR
 - M0 skeleton (2026-06-21)
 - GitHub June path — superseded by the playable slice
 - M1 ludus slice (2026-08-26)
