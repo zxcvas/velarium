@@ -1,0 +1,28 @@
+{
+  "id": "char_household",
+  "endpoint": "/create-character-with-4-directions",
+  "seed": 795,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Household slave idle, SNES 3/4 low top-down like A Link to the Past. Undyed dirty-linen tunic, bare head, no helm, no weapon, no armor. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": null,
+  "character_id": "673a08e7-1037-4f48-8fc5-8a0eb5375c09",
+  "background_job_id": null,
+  "files": {
+    "south": "characters/household_s_idle_00.png",
+    "east": "characters/household_e_idle_00.png",
+    "north": "characters/household_n_idle_00.png",
+    "west": "characters/household_w_idle_00.png"
+  },
+  "force_colors": true,
+  "proportions": "cartoon"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "char_thraex",
+  "endpoint": "/create-character-with-4-directions",
+  "seed": 792,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Thraex gladiator idle, SNES 3/4 low top-down like A Link to the Past. Griffin helm (bird-of-prey griffin head on the crown, two eye slits). Small parmula, curved sica, long greaves. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
+  "usage": null,
+  "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
+  "background_job_id": null,
+  "files": {
+    "south": "characters/thraex_s_idle_00.png",
+    "east": "characters/thraex_e_idle_00.png",
+    "north": "characters/thraex_n_idle_00.png",
+    "west": "characters/thraex_w_idle_00.png"
+  },
+  "force_colors": true,
+  "proportions": "cartoon"
+}
