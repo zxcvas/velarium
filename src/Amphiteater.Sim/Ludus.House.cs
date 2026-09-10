@@ -45,15 +45,20 @@ public static partial class Ludus
         return Math.Clamp(n, 0, StallCap(s));
     }
 
+    public static int DishSale(GameState s, DishKind kind)
+    {
+        var d = Content.GetDish(kind);
+        if (s.FoodRumorActive && s.FoodRumorDish == kind)
+            return Math.Max(d.Cost + 1, d.Sale + s.FoodRumorPrice);
+        return d.Sale;
+    }
+
     public static (int cost, int sale, string nom) StallPrices(GameState s)
     {
         if (KitchenLevel(s) >= 3)
         {
             var d = Content.GetDish(s.StallDish);
-            int sale = d.Sale;
-            if (s.FoodRumorActive && s.FoodRumorDish == s.StallDish)
-                sale = Math.Max(d.Cost + 1, d.Sale + s.FoodRumorPrice);
-            return (d.Cost, sale, d.Nom);
+            return (d.Cost, DishSale(s, d.Kind), d.Nom);
         }
         return (StallAnonCost, StallAnonSale, "bowls from the street window");
     }

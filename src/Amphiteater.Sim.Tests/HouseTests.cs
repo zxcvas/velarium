@@ -75,6 +75,7 @@ public class HouseTests
         foreach (var g in s.Living) g.Order = DayOrder.None;
         var night = Ludus.EndDay(s, rng);
         Assert.Contains(night.Log, line => line.Contains("Thermopolium"));
+        Assert.True(night.StallProfit > 0);
     }
 
     [Fact]
@@ -86,6 +87,7 @@ public class HouseTests
         foreach (var g in s.Living) g.Order = DayOrder.None;
         var night = Ludus.EndDay(s, rng);
         Assert.DoesNotContain(night.Log, line => line.Contains("Thermopolium"));
+        Assert.Equal(0, night.StallProfit);
     }
 
     [Fact]
@@ -99,6 +101,7 @@ public class HouseTests
         foreach (var g in s.Living) g.Order = DayOrder.None;
         var night = Ludus.EndDay(s, rng);
         Assert.DoesNotContain(night.Log, line => line.Contains("Thermopolium"));
+        Assert.Equal(0, night.StallProfit);
     }
 
     [Fact]
@@ -121,6 +124,7 @@ public class HouseTests
         foreach (var g in s.Living) g.Order = DayOrder.None;
         var night = Ludus.EndDay(s, rng);
         Assert.Contains(night.Log, line => line.Contains("Thermopolium") && line.Contains("moretum"));
+        Assert.True(night.StallProfit > 0);
     }
 
     [Fact]
