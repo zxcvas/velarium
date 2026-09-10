@@ -55,6 +55,13 @@ public static partial class Ludus
     public const int StallBaseClientsPerLevel = 2;
     public const int StallAnonCost = 1;
     public const int StallAnonSale = 3;
+    public const int SpyPurseLiftMin = 12;
+    public const int SpyPurseLiftMax = 25;
+    public const int SpyHighSudoreMin = 32;
+    public const int SpyHighSudoreMax = 38;
+    public const int SpyHighOccisusMin = 450;
+    public const int SpyHighOccisusMax = 520;
+    public const int SpyMatchRosterPct = 70;
 
     public static int Upkeep(int mouths) => UpkeepRoof + mouths * UpkeepPerMouth;
 
@@ -123,17 +130,29 @@ public static partial class Ludus
     public static void RefreshOffer(GameState s, Random rng)
     {
         bool rivalMissed = s.Rival is { MissTomorrow: true };
-        if (s.Rival != null) s.Rival.MissTomorrow = false;
+        bool seededOffer = s.Rival is { HasSeededOffer: true };
+        Armatura? seededKit = seededOffer ? s.Rival!.SeededArmatura : null;
+        int seededSudore = s.Rival?.SeededSudore ?? 0;
+        int seededOccisus = s.Rival?.SeededOccisus ?? 0;
+        if (s.Rival != null)
+        {
+            s.Rival.MissTomorrow = false;
+            s.Rival.HasSeededOffer = false;
+            s.Rival.SeededSudore = 0;
+            s.Rival.SeededOccisus = 0;
+        }
 
         // First two mornings always bring an editor so the core loop is visible.
-        if (!rivalMissed && s.DaysPlayed >= 2 && rng.Next(100) < 32)
+        // Spy/sabotage seeds force an offer so the night's report is not a lie.
+        bool forceOffer = rivalMissed || seededOffer || seededSudore > 0;
+        if (!forceOffer && s.DaysPlayed >= 2 && rng.Next(100) < 32)
         {
             s.Offer = null;
             return;
         }
-        var req = RandomArmatura(rng);
-        int sudore = rng.Next(22, 38);
-        int occisus = rng.Next(360, 520);
+        var req = seededKit ?? RandomArmatura(rng);
+        int sudore = seededSudore > 0 ? seededSudore : rng.Next(22, 38);
+        int occisus = seededOccisus > 0 ? seededOccisus : rng.Next(360, 520);
         s.Offer = new Contract
         {
             EditorName = Content.EditorNames[rng.Next(Content.EditorNames.Length)],
@@ -208,6 +227,14 @@ public static partial class Ludus
             foe.Virtus = Math.Max(3, foe.Virtus - 2);
             foe.Vigor = Math.Max(4, foe.VigorMax * 2 / 3);
             s.Rival.NextFoePoisoned = false;
+            s.Rival.NextFoeWeak = false;
+        }
+        else if (!hosted && s.Rival is { NextFoeWeak: true })
+        {
+            foe.Status = GladiatorStatus.Fessus;
+            foe.Virtus = Math.Max(3, foe.Virtus - 1);
+            foe.Vigor = Math.Max(4, foe.VigorMax * 5 / 6);
+            s.Rival.NextFoeWeak = false;
         }
 
         var report = Combat.Fight(rng, g, foe);
