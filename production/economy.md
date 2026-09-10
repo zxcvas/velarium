@@ -99,7 +99,7 @@ Beds = `max(8, 6 + 2×cellae level)`.
 |---|---|
 | Buy cook if purse | > 120 |
 | Keep cushion | 50 |
-| Never hosts; *mitte* own fallen | — |
+| Never hosts; never grants the *rudis*; *mitte* own fallen | — |
 
 ## Market prices already in code
 
@@ -124,6 +124,19 @@ Street window on the ludus wall. Staffed cook required. Settles at dusk **before
 | Unstaffed | no sales (and no diet bonus) | |
 
 Empty kitchen = shuttered. If purse < cost×clients, sell only what grain you can buy.
+
+## Rudis (discharge)
+
+Rare, late, costly, fama-positive. You lose the man (`GrantRudis`). He is *rudiarius*, not dead — he leaves `Familia` and is listed on `Rudiarii`, not Ad Libitinam. Console: day menu **Rudis**, or inspect a man in Familia. Career AI (`--report`) never grants it.
+
+| Knob | Value | Code |
+|---|---|---|
+| Palmae on the man | ≥ 5 | `RudisPalmaeNeed` |
+| Fama ludi | ≥ 20 (hosting unlocks at 16) | `RudisFamaNeed` |
+| Cash cost | `max(300, Value() × 2/3)` | `RudisCost` / `RudisMinCost` |
+| Fama gain | +5 (clamp 0–99) | `RudisFamaGain` |
+
+Rejections: `gone` (dead / not in the house), `fama`, `palmae`, `coin`. Empty roster after a discharge does **not** close the ludus until dusk (`CheckEnd`); you may still buy at the forum that day.
 
 ## Spy intel (`GrantSpyIntel`)
 

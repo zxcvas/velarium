@@ -33,6 +33,7 @@ Day loop in a console ludus:
 - **Locatio:** an editor wants a type; terms *pro sudore* vs *occisus*
 - Combat text, classic pairings (murmillo–thraex, retiarius–secutor)
 - **Edere munus:** locked until fama 16 and a palma in the house
+- **Rudis:** locked until fama 20 and 5 palmae on the man; costly; he leaves the roster
 - End day: upkeep, training, events, Roman calendar
 
 Failure: empty cells and an empty purse. There is no scripted "win"; hosting your first munus is the slice's payoff.

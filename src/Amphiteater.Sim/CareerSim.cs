@@ -121,7 +121,7 @@ public static class CareerSim
         sb.AppendLine("AMPHITEATER — headless career report");
         sb.AppendLine("Ville target: ~10% of combatants die per bout (deaths / (2 * bouts) ≈ 0.10).");
         sb.AppendLine("Gaius: sweat cheap, corpse dear. Start 620 denarii. Upkeep 10 + 6/mouth.");
-        sb.AppendLine("AI: locatio-first, never hosts, mitte on own fallen (own-death stays 0).");
+        sb.AppendLine("AI: locatio-first, never hosts, never grants the rudis, mitte on own fallen (own-death stays 0).");
         sb.AppendLine("    Buys a cook if purse > 120 and kitchen empty. Night is rest.");
         sb.AppendLine();
         sb.AppendLine($"Careers:              {r.Careers}");

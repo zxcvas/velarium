@@ -22,13 +22,13 @@ dist\Amphiteater.exe
 - Pick a Roman name (or compose *praenomen + nomen + cognomen*)
 - A ludus in Capua, Kalends of May, a.u.c. DCCLXXXII
 - Three *tiros*: murmillo, thraex, retiarius
-- A day menu: familia, exercitia, forum, locatio, edere munus (locked), **domus** (rooms / household / night), end day
+- A day menu: familia, exercitia, forum, locatio, edere munus (locked), **rudis** (discharge, locked until fama and palmae), **domus** (rooms / household / night), end day
 
 Day one an editor will usually be at the gate. Send the type he asked for.
 
 Saves write to `dist/amphiteater_save.json` (ignored by git). Continue from the title screen.
 
-Exit: title `[4] Vale`. In a day: `[7] Servare et abire` (save and leave), then Vale.
+Exit: title `[4] Vale`. In a day: **Servare et abire** (save and leave), then Vale.
 
 Headless balance dump (no UI):
 

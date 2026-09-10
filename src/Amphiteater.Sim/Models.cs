@@ -189,6 +189,7 @@ public sealed class GameState
     public List<Gladiator> Familia { get; set; } = new();
     public List<Gladiator> Market { get; set; } = new();
     public List<string> AdLibitinam { get; set; } = new();
+    public List<string> Rudiarii { get; set; } = new();
     public Contract? Offer { get; set; }
     public List<Room> Rooms { get; set; } = new();
     public List<Worker> Household { get; set; } = new();
