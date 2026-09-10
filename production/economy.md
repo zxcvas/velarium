@@ -95,11 +95,17 @@ Beds = `max(8, 6 + 2×cellae level)`.
 
 ## Career AI (`--report` only)
 
-| Knob | Value |
-|---|---|
-| Buy cook if purse | > 120 |
-| Keep cushion | 50 |
-| Never hosts; never grants the *rudis*; *mitte* own fallen | — |
+Default policy is `CareerKitchenPolicy.UpgradeStall`. Locatio-only / staff-only exist for `--report` tests, not the console.
+
+Spends **after** locatio settlement so sweat can fund the mason. Night is rest. Never hosts; never grants the *rudis*; *mitte* own fallen.
+
+| Knob | Value | Code |
+|---|---|---|
+| Buy cook if purse | > 120 | `CareerSim.CookPurseNeed` |
+| Keep cushion (hire / *auctoratus*) | 50 | `CareerSim.KeepCushion` |
+| Kitchen upgrade if staffed, not pending, lv < 3 | purse ≥ `UpgradeCost` + 80 | `CareerSim.KitchenUpgradeCushion` |
+| Kitchen 1→2 / 2→3 | 90 / 110 | `UpgradeCost` |
+| Lv3 dish | max expected `(sale−cost)×bowls` given rumor and grain | `CareerSim.ChooseStallDish` |
 
 ## Market prices already in code
 

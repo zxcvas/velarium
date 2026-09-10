@@ -1,8 +1,9 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-10 (rudis-discharge)
+**Last Updated:** 2026-09-10 (career-kitchen-ai)
 
 ## Now
+- [x] Career AI kitchen upgrade / stall (`--report`) — claimed `career-kitchen-ai` (`cursor/career-kitchen-ai-ce03`)
 - [x] Discharge (*rudis*) — claimed `rudis-discharge` (`cursor/rudis-discharge-085f`)
 - [x] Spy intel that pays — claimed `spy-intel-pays` (`cursor/spy-intel-pays-f234`)
 - [x] Wave 2 remaining 4-dir idle bodies (thraex, retiarius, secutor, household) — claimed `art-wave2-bodies` (`cursor/art-wave2-bodies-7dba`)
@@ -19,6 +20,7 @@
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
 
 ## Done this cycle
+- CareerSim kitchen upgrade / stall AI (2026-09-10) — `--report` hires, upgrades culina, picks dishes; locatio-only still ruins ~day 21
 - Discharge / *rudis* (2026-09-10) — five palmae, fama 20, two-thirds value; man leaves the roster; console + tests
 - Spy intel that pays (2026-09-09) — success seeds dawn locatio kit, thin purse + lift, missed editor, or fessus foe; miss/caught stay
 - PixelLab wave 2 4-dir idle bodies (2026-09-09) — thraex, retiarius, secutor, household; murmillo skipped
@@ -38,6 +40,6 @@
 
 ## Blocked / Questions
 Playtest **holds**. Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
-Empty purse closes at dusk. Locatio-only `--report` still ~100% ruin by day ~20. AI does not upgrade the kitchen, so stall income is mostly a human path.
+Empty purse closes at dusk. Locatio-only `--report` still ~100% ruin by day ~21. Default career AI now upgrades/staffs the kitchen and takes stall income (`production/economy.md`).
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
 Godot 4.6 C# courtyard is blocked: this SDK is net10-only; Godot still wants net8. Mono zip is in Downloads. See `godot/README.md`.

@@ -33,6 +33,7 @@ public sealed class EndDayResult
     public List<string> Log { get; init; } = new();
     public Gladiator? Volunteer { get; init; }
     public int Bounty { get; init; }
+    public int StallProfit { get; init; }
 }
 
 public static partial class Ludus
@@ -472,7 +473,7 @@ public static partial class Ludus
 
         CompleteUpgrades(s, log);
         RecoverDetained(s, rng, log);
-        SettleStall(s, log);
+        int stallProfit = SettleStall(s, log);
 
         int mouths = s.Living.Count();
         int hands = LivingWorkers(s).Count();
@@ -532,7 +533,7 @@ public static partial class Ludus
 
         CheckEnd(s);
 
-        return new EndDayResult { Log = log, Volunteer = volunteer, Bounty = bounty };
+        return new EndDayResult { Log = log, Volunteer = volunteer, Bounty = bounty, StallProfit = stallProfit };
     }
 
     static (string text, Gladiator? volunteer, int bounty) NightEvent(GameState s, Random rng)
