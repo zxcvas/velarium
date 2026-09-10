@@ -50,6 +50,10 @@ public static partial class Ludus
     public const int WorkerUpkeep = 3;
     public const int HouseholdCap = 6;
     public const int HostFamaNeed = 16;
+    public const int RudisPalmaeNeed = 5;
+    public const int RudisFamaNeed = 20;
+    public const int RudisFamaGain = 5;
+    public const int RudisMinCost = 300;
     public const int MaxRoomLevel = 3;
     public const int StallBowlsPerLevel = 4;
     public const int StallBaseClientsPerLevel = 2;
@@ -192,6 +196,36 @@ public static partial class Ludus
         g.Order = DayOrder.None;
         s.Familia.Add(g);
         s.Market.RemoveAt(marketIndex);
+        return null;
+    }
+
+    public static int RudisCost(Gladiator g)
+        => Math.Max(RudisMinCost, g.Value() * 2 / 3);
+
+    public static string? RudisRefusal(GameState s, Gladiator g)
+    {
+        if (!g.Alive || !s.Familia.Contains(g)) return "gone";
+        if (s.Fama < RudisFamaNeed) return "fama";
+        if (g.Palmae < RudisPalmaeNeed) return "palmae";
+        if (s.Denarii < RudisCost(g)) return "coin";
+        return null;
+    }
+
+    public static string? GrantRudis(GameState s, Gladiator g)
+    {
+        string? err = RudisRefusal(s, g);
+        if (err != null) return err;
+
+        int cost = RudisCost(g);
+        s.Denarii -= cost;
+        s.Fama = Math.Clamp(s.Fama + RudisFamaGain, 0, 99);
+        if (!s.NightActorIsWorker && s.NightActorId == g.Id)
+        {
+            s.NightOrder = NightOrder.Rest;
+            s.NightActorId = 0;
+        }
+        s.Familia.Remove(g);
+        s.Rudiarii.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()} — rudiarius");
         return null;
     }
 

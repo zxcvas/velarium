@@ -288,4 +288,5 @@ Each PR is independently playable. Console build is required on all of them.
 
 ### PR10 — Rudis and late image of Rome
 - **Depends on:** PR7–PR9
-- **What:** Discharge as a rare, costly, fama-positive loss of an asset. Ludus Magnus as a *picture*, not a start map.
+- **Status:** console discharge slice 2026-09-10 (Ludus Magnus picture still later)
+- **What:** Discharge as a rare, costly, fama-positive loss of an asset. Ludus Magnus as a *picture*, not a start map. Knobs: `production/economy.md` (*Rudis*).

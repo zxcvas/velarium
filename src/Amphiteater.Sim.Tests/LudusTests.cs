@@ -155,6 +155,153 @@ public class LudusTests
     }
 
     [Fact]
+    public void GrantRudis_frees_a_star_pays_and_raises_fama()
+    {
+        var s = Fresh();
+        s.Fama = Ludus.RudisFamaNeed;
+        s.Denarii = 5_000;
+        var g = s.Living.First();
+        g.Palmae = Ludus.RudisPalmaeNeed;
+        g.Virtus = 10;
+        g.Fama = 4;
+        g.VigorMax = 16;
+        g.Vigor = 16;
+        g.Status = GladiatorStatus.Validus;
+        int cost = Ludus.RudisCost(g);
+        int purse = s.Denarii;
+        int mouths = s.Living.Count();
+        Assert.Null(Ludus.RudisRefusal(s, g));
+        Assert.Null(Ludus.GrantRudis(s, g));
+        Assert.DoesNotContain(s.Familia, x => x.Id == g.Id);
+        Assert.Equal(mouths - 1, s.Living.Count());
+        Assert.Equal(purse - cost, s.Denarii);
+        Assert.Equal(Ludus.RudisFamaNeed + Ludus.RudisFamaGain, s.Fama);
+        Assert.Contains(s.Rudiarii, line => line.Contains(g.Name) && line.Contains("rudiarius"));
+        Assert.DoesNotContain(s.AdLibitinam, line => line.Contains(g.Name));
+        Assert.False(s.Ended);
+    }
+
+    [Fact]
+    public void GrantRudis_rejects_tiro_without_palmae()
+    {
+        var s = Fresh();
+        s.Fama = 50;
+        s.Denarii = 5_000;
+        var g = s.Living.First();
+        Assert.Equal(0, g.Palmae);
+        Assert.Equal("palmae", Ludus.GrantRudis(s, g));
+        Assert.Contains(s.Living, x => x.Id == g.Id);
+        Assert.Empty(s.Rudiarii);
+    }
+
+    [Fact]
+    public void GrantRudis_rejects_low_ludus_fama()
+    {
+        var s = Fresh();
+        s.Fama = Ludus.RudisFamaNeed - 1;
+        s.Denarii = 5_000;
+        var g = s.Living.First();
+        g.Palmae = Ludus.RudisPalmaeNeed;
+        Assert.Equal("fama", Ludus.GrantRudis(s, g));
+        Assert.Contains(s.Living, x => x.Id == g.Id);
+        Assert.Equal(Ludus.RudisFamaNeed - 1, s.Fama);
+    }
+
+    [Fact]
+    public void GrantRudis_rejects_short_purse()
+    {
+        var s = Fresh();
+        s.Fama = Ludus.RudisFamaNeed;
+        var g = s.Living.First();
+        g.Palmae = Ludus.RudisPalmaeNeed;
+        s.Denarii = Ludus.RudisCost(g) - 1;
+        Assert.Equal("coin", Ludus.GrantRudis(s, g));
+        Assert.Contains(s.Living, x => x.Id == g.Id);
+        Assert.Equal(Ludus.RudisCost(g) - 1, s.Denarii);
+    }
+
+    [Fact]
+    public void GrantRudis_rejects_dead_or_stranger()
+    {
+        var s = Fresh();
+        s.Fama = 50;
+        s.Denarii = 5_000;
+        var g = s.Living.First();
+        g.Palmae = 8;
+        Ludus.Kill(s, g);
+        Assert.Equal("gone", Ludus.GrantRudis(s, g));
+
+        var stranger = new Gladiator
+        {
+            Name = "NEMO",
+            Palmae = 8,
+            Status = GladiatorStatus.Validus,
+            Vigor = 10,
+            VigorMax = 10
+        };
+        Assert.Equal("gone", Ludus.GrantRudis(s, stranger));
+        Assert.Empty(s.Rudiarii);
+    }
+
+    [Fact]
+    public void RudisCost_is_two_thirds_value_floored_at_min()
+    {
+        var cheap = new Gladiator
+        {
+            Virtus = 1,
+            Palmae = 0,
+            Fama = 0,
+            VigorMax = 1,
+            Status = GladiatorStatus.Validus
+        };
+        Assert.Equal(Ludus.RudisMinCost, Ludus.RudisCost(cheap));
+
+        var star = new Gladiator
+        {
+            Virtus = 10,
+            Palmae = 5,
+            Fama = 4,
+            VigorMax = 16,
+            Status = GladiatorStatus.Validus
+        };
+        Assert.Equal(Math.Max(Ludus.RudisMinCost, star.Value() * 2 / 3), Ludus.RudisCost(star));
+        Assert.True(Ludus.RudisCost(star) >= Ludus.RudisMinCost);
+    }
+
+    [Fact]
+    public void GrantRudis_last_man_does_not_close_until_check_end()
+    {
+        var s = Fresh();
+        s.Fama = 50;
+        s.Denarii = 5_000;
+        var keep = s.Living.First();
+        keep.Palmae = 8;
+        foreach (var g in s.Living.Where(x => x.Id != keep.Id).ToList())
+            Ludus.Kill(s, g);
+        Assert.Null(Ludus.GrantRudis(s, keep));
+        Assert.Empty(s.Living);
+        Assert.False(s.Ended);
+        Ludus.CheckEnd(s);
+        Assert.True(s.Ended);
+    }
+
+    [Fact]
+    public void GrantRudis_clears_night_blade_if_he_was_the_actor()
+    {
+        var s = Fresh();
+        s.Fama = 50;
+        s.Denarii = 5_000;
+        var g = s.Living.First();
+        g.Palmae = 8;
+        s.NightOrder = NightOrder.Spy;
+        s.NightActorIsWorker = false;
+        s.NightActorId = g.Id;
+        Assert.Null(Ludus.GrantRudis(s, g));
+        Assert.Equal(NightOrder.Rest, s.NightOrder);
+        Assert.Equal(0, s.NightActorId);
+    }
+
+    [Fact]
     public void RunCareer_some_careers_staff_kitchen_by_day_twelve()
     {
         var r = CareerSim.RunMany(20, maxDays: 12);

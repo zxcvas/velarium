@@ -118,21 +118,23 @@ sealed class Game
                 "Forum (buy, medicus, rumors)",
                 OfferLabel(),
                 HostLabel(),
+                RudisLabel(),
                 "Domus (rooms, household, night)"
             };
             if (thermo) items.Add("Thermopolium (today's dish)");
             items.Add("Finis diei (end the day)");
             items.Add("Servare et abire (save and leave)");
             int c = Ui.Menu(null!, items, zeroBack: false);
-            int endDay = thermo ? 8 : 7;
-            int save = thermo ? 9 : 8;
+            int endDay = thermo ? 9 : 8;
+            int save = thermo ? 10 : 9;
             if (c == 1) FamiliaScreen();
             else if (c == 2) OrdersScreen();
             else if (c == 3) ForumScreen();
             else if (c == 4) LocatioScreen();
             else if (c == 5) HostScreen();
-            else if (c == 6) DomusScreen();
-            else if (thermo && c == 7) ThermopoliumScreen();
+            else if (c == 6) RudisScreen();
+            else if (c == 7) DomusScreen();
+            else if (thermo && c == 8) ThermopoliumScreen();
             else if (c == endDay) EndDayScreen();
             else if (c == save) { Autosave(); return; }
             if (s.Ended) ShowEnding();
@@ -175,6 +177,11 @@ sealed class Game
             ? "Edere munus (host games — unlocked)"
             : "Edere munus (locked — fama and a palma needed)";
 
+    string RudisLabel()
+        => s.Living.Any(g => Ludus.RudisRefusal(s, g) == null)
+            ? "Rudis (discharge a rudiarius)"
+            : "Rudis (locked — fama, palmae, and coin)";
+
     void FamiliaScreen()
     {
         while (true)
@@ -198,6 +205,13 @@ sealed class Game
                     Console.WriteLine($"{i + 1,2} {g.Name,-14} {Content.ArmaturaNom(g.Armatura),-10} {g.Origin,-10} {g.Vigor,2}/{g.VigorMax,-2} {g.Virtus,3} {Content.StatusLat(g.Status),-12} {rank}");
                     Console.WriteLine($"    {g.Record()}    {Content.OrderLat(g.Order)}    {g.Source}");
                 }
+            }
+            if (s.Rudiarii.Count > 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Rudiarii (discharged):");
+                foreach (var d in s.Rudiarii.TakeLast(8))
+                    Console.WriteLine("  " + d);
             }
             if (s.AdLibitinam.Count > 0)
             {
@@ -226,7 +240,13 @@ sealed class Game
         Ui.Wrap(g.Pugnat == 0
             ? "A tiro. He has not yet seen the harena. The palus knows him; the crowd does not."
             : $"{g.Name} has gone down onto the sand {g.Pugnat} time(s). The familia measures him by palmae, not by years.");
-        Ui.Pause();
+        Console.WriteLine();
+        if (g.Palmae >= Ludus.RudisPalmaeNeed)
+            Ui.Wrap($"He has {g.Palmae} palmae. The rudis would cost {Ludus.RudisCost(g)} denarii and raise fama by {Ludus.RudisFamaGain}. He would leave the roster.");
+        else
+            Ui.Wrap($"Discharge needs {Ludus.RudisPalmaeNeed} palmae (he has {g.Palmae}) and fama ludi {Ludus.RudisFamaNeed}. The wooden sword is late, and it costs the asset.");
+        int c = Ui.Menu(g.Name, new[] { "Grant the rudis (discharge — he walks free)" });
+        if (c == 1) OfferRudis(g);
     }
 
     void OrdersScreen()
@@ -820,6 +840,74 @@ sealed class Game
         Ui.Pause();
     }
 
+    void RudisScreen()
+    {
+        Ui.Clear();
+        Ui.Title("Rudis");
+        Ui.Wrap("The rudis is a wooden sword and a door. Grant it and the man is rudiarius: free of the familia, no longer yours to rent or spend. The crowd loves a lanista who can afford to lose a star. You buy that talk with coin, and you lose the asset.");
+        Console.WriteLine();
+        Console.WriteLine($"Need: fama ludi {Ludus.RudisFamaNeed}, {Ludus.RudisPalmaeNeed} palmae on the man.");
+        Console.WriteLine($"Cost: two-thirds his sale value (min {Ludus.RudisMinCost} denarii). Fama +{Ludus.RudisFamaGain}.");
+        Console.WriteLine($"Fama ludi now: {s.Fama}. Purse: {s.Denarii}.");
+        var stars = s.Living.Where(g => g.Palmae >= Ludus.RudisPalmaeNeed).ToList();
+        if (stars.Count == 0)
+        {
+            Console.WriteLine();
+            Ui.Wrap("No one in the cells has earned five palmae. Train, rent, host. The wooden sword is late.");
+            Ui.Pause();
+            return;
+        }
+        int c = Ui.Menu("Whom do you free?", stars.Select(g =>
+            $"{g.Name}, {g.Palmae} palmae, {Ludus.RudisCost(g)} den. ({g.Rank()})").ToList());
+        if (c == 0) return;
+        OfferRudis(stars[c - 1]);
+    }
+
+    void OfferRudis(Gladiator g)
+    {
+        int cost = Ludus.RudisCost(g);
+        string? block = Ludus.RudisRefusal(s, g);
+        if (block == "fama")
+        {
+            Ui.Wrap($"The duumviri would not notice. Raise the fama of the ludus to {Ludus.RudisFamaNeed} (now {s.Fama}) before you spend a star on talk.");
+            Ui.Pause();
+            return;
+        }
+        if (block == "palmae")
+        {
+            Ui.Wrap($"{g.Name} has {g.Palmae} palmae. The rudis waits on {Ludus.RudisPalmaeNeed}.");
+            Ui.Pause();
+            return;
+        }
+        if (block == "coin")
+        {
+            Ui.Wrap($"Manumission is not a gesture. {g.Name} would cost {cost} denarii (two-thirds of {g.Value()}). Purse: {s.Denarii}.");
+            Ui.Pause();
+            return;
+        }
+        if (block != null)
+        {
+            Ui.Wrap("He is already gone.");
+            Ui.Pause();
+            return;
+        }
+
+        Ui.Wrap($"Pay {cost} denarii, gain {Ludus.RudisFamaGain} fama, and lose {g.Name}. He will not fight for you again. The cells will show one fewer mouth.");
+        if (!Ui.Confirm($"Grant the rudis to {g.Name}?")) return;
+        string? err = Ludus.GrantRudis(s, g);
+        if (err != null)
+        {
+            Ui.Wrap("The clerks shake their heads. Nothing is done.");
+            Ui.Pause();
+            return;
+        }
+        Console.WriteLine();
+        Ui.Wrap($"You put the rudis in his hand. {g.Name} walks out the porta a free man. The familia is lighter. Capua talks.");
+        Console.WriteLine($"Purse: {s.Denarii} denarii. Fama ludi: {s.Fama}.");
+        Autosave();
+        Ui.Pause();
+    }
+
     void EndDayScreen()
     {
         Ui.Clear();
@@ -868,6 +956,13 @@ sealed class Game
         Ui.Wrap(s.EndMessage ?? "The games end.");
         Console.WriteLine();
         Console.WriteLine($"Days: {s.DaysPlayed}    Fama: {s.Fama}    Denarii: {s.Denarii}");
+        if (s.Rudiarii.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Rudiarii:");
+            foreach (var d in s.Rudiarii)
+                Console.WriteLine("  " + d);
+        }
         if (s.AdLibitinam.Count > 0)
         {
             Console.WriteLine();
@@ -889,12 +984,14 @@ sealed class Game
         Console.WriteLine();
         Ui.Wrap("If the ludus earns fama, and a man of yours takes a palma, the duumviri may let you stage a munus of your own. Then you are editor for an afternoon: mitte or iugula is your hand.");
         Console.WriteLine();
+        Ui.Wrap("Late, and costly: the rudis. Five palmae, fama 20, two-thirds the man's value. He walks free. You lose the asset. The city talks.");
+        Console.WriteLine();
         Console.WriteLine("Pairings the crowd expects:");
         Console.WriteLine("  murmillo  vs  thraex");
         Console.WriteLine("  retiarius vs  secutor");
         Console.WriteLine();
         Console.WriteLine("Terms: tiro (novice), palma (win), missio (reprieve), stans (draw),");
-        Console.WriteLine("       rudis (wooden sword / later, discharge), harena (sand).");
+        Console.WriteLine("       rudis (wooden sword of discharge; he leaves the familia), harena (sand).");
         Console.WriteLine("Currency: denarii. Date: Roman civil calendar, a.u.c.");
         Ui.Pause();
     }
