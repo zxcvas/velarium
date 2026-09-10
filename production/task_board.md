@@ -1,9 +1,9 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-10 (rudis-discharge claimed)
+**Last Updated:** 2026-09-10 (rudis-discharge)
 
 ## Now
-- [ ] Discharge (*rudis*) — claimed `rudis-discharge` (`cursor/rudis-discharge-085f`)
+- [x] Discharge (*rudis*) — claimed `rudis-discharge` (`cursor/rudis-discharge-085f`)
 - [x] Spy intel that pays — claimed `spy-intel-pays` (`cursor/spy-intel-pays-f234`)
 - [x] Wave 2 remaining 4-dir idle bodies (thraex, retiarius, secutor, household) — claimed `art-wave2-bodies` (`cursor/art-wave2-bodies-7dba`)
 - [x] Engine: keep console for first demo
@@ -19,6 +19,7 @@
 - Godot courtyard — needs .NET 8 targeting pack (see `godot/README.md`)
 
 ## Done this cycle
+- Discharge / *rudis* (2026-09-10) — five palmae, fama 20, two-thirds value; man leaves the roster; console + tests
 - Spy intel that pays (2026-09-09) — success seeds dawn locatio kit, thin purse + lift, missed editor, or fessus foe; miss/caught stay
 - PixelLab wave 2 4-dir idle bodies (2026-09-09) — thraex, retiarius, secutor, household; murmillo skipped
 - PixelLab wave 2 tooling (2026-09-08) — WAVE2 jobs registered; no generate in that PR
