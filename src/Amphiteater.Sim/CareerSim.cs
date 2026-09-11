@@ -18,6 +18,8 @@ public sealed class CareerStats
     public int FoeDeaths { get; set; }
     public int SudoreCount { get; set; }
     public int OccisusCount { get; set; }
+    public int HostedBouts { get; set; }
+    public int LocatioSkipped { get; set; }
     public bool Ruined { get; set; }
     public bool HostingUnlockedBy30 { get; set; }
     public bool StaffedKitchenBy30 { get; set; }
@@ -43,6 +45,8 @@ public sealed class AggregateReport
     public int FoeDeaths { get; init; }
     public int SudoreCount { get; init; }
     public int OccisusCount { get; init; }
+    public int HostedBouts { get; init; }
+    public int LocatioSkipped { get; init; }
     public int HostingUnlockedBy30 { get; init; }
     public int StaffedKitchenBy30 { get; init; }
     public int StallKitchenBy30 { get; init; }
@@ -72,6 +76,11 @@ public static class CareerSim
     public const int CookPurseNeed = 120;
     public const int KeepCushion = 50;
     public const int KitchenUpgradeCushion = 80;
+    public const int TreatCushion = 25;
+    public const int LocatioDesperatePurse = 90;
+    public const int LocatioWrongTypeMinSudore = 30;
+    public const int HostCushion = 80;
+    public const int HireRosterNeed = 2;
 
     public static CareerStats RunCareer(
         int seed,
@@ -86,6 +95,9 @@ public static class CareerSim
         {
             MorningTreat(s);
             MorningOrders(s);
+            TryHireFighter(s);
+            if (kitchen == CareerKitchenPolicy.LocatioOnly)
+                TryHost(s, rng, stats);
             TryLocatio(s, rng, stats);
             MorningKitchen(s, kitchen);
 
@@ -148,6 +160,8 @@ public static class CareerSim
             FoeDeaths = list.Sum(c => c.FoeDeaths),
             SudoreCount = list.Sum(c => c.SudoreCount),
             OccisusCount = list.Sum(c => c.OccisusCount),
+            HostedBouts = list.Sum(c => c.HostedBouts),
+            LocatioSkipped = list.Sum(c => c.LocatioSkipped),
             HostingUnlockedBy30 = list.Count(c => c.HostingUnlockedBy30),
             StaffedKitchenBy30 = list.Count(c => c.StaffedKitchenBy30),
             StallKitchenBy30 = list.Count(c => c.StallKitchenBy30),
@@ -162,15 +176,26 @@ public static class CareerSim
         };
     }
 
-    public static string Format(AggregateReport r)
+    public static string Format(AggregateReport r, CareerKitchenPolicy kitchen = CareerKitchenPolicy.UpgradeStall)
     {
         var sb = new System.Text.StringBuilder();
         sb.AppendLine("AMPHITEATER — headless career report");
         sb.AppendLine("Ville target: ~10% of combatants die per bout (deaths / (2 * bouts) ≈ 0.10).");
         sb.AppendLine("Gaius: sweat cheap, corpse dear. Start 620 denarii. Upkeep 10 + 6/mouth.");
-        sb.AppendLine("AI: locatio-first, never hosts, never grants the rudis, mitte on own fallen (own-death stays 0).");
-        sb.AppendLine($"    Buys a cook if purse > {CookPurseNeed} and kitchen empty. Night is rest.");
-        sb.AppendLine($"    After locatio: upgrade culina when staffed if purse ≥ cost + {KitchenUpgradeCushion}; lv3 sells the fattest rumor-aware margin.");
+        sb.AppendLine("AI: locatio-first, never grants the rudis, mitte on own fallen (own-death stays 0).");
+        sb.AppendLine($"    Treats wounds/illness (or vigor < half) if purse > fee + {TreatCushion}. Rests tired men; palus for tiros; no sparring.");
+        sb.AppendLine($"    Skips a tired or cheap wrong-type locatio unless purse < {LocatioDesperatePurse}.");
+        if (kitchen == CareerKitchenPolicy.LocatioOnly)
+        {
+            sb.AppendLine($"    Kitchen: locatio-only (no cook, no stall). `--report --locatio`.");
+            sb.AppendLine($"    Hosts when unlocked if purse ≥ {Ludus.HostCost} + {HostCushion} and two men can stand. Buys a cheap replacement if living < {HireRosterNeed}.");
+        }
+        else
+        {
+            sb.AppendLine("    Never hosts. Night is rest.");
+            sb.AppendLine($"    Buys a cook if purse > {CookPurseNeed} and kitchen empty.");
+            sb.AppendLine($"    After locatio: upgrade culina when staffed if purse ≥ cost + {KitchenUpgradeCushion}; lv3 sells the fattest rumor-aware margin.");
+        }
         sb.AppendLine();
         sb.AppendLine($"Careers:              {r.Careers}");
         sb.AppendLine($"Ruined:               {r.Ruined}  ({r.RuinedPct:0.0}%)");
@@ -191,6 +216,8 @@ public static class CareerSim
         sb.AppendLine($"Own-man death / bout: {r.OwnDeathRate:0.000}");
         sb.AppendLine($"Sudore settlements:   {r.SudoreCount}");
         sb.AppendLine($"Occisus settlements:  {r.OccisusCount}");
+        sb.AppendLine($"Hosted bouts:         {r.HostedBouts}");
+        sb.AppendLine($"Locatio skipped:      {r.LocatioSkipped}");
         sb.AppendLine();
         sb.AppendLine($"Mean denarii day 1:   {Fmt(r.MeanDenariiDay1)}");
         sb.AppendLine($"Mean denarii day 7:   {Fmt(r.MeanDenariiDay7)}");
@@ -210,25 +237,69 @@ public static class CareerSim
 
     static void MorningTreat(GameState s)
     {
-        foreach (var g in s.Living.Where(Ludus.NeedsMedicus).ToList())
+        foreach (var g in s.Living.Where(NeedsCareerTreat).ToList())
         {
-            if (s.Denarii <= 30) break;
+            int fee = Ludus.TreatFee(s);
+            if (s.Denarii < fee + TreatCushion) break;
             Ludus.Treat(s, g);
         }
     }
+
+    static bool NeedsCareerTreat(Gladiator g)
+        => g.Alive && (g.Status is GladiatorStatus.Vulneratus or GladiatorStatus.Aeger
+            || g.Vigor < g.VigorMax / 2);
 
     static void MorningOrders(GameState s)
     {
         foreach (var g in s.Living)
         {
-            if (g.Status != GladiatorStatus.Validus)
+            if (g.Status != GladiatorStatus.Validus || g.Vigor < FreshVigor(g))
                 g.Order = DayOrder.Requies;
             else if (g.Pugnat == 0)
                 g.Order = DayOrder.Palus;
             else
-                g.Order = DayOrder.Sparring;
+                g.Order = DayOrder.Requies;
         }
     }
+
+    static int FreshVigor(Gladiator g) => g.VigorMax * 2 / 3;
+
+    public static bool IsFreshEnough(Gladiator g)
+        => g.CanFight && g.Status == GladiatorStatus.Validus && g.Vigor >= FreshVigor(g);
+
+    public static bool PurseIsThin(GameState s) => s.Denarii < LocatioDesperatePurse;
+
+    public static Gladiator? PickLocatio(GameState s)
+    {
+        if (s.Offer == null) return null;
+        var able = s.Living.Where(g => g.CanFight).ToList();
+        if (able.Count == 0) return null;
+        var requested = able.Where(g => g.Armatura == s.Offer.Requested).ToList();
+        return (requested.Count > 0 ? requested : able)
+            .OrderByDescending(g => g.Virtus)
+            .First();
+    }
+
+    public static bool ShouldTakeLocatio(GameState s, Gladiator pick)
+    {
+        if (s.Offer == null || !pick.CanFight) return false;
+        bool desperate = PurseIsThin(s);
+        if (desperate) return true;
+        if (!IsFreshEnough(pick)) return false;
+        bool wrong = pick.Armatura != s.Offer.Requested;
+        if (wrong && s.Offer.PaySudore < LocatioWrongTypeMinSudore) return false;
+        return true;
+    }
+
+    public static bool ShouldHost(GameState s)
+    {
+        if (!s.HostingUnlocked || s.OfferTakenToday) return false;
+        if (s.Denarii < Ludus.HostCost + HostCushion) return false;
+        return HostCandidates(s).Count >= 2;
+    }
+
+    static List<Gladiator> HostCandidates(GameState s)
+        => s.Living.Where(IsFreshEnough).OrderByDescending(g => g.Virtus).ToList();
 
     static void MorningKitchen(GameState s, CareerKitchenPolicy kitchen)
     {
@@ -320,24 +391,61 @@ public static class CareerSim
         return Math.Clamp(n, 1, cap);
     }
 
+    static void TryHireFighter(GameState s)
+    {
+        if (s.Living.Count() >= HireRosterNeed) return;
+        if (s.Market.Count == 0) return;
+        int best = 0;
+        int bestPrice = int.MaxValue;
+        for (int i = 0; i < s.Market.Count; i++)
+        {
+            int price = s.Market[i].Value();
+            if (price < bestPrice)
+            {
+                bestPrice = price;
+                best = i;
+            }
+        }
+        if (s.Denarii < bestPrice + KeepCushion + HostCushion) return;
+        Ludus.Buy(s, best);
+    }
+
+    static void TryHost(GameState s, Random rng, CareerStats stats)
+    {
+        if (!ShouldHost(s)) return;
+        if (!Ludus.TryPayHost(s)) return;
+
+        var picks = HostCandidates(s).Take(2).ToList();
+        foreach (var g in picks)
+        {
+            if (!g.CanFight) continue;
+            RecordBout(s, rng, stats, g, hosted: true);
+        }
+    }
+
     static void TryLocatio(GameState s, Random rng, CareerStats stats)
     {
         if (s.OfferTakenToday || s.Offer == null) return;
-        var able = s.Living.Where(g => g.CanFight).ToList();
-        if (able.Count == 0) return;
+        var pick = PickLocatio(s);
+        if (pick == null) return;
+        if (!ShouldTakeLocatio(s, pick))
+        {
+            stats.LocatioSkipped++;
+            return;
+        }
+        RecordBout(s, rng, stats, pick, hosted: false);
+    }
 
-        var requested = able.Where(g => g.Armatura == s.Offer.Requested).ToList();
-        var pick = (requested.Count > 0 ? requested : able)
-            .OrderByDescending(g => g.Virtus)
-            .First();
-
-        var bout = Ludus.RunBout(s, rng, pick, hosted: false);
+    static void RecordBout(GameState s, Random rng, CareerStats stats, Gladiator pick, bool hosted)
+    {
+        var bout = Ludus.RunBout(s, rng, pick, hosted);
         var settled = Ludus.SettleBout(s, rng, bout, IugulaChoice.Mitte, IugulaChoice.SimRolls);
         stats.Bouts++;
+        if (hosted) stats.HostedBouts++;
         if (settled.OwnDied) stats.OwnDeaths++;
         if (settled.FoeDied) stats.FoeDeaths++;
         if (settled.OccisusPay) stats.OccisusCount++;
-        else stats.SudoreCount++;
+        else if (!hosted) stats.SudoreCount++;
     }
 
     static void Snapshot(GameState s, CareerStats stats)

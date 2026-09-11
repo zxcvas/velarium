@@ -23,8 +23,16 @@ static class Program
         int n = 200;
         if (idx + 1 < args.Length && int.TryParse(args[idx + 1], out int parsed) && parsed > 0)
             n = parsed;
-        var report = CareerSim.RunMany(n);
-        Console.Write(CareerSim.Format(report));
+        var kitchen = args.Any(a => a == "--locatio")
+            ? CareerKitchenPolicy.LocatioOnly
+            : CareerKitchenPolicy.UpgradeStall;
+        int days = CareerSim.DefaultMaxDays;
+        int daysIdx = Array.FindIndex(args, a => a == "--days");
+        if (daysIdx >= 0 && daysIdx + 1 < args.Length
+            && int.TryParse(args[daysIdx + 1], out int parsedDays) && parsedDays > 0)
+            days = parsedDays;
+        var report = CareerSim.RunMany(n, days, kitchen);
+        Console.Write(CareerSim.Format(report, kitchen));
         return true;
     }
 }
