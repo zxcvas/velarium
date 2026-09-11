@@ -86,4 +86,104 @@ public class CareerSimTests
         Assert.Contains("Kitchen stall", text, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Mean stall profit", text, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void Format_names_the_locatio_only_policy()
+    {
+        var r = CareerSim.RunMany(3, maxDays: 4, CareerKitchenPolicy.LocatioOnly);
+        string text = CareerSim.Format(r, CareerKitchenPolicy.LocatioOnly);
+        Assert.Contains("locatio-only", text, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Hosts when unlocked", text, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("upgrade culina", text, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ShouldTakeLocatio_skips_a_tired_man_when_the_purse_is_fat()
+    {
+        var s = FreshOffer();
+        s.Denarii = 400;
+        var pick = s.Living.First(g => g.Armatura == s.Offer!.Requested);
+        pick.Status = GladiatorStatus.Fessus;
+        pick.Vigor = 8;
+        Assert.False(CareerSim.ShouldTakeLocatio(s, pick));
+    }
+
+    [Fact]
+    public void ShouldTakeLocatio_sends_a_tired_man_when_broke()
+    {
+        var s = FreshOffer();
+        s.Denarii = 40;
+        var pick = s.Living.First(g => g.CanFight);
+        pick.Status = GladiatorStatus.Fessus;
+        pick.Vigor = 8;
+        Assert.True(CareerSim.ShouldTakeLocatio(s, pick));
+    }
+
+    [Fact]
+    public void ShouldTakeLocatio_skips_a_cheap_wrong_type()
+    {
+        var s = FreshOffer();
+        s.Denarii = 400;
+        var pick = s.Living.First();
+        pick.Status = GladiatorStatus.Validus;
+        pick.Vigor = pick.VigorMax;
+        s.Offer!.Requested = pick.Armatura == Armatura.Secutor ? Armatura.Murmillo : Armatura.Secutor;
+        s.Offer.PaySudore = 22;
+        Assert.False(CareerSim.ShouldTakeLocatio(s, pick));
+        s.Offer.PaySudore = 36;
+        Assert.True(CareerSim.ShouldTakeLocatio(s, pick));
+    }
+
+    [Fact]
+    public void ShouldHost_when_unlocked_two_fresh_and_cushioned()
+    {
+        var s = FreshOffer();
+        s.Fama = Ludus.HostFamaNeed;
+        s.Denarii = Ludus.HostCost + CareerSim.HostCushion;
+        foreach (var g in s.Living)
+        {
+            g.Palmae = 1;
+            g.Status = GladiatorStatus.Validus;
+            g.Vigor = g.VigorMax;
+        }
+        Assert.True(s.HostingUnlocked);
+        Assert.True(CareerSim.ShouldHost(s));
+        s.Denarii = Ludus.HostCost + CareerSim.HostCushion - 1;
+        Assert.False(CareerSim.ShouldHost(s));
+    }
+
+    [Fact]
+    public void RunCareer_locatio_only_rarely_ruins_by_day_21()
+    {
+        const int n = 40;
+        const int days = 21;
+        var r = CareerSim.RunMany(n, days, CareerKitchenPolicy.LocatioOnly);
+        Assert.True(r.RuinedPct < 50,
+            $"locatio-only ruin by day 21 was {r.RuinedPct:0.0}% (prior baseline ~100%)");
+        Assert.True(r.MeanDays > 16, $"mean days {r.MeanDays:0.0} still hugs the old ~21 death march");
+        Assert.True(r.LocatioSkipped > 0, "locatio AI should skip some tired/wrong-type offers");
+    }
+
+    [Fact]
+    public void RunCareer_locatio_only_takes_the_fama_host_path()
+    {
+        var r = CareerSim.RunMany(24, maxDays: 40, CareerKitchenPolicy.LocatioOnly);
+        Assert.True(r.HostedBouts > 0, "locatio-only should host once fama unlocks and the purse can pay the gate");
+        Assert.Equal(0, r.StaffedKitchenBy30);
+    }
+
+    static GameState FreshOffer()
+    {
+        var rng = new Random(3);
+        var s = Ludus.Start(rng, 3, "Lucius", "Atinius", "Strabo");
+        var pick = s.Living.First();
+        s.Offer = new Contract
+        {
+            EditorName = "Gaius",
+            Requested = pick.Armatura,
+            PaySudore = 32,
+            PayOccisus = 400
+        };
+        return s;
+    }
 }

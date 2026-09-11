@@ -67,6 +67,16 @@ public static partial class Ludus
     public const int SpyHighOccisusMin = 450;
     public const int SpyHighOccisusMax = 520;
     public const int SpyMatchRosterPct = 70;
+    public const int LocatioSudoreMin = 22;
+    public const int LocatioSudoreMaxExclusive = 38;
+    public const int LocatioOccisusMin = 360;
+    public const int LocatioOccisusMaxExclusive = 520;
+    public const int LocatioSudoreFloor = 12;
+    public const int LocatioOccisusFloor = 80;
+    public const int LocatioWrongSudoreDock = 8;
+    public const int LocatioWrongOccisusDock = 40;
+    public const int LocatioPalmaFlat = 25;
+    public const int LocatioPalmaPerWin = 2;
 
     public static int Upkeep(int mouths) => UpkeepRoof + mouths * UpkeepPerMouth;
 
@@ -156,8 +166,8 @@ public static partial class Ludus
             return;
         }
         var req = seededKit ?? RandomArmatura(rng);
-        int sudore = seededSudore > 0 ? seededSudore : rng.Next(22, 38);
-        int occisus = seededOccisus > 0 ? seededOccisus : rng.Next(360, 520);
+        int sudore = seededSudore > 0 ? seededSudore : rng.Next(LocatioSudoreMin, LocatioSudoreMaxExclusive);
+        int occisus = seededOccisus > 0 ? seededOccisus : rng.Next(LocatioOccisusMin, LocatioOccisusMaxExclusive);
         s.Offer = new Contract
         {
             EditorName = Content.EditorNames[rng.Next(Content.EditorNames.Length)],
@@ -309,7 +319,7 @@ public static partial class Ludus
             g.Stantes++;
             g.Virtus = Math.Min(18, g.Virtus + (rng.Next(2) == 0 ? 1 : 0));
             g.Fama++;
-            pay = hosted ? rng.Next(90, 140) : Sudore(bout.Offer, wrongType);
+            pay = hosted ? rng.Next(90, 140) : LocatioSudore(bout.Offer, wrongType);
             famaDelta = report.Spectacular ? 2 : 1;
             lines.Add($"Stans. Both leave the sand. The crowd is divided; the clerks are not. Pro sudore: {pay} denarii.");
         }
@@ -330,7 +340,7 @@ public static partial class Ludus
             g.Vigor = Math.Max(g.Vigor, 3);
             pay = hosted
                 ? rng.Next(160, 280) + (killFoe ? 40 : 0) + (report.Spectacular ? 30 : 0)
-                : Sudore(bout.Offer, wrongType) + 25 + g.Palmae * 2;
+                : LocatioSudore(bout.Offer, wrongType) + LocatioPalmaFlat + g.Palmae * LocatioPalmaPerWin;
             famaDelta = (killFoe ? 2 : 1) + (report.Spectacular ? 1 : 0) + (hosted ? 3 : 0);
             if (wrongType) famaDelta = Math.Max(0, famaDelta - 1);
             lines.Add($"{g.Name} takes the palma. {(hosted ? "Gate and gifts" : "The editor's purse")}: {pay} denarii.");
@@ -353,7 +363,7 @@ public static partial class Ludus
 
             if (iugula)
             {
-                pay = hosted ? rng.Next(40, 90) : Occisus(bout.Offer, wrongType);
+                pay = hosted ? rng.Next(40, 90) : LocatioOccisus(bout.Offer, wrongType);
                 famaDelta = hosted ? 1 : 0;
                 occisusPay = !hosted;
                 ownDied = true;
@@ -366,7 +376,7 @@ public static partial class Ludus
                 g.Status = GladiatorStatus.Vulneratus;
                 g.Vigor = Math.Max(1, g.VigorMax / 4);
                 g.Virtus = Math.Min(18, g.Virtus + (rng.Next(3) == 0 ? 1 : 0));
-                pay = hosted ? rng.Next(70, 120) : Sudore(bout.Offer, wrongType) * 2 / 3;
+                pay = hosted ? rng.Next(70, 120) : LocatioSudore(bout.Offer, wrongType) * 2 / 3;
                 famaDelta = report.Spectacular ? 1 : 0;
                 lines.Add($"Missio. {g.Name} will eat barley on his back for a while. Pay: {pay} denarii.");
             }
@@ -399,11 +409,11 @@ public static partial class Ludus
         _ => simRoll()
     };
 
-    static int Sudore(Contract? offer, bool wrong)
-        => Math.Max(12, (offer?.PaySudore ?? 28) - (wrong ? 8 : 0));
+    public static int LocatioSudore(Contract? offer, bool wrong)
+        => Math.Max(LocatioSudoreFloor, (offer?.PaySudore ?? 28) - (wrong ? LocatioWrongSudoreDock : 0));
 
-    static int Occisus(Contract? offer, bool wrong)
-        => Math.Max(80, (offer?.PayOccisus ?? 420) - (wrong ? 40 : 0));
+    public static int LocatioOccisus(Contract? offer, bool wrong)
+        => Math.Max(LocatioOccisusFloor, (offer?.PayOccisus ?? 420) - (wrong ? LocatioWrongOccisusDock : 0));
 
     public static void Kill(GameState s, Gladiator g)
     {

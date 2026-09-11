@@ -31,11 +31,11 @@ Offer appears most mornings (always days 0–1; after that 68% if rival did not 
 
 | Knob | Range | Code |
 |---|---|---|
-| *Pro sudore* (sweat) | 22–37 | `RefreshOffer` |
-| *Pro occiso* (corpse) | 360–519 | `RefreshOffer` |
-| Wrong *armatura* sweat | sweat − 8 (min 12) | `Sudore` |
-| Wrong *armatura* corpse | corpse − 40 (min 80) | `Occisus` |
-| Palma (rental win) | sweat + 25 + 2×palmae | `SettleBout` |
+| *Pro sudore* (sweat) | 22–37 | `LocatioSudoreMin` / `LocatioSudoreMaxExclusive` (`RefreshOffer`) |
+| *Pro occiso* (corpse) | 360–519 | `LocatioOccisusMin` / `LocatioOccisusMaxExclusive` |
+| Wrong *armatura* sweat | sweat − 8 (min 12) | `LocatioWrongSudoreDock` / `LocatioSudoreFloor` |
+| Wrong *armatura* corpse | corpse − 40 (min 80) | `LocatioWrongOccisusDock` / `LocatioOccisusFloor` |
+| Palma (rental win) | sweat + 25 + 2×palmae | `LocatioPalmaFlat` / `LocatioPalmaPerWin` (`SettleBout`) |
 | Missio (rental, spared) | ⅔ sweat | `SettleBout` |
 | Stans (rental) | sweat | `SettleBout` |
 
@@ -95,9 +95,11 @@ Beds = `max(8, 6 + 2×cellae level)`.
 
 ## Career AI (`--report` only)
 
-Default policy is `CareerKitchenPolicy.UpgradeStall`. Locatio-only / staff-only exist for `--report` tests, not the console.
+Default policy is `CareerKitchenPolicy.UpgradeStall`. Locatio-only / staff-only exist for `--report` tests, not the console. Verify locatio-only with `--report 50 --locatio` (optional `--days 21`).
 
-Spends **after** locatio settlement so sweat can fund the mason. Night is rest. Never hosts; never grants the *rudis*; *mitte* own fallen.
+Spends **after** locatio settlement so sweat can fund the mason. Night is rest. Kitchen policies never host; locatio-only hosts once unlocked. Never grants the *rudis*; *mitte* own fallen.
+
+All `--report` policies now rest tired men and skip a bad locatio (that was the locatio-only death march: treat-everyone + always-spar + always-fight).
 
 | Knob | Value | Code |
 |---|---|---|
@@ -106,6 +108,10 @@ Spends **after** locatio settlement so sweat can fund the mason. Night is rest. 
 | Kitchen upgrade if staffed, not pending, lv < 3 | purse ≥ `UpgradeCost` + 80 | `CareerSim.KitchenUpgradeCushion` |
 | Kitchen 1→2 / 2→3 | 90 / 110 | `UpgradeCost` |
 | Lv3 dish | max expected `(sale−cost)×bowls` given rumor and grain | `CareerSim.ChooseStallDish` |
+| Treat (AI) | wounds / fever, or vigor < half; keep `TreatCushion` 25 | `CareerSim.TreatCushion` |
+| Locatio skip unless purse thin | tired (`fessus` / vigor < ⅔ max) or wrong type with sweat < 30 | `LocatioDesperatePurse` 90 / `LocatioWrongTypeMinSudore` 30 |
+| Host (locatio-only) | unlocked, purse ≥ 220 + 80, two fresh men | `CareerSim.HostCushion` |
+| Buy replacement (locatio-only) | living < 2 and purse ≥ price + 50 + 80 | `CareerSim.HireRosterNeed` |
 
 ## Market prices already in code
 
