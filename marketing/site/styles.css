@@ -79,6 +79,9 @@ button:focus-visible {
 }
 
 .masthead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -138,12 +141,12 @@ button:focus-visible {
 .yard {
   position: relative;
   margin: 0;
-  aspect-ratio: 16 / 7;
-  min-height: 14rem;
+  aspect-ratio: 16 / 8;
+  min-height: 16rem;
   overflow: hidden;
   background-color: var(--packed-dirt);
   background-image: url("img/sample_dirt.png");
-  background-size: 64px 64px;
+  background-size: 96px 96px;
   background-repeat: repeat;
   border-bottom: var(--chrome) solid var(--outline);
 }
@@ -154,14 +157,14 @@ button:focus-visible {
   image-rendering: pixelated;
 }
 
-.yard .porta { left: 6%; bottom: 18%; width: 96px; height: auto; }
-.yard .cellae { left: 22%; bottom: 28%; width: 88px; height: auto; }
-.yard .hearth { right: 22%; bottom: 26%; width: 88px; height: auto; }
-.yard .palus { left: 48%; bottom: 34%; width: 72px; height: auto; }
-.yard .medicus { right: 8%; bottom: 16%; width: 88px; height: auto; }
-.yard .household { left: 28%; bottom: 8%; width: 96px; height: auto; }
-.yard .murmillo { left: 44%; bottom: 6%; width: 104px; height: auto; }
-.yard .thraex { left: 58%; bottom: 10%; width: 96px; height: auto; }
+.yard .porta { left: 8%; bottom: 22%; width: 128px; height: auto; }
+.yard .cellae { left: 26%; bottom: 36%; width: 112px; height: auto; }
+.yard .hearth { right: 24%; bottom: 34%; width: 112px; height: auto; }
+.yard .palus { left: 46%; bottom: 40%; width: 96px; height: auto; }
+.yard .medicus { right: 10%; bottom: 20%; width: 112px; height: auto; }
+.yard .household { left: 30%; bottom: 10%; width: 120px; height: auto; }
+.yard .murmillo { left: 44%; bottom: 6%; width: 136px; height: auto; }
+.yard .thraex { left: 58%; bottom: 12%; width: 120px; height: auto; }
 
 .yard figcaption {
   position: absolute;
@@ -439,6 +442,10 @@ h2 {
   border-bottom: 1px solid var(--charcoal);
 }
 
+.facts li > span:last-child {
+  min-width: 0;
+}
+
 .facts span {
   font-family: var(--font-display);
   font-size: 0.75rem;
@@ -496,10 +503,13 @@ code {
     aspect-ratio: 4 / 3;
   }
 
-  .yard .porta { width: 72px; }
-  .yard .murmillo { width: 80px; }
+  .yard .porta { width: 88px; }
+  .yard .cellae,
+  .yard .hearth,
+  .yard .medicus { width: 80px; }
+  .yard .murmillo { width: 96px; }
   .yard .thraex,
-  .yard .household { width: 72px; }
+  .yard .household { width: 88px; }
 
   .facts li {
     grid-template-columns: 1fr;
