@@ -12,7 +12,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
 
 ## Done this cycle
-- Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, this PR) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
+- Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, PR #17) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
 - Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14; CI fix #15) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`
 - Godot courtyard net8 (`godot-courtyard-net8`, 2026-09-12, PR #12) — Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
 - Board hygiene after PR #12 (`board-hygiene-godot-net8`, 2026-09-12) — closed the in-flight courtyard claim; Now empty; Next is editor unzip only
