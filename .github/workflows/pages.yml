@@ -1,5 +1,6 @@
 # Amphiteater / Velarium — GitHub Pages from marketing/site only.
-# Sibling simplicity: FOON web/site pages.yml, Latifundium marketing/site allowlist.
+# PR: package the static site (regular artifact). No configure-pages / deploy.
+# Push to master / workflow_dispatch: configure-pages + deploy (after Pages is enabled).
 # BRIEF.md lives at marketing/BRIEF.md and is not in this folder.
 
 name: Deploy marketing site
@@ -19,15 +20,14 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  package:
+    name: Package site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,22 +44,36 @@ jobs:
             exit 1
           fi
 
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketing-site
+          path: marketing/site
+
+  deploy:
+    name: Deploy GitHub Pages
+    needs: package
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload site
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: marketing/site
 
-  deploy:
-    needs: build
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -26,10 +26,10 @@ Open http://127.0.0.1:8080/
 
 ## GitHub Pages
 
-`.github/workflows/pages.yml` uploads this folder as the Pages artifact.
+`.github/workflows/pages.yml` packages this folder on every PR (regular artifact; no Pages API). Deploy + `configure-pages` run only on `master` push or **workflow_dispatch**.
 
-1. Merge to `master` (or run **workflow_dispatch**).
-2. Human: repo **Settings → Pages → Source = GitHub Actions**.
+1. Human: repo **Settings → Pages → Source = GitHub Actions** (once).
+2. Merge to `master` (or run **workflow_dispatch**).
 
 Do not publish a game download from Pages. There is no public build.
 
