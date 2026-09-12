@@ -1,6 +1,6 @@
 # Amphiteater — Task Schedule
 
-This document will evolve. For the skeleton we only list major tracks.
+Long-horizon **track list**. Now / Next / Blocked is [`production/task_board.md`](production/task_board.md). Do not treat this file, or agent memory, as a second queue.
 
 ## Tracks
 - **Foundation & Tooling**
@@ -11,7 +11,7 @@ This document will evolve. For the skeleton we only list major tracks.
 - **Quality & Release**
 - **Meta / Agents & Workflow**
 
-## Current High-Level Backlog (all pending post-skeleton)
+## Track status (not a dispatch list)
 
 ### Foundation & Tooling
 - [x] Finalize language/engine choice (C# console for M1; Godot deferred)
@@ -33,44 +33,45 @@ This document will evolve. For the skeleton we only list major tracks.
 - [x] Ludus rooms + upgrades
 - [x] Household slave workforce
 - [x] Night ops (spy / poison / sabotage) vs a rival camp
-- [ ] Politics meters / patrons
 - [x] Rudis / discharge
-- [ ] Hosted munus with more than one pair
+- [x] Hosted munus with more than one pair (two pairs, one gate)
+- [ ] Politics meters / patrons — later; not on the board
 
 ### Presentation
-- [-] Main menu flow
+- [x] Main menu flow
 - [x] Roster screen (console table)
-- [ ] Show planning screen
+- [x] Arrow / tab / Enter / Esc menus (numbers still work)
+- [ ] Show planning screen / edictum
 - [ ] Event log / narrative text
-- [ ] Later: graphical / Godot / custom engine?
+- [ ] Later: graphical / Godot / custom engine? (board Next; blocked on net8)
 
 ### Content & Narrative
 - [ ] Starting scenario
-- [ ] NPC / rival lanistas
+- [ ] NPC / rival lanistas (one named rival exists for night ops)
 - [ ] Imperial figures
-- [ ] Random event table
+- [ ] Random event table (night events exist)
 - [ ] Multiple endings / legacies
 
 ### Art & Audio
 - [x] Style guide (NES/SNES lock)
-- [-] Core sprites (wave 0–1 in; wave 2 bodies next)
+- [x] Core sprites (wave 0–2 4-dir idles in; wave 3 motion waits on a human silhouette squint — `assets/art/ASSET_MAP.md`)
 - [ ] Sound design direction
 - [ ] Music direction
 
 ### Quality & Release
 - [x] Test harness / scenarios (`Amphiteater.Sim.Tests` + `--report`)
-- [-] Balancing passes (Ville ~0.12 on `--report 200`; cash drain noted; wait on human playtest)
+- [-] Balancing passes (playtest **holds** — no virtus / vigor / palmae retune this sitting)
 - [ ] Documentation
 - [ ] Steam / distribution prep (later)
 
 ### Meta / Agents & Workflow
-- [ ] Exercise organizer + subagents on first real task
+- [x] Root `AGENTS.md` cycle pointer
+- [x] Live board is SoT (`production/task_board.md`)
 - [ ] Refine DEVELOPMENT_CYCLE.md based on use
-- [ ] Populate production/ with actual milestones
 
 **Status Legend:**  
 - [ ] Not started  
-- [-] In progress (by agents)  
+- [-] Held / parked  
 - [x] Done
 
-This file will be updated by the organizer agent regularly.
+This file is a map of tracks. Dispatch only from the board.

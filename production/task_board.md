@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-11 (board-hygiene)
+**Last Updated:** 2026-09-12 (plan-hygiene)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
@@ -11,7 +11,8 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 - Godot courtyard — blocked on .NET 8 targeting pack (see `godot/README.md`)
 
 ## Done this cycle
-- Board hygiene (`board-hygiene`, 2026-09-11) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked
+- Plan / schedule hygiene (`plan-hygiene`, 2026-09-12) — `TASK_SCHEDULE.md` and `PROJECT_PLAN.md` match shipped reality; they stay track lists, not a second queue
+- Board hygiene (`board-hygiene`, 2026-09-11, PR #8 / #10) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked
 - Locatio-only career survival (`locatio-survival`, 2026-09-11, PR #7) — `--report --locatio` rest/skip/host; day-21 ruin ~6% (was ~100%); default UpgradeStall fine
 - CareerSim kitchen upgrade / stall AI (`career-kitchen-ai`, 2026-09-10, PR #6) — `--report` hires, upgrades culina, picks dishes
 - Discharge / *rudis* (`rudis-discharge`, 2026-09-10, PR #5) — five palmae, fama 20, two-thirds value; man leaves the roster; console + tests
