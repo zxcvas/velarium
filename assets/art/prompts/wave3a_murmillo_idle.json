@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_murmillo_idle",
+  "endpoint": "/animate-character",
+  "seed": 1800,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "breathing idle, tiny weight shift, feet planted, SNES 4-frame loop, facing south, keep kit silhouette, transparent background",
+  "usage": null,
+  "slug": "murmillo",
+  "clip": "idle",
+  "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+  "background_job_id": "39974873-7a73-4257-a701-fcf386642b00",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/murmillo_s_idle_00.png",
+    "characters/murmillo_s_idle_01.png",
+    "characters/murmillo_s_idle_02.png",
+    "characters/murmillo_s_idle_03.png"
+  ]
+}

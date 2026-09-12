@@ -1,7 +1,7 @@
 {
   "id": "char_retiarius",
   "endpoint": "/create-character-with-4-directions",
-  "seed": 793,
+  "seed": 1793,
   "image_size": {
     "width": 48,
     "height": 48
@@ -15,7 +15,8 @@
   "color_image": true,
   "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Retiarius gladiator idle, SNES 3/4 low top-down like A Link to the Past. Bare head, no helm. Galerus on the shoulder, net and trident, short tunic. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
   "usage": null,
-  "character_id": "dfb3e676-0aa6-4a7a-8c37-69af4c8ba290",
+  "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+  "previous_character_id": "dfb3e676-0aa6-4a7a-8c37-69af4c8ba290",
   "background_job_id": null,
   "files": {
     "south": "characters/retiarius_s_idle_00.png",
@@ -24,5 +25,7 @@
     "west": "characters/retiarius_w_idle_00.png"
   },
   "force_colors": true,
-  "proportions": "cartoon"
+  "proportions": "cartoon",
+  "recreate": true,
+  "kit_review": "soft-fail accepted for motion (net / galerus / trident read is weak)"
 }

@@ -1,16 +1,17 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-12 (marketing-site-shell)
+**Last Updated:** 2026-09-12 (art-wave3a-south)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- Marketing site shell (`marketing-site-shell`, this PR) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`. Docs/site only; no sim/gameplay changes.
+- Wave 3a south anims + Wave 2 retiarius/household recreate (`art-wave3a-south`, PR #16) — 12 south idle/walk/attack jobs logged; tooling `tools/pixellab_wave3a.py`; PNG pull still needs `pixellab.env`; no household anims; no Infected/Latifundium.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 
 ## Done this cycle
+- Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14) — static `marketing/site/` landing + Pages workflow
 - Godot courtyard net8 (`godot-courtyard-net8`, 2026-09-12, PR #12) — Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
 - Board hygiene after PR #12 (`board-hygiene-godot-net8`, 2026-09-12) — closed the in-flight courtyard claim; Now empty; Next is editor unzip only
 - Board hygiene (`board-hygiene`, 2026-09-11) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked

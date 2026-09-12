@@ -241,7 +241,8 @@ WAVE2 = [
         "path": "characters/retiarius_s_idle_00.png",
         "kind": "character4",
         "slug": "retiarius",
-        "seed": 793,
+        # Victor-approved recreate (wave 3a). Soft-fail kit accepted for motion.
+        "seed": 1793,
         "w": 48,
         "h": 48,
         "view": "low top-down",
@@ -280,7 +281,8 @@ WAVE2 = [
         "path": "characters/household_s_idle_00.png",
         "kind": "character4",
         "slug": "household",
-        "seed": 795,
+        # Victor-approved recreate (wave 3a). Review PASS; idle only (no 3a anims).
+        "seed": 1795,
         "w": 48,
         "h": 48,
         "view": "low top-down",
