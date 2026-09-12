@@ -5,7 +5,7 @@
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- Wave 3a south anims + Wave 2 retiarius/household recreate (`art-wave3a-south`, this PR) — 12 south idle/walk/attack jobs (4 armaturae); tooling `tools/pixellab_wave3a.py`; no household anims; no Infected/Latifundium.
+- Wave 3a south anims + Wave 2 retiarius/household recreate (`art-wave3a-south`, PR #16) — 12 south idle/walk/attack jobs logged; tooling `tools/pixellab_wave3a.py`; PNG pull still needs `pixellab.env`; no household anims; no Infected/Latifundium.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
