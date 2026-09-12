@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_retiarius_attack",
+  "endpoint": "/animate-character",
+  "seed": 1822,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "south-facing attack, 4 frames, commit the swing, not a loop, keep kit silhouette, transparent background",
+  "usage": null,
+  "slug": "retiarius",
+  "clip": "attack",
+  "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+  "background_job_id": "cefbd92d-5dc5-4aae-993e-be303cc115e2",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/retiarius_s_attack_00.png",
+    "characters/retiarius_s_attack_01.png",
+    "characters/retiarius_s_attack_02.png",
+    "characters/retiarius_s_attack_03.png"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_secutor_walk",
+  "endpoint": "/animate-character",
+  "seed": 1831,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "walking in place south, SNES 4-frame loop, limbs and kit move, keep silhouette, transparent background",
+  "usage": null,
+  "slug": "secutor",
+  "clip": "walk",
+  "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+  "background_job_id": "22a6f499-0918-4dd7-aa91-8d011224975a",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/secutor_s_walk_00.png",
+    "characters/secutor_s_walk_01.png",
+    "characters/secutor_s_walk_02.png",
+    "characters/secutor_s_walk_03.png"
+  ]
+}

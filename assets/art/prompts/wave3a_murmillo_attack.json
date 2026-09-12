@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_murmillo_attack",
+  "endpoint": "/animate-character",
+  "seed": 1802,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "south-facing attack, 4 frames, commit the swing, not a loop, keep kit silhouette, transparent background",
+  "usage": null,
+  "slug": "murmillo",
+  "clip": "attack",
+  "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+  "background_job_id": "d0e936f1-e5f4-4f73-bbe9-7a48f1d31958",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/murmillo_s_attack_00.png",
+    "characters/murmillo_s_attack_01.png",
+    "characters/murmillo_s_attack_02.png",
+    "characters/murmillo_s_attack_03.png"
+  ]
+}

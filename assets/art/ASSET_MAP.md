@@ -1,6 +1,6 @@
 # Amphiteater — PixelLab asset map
 
-**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Wave 2 4-dir idle bodies pulled 2026-09-09 (thraex, retiarius, secutor, household; murmillo remains wave 0).  
+**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Wave 2 4-dir idle bodies **generated** (thraex / secutor 2026-09-09; retiarius seed 1793 + household seed 1795 Victor-approved recreate 2026-09-12). Wave 3a **shipped south** — 12 idle/walk/attack jobs logged; PNG pull is `python tools/pixellab_wave3a.py --pull`. Household: idles only, no 3a anims.  
 **Engine:** PixelLab v2 only for production art.  
 **Consumers:** later Godot; console stays text.  
 **Style:** `STYLE.md` — NES/SNES, cartoon KO, Pompeii kit.
@@ -86,9 +86,9 @@ Murmillo 4-dir idle shipped in wave 0 (`murmillo_{n,e,s,w}_idle_00.png`). Remain
 | id | Seed | character_id | Who | Out |
 |---|---|---|---|---|
 | `char_thraex` | 792 | `dc9e6a43-a406-45c6-b2e8-3838f3a77c4c` | thraex: griffin helm, parmula, sica, long greaves | `characters/thraex_{n,e,s,w}_idle_00.png` |
-| `char_retiarius` | 793 | `dfb3e676-0aa6-4a7a-8c37-69af4c8ba290` | retiarius: bare head, galerus, net+trident, tunic | `characters/retiarius_{n,e,s,w}_idle_00.png` |
+| `char_retiarius` | 1793 | `e227393a-96ad-4210-aeb6-afb42ff0ae96` | retiarius recreate: bare head, galerus, net+trident, tunic. **Soft-fail kit** accepted for motion | `characters/retiarius_{n,e,s,w}_idle_00.png` |
 | `char_secutor` | 794 | `4fb8a6da-eef8-4c8d-a31a-31ca17b3360e` | secutor: smooth two-eyehole helm, scutum, no fish crest | `characters/secutor_{n,e,s,w}_idle_00.png` |
-| `char_household` | 795 | `673a08e7-1037-4f48-8fc5-8a0eb5375c09` | household: undyed tunic, no helm/weapon | `characters/household_{n,e,s,w}_idle_00.png` |
+| `char_household` | 1795 | `a317ac42-f430-40b0-a295-cf13d6401306` | household recreate **PASS**: undyed tunic, no helm/weapon | `characters/household_{n,e,s,w}_idle_00.png` |
 
 Prompt logs: `assets/art/prompts/char_{thraex,retiarius,secutor,household}.json`. Re-pull: `python tools/pixellab_gen.py --wave 2 --only char_thraex --from-character-id <uuid>` (skip murmillo).
 
@@ -114,7 +114,7 @@ Foes on the sand **reuse** the four *armaturae* (palette swap later if we want r
 | `down` | 4 | 2 | hold last | missio / stans fall |
 | `ko` | 4 | 4 | hold last | mors — cartoon |
 
-**Wave 3a (ship):** **south only** — idle, walk, attack. 4 types × 3 clips = **12 anim jobs**.
+**Wave 3a (shipped south):** idle, walk, attack. 4 types × 3 clips = **12 anim jobs**. Job table + pull notes: `prompts/WAVE3A_SOUTH_LOG.md`. Tooling: `python tools/pixellab_wave3a.py --pull`.
 
 **Wave 3b:** hit, down, ko south. 4 × 3 = 12.
 
@@ -216,8 +216,8 @@ Crowd is a **tile** of heads, not a sim of pollice verso.
 
 ## Next action (human)
 
-1. Wave 0–2 idles are in (murmillo wave 0; thraex / retiarius / secutor / household wave 2).
-2. Squint kit silhouettes on the four new 4-dir bodies before wave 3 motion.
-3. Re-pull only: `python tools/pixellab_gen.py --wave 2 --only char_<id> --from-character-id <uuid>`. Do not re-bill create.
+1. Wave 0–2 idles are generated (murmillo wave 0; thraex / secutor wave 2; retiarius + household recreate 2026-09-12).
+2. Wave 3a south idle/walk/attack jobs shipped (12 ids in `WAVE3A_SOUTH_LOG.md`). **PNGs still need `--pull`** if this tree has no token — Art Director pushes the 48 frames + recreate idles.
+3. Re-pull zips (no create): `python tools/pixellab_wave3a.py --pull`. Wave 2 still: `python tools/pixellab_gen.py --wave 2 --only char_<id> --from-character-id <uuid>`.
 
 Imagine `assets/art/style_lock.png` is mood only — never `color_image`.

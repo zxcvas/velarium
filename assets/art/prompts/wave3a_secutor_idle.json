@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_secutor_idle",
+  "endpoint": "/animate-character",
+  "seed": 1830,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "breathing idle, tiny weight shift, feet planted, SNES 4-frame loop, facing south, keep kit silhouette, transparent background",
+  "usage": null,
+  "slug": "secutor",
+  "clip": "idle",
+  "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+  "background_job_id": "0ceb4d86-f439-491a-8b9f-a8342b6695ee",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/secutor_s_idle_00.png",
+    "characters/secutor_s_idle_01.png",
+    "characters/secutor_s_idle_02.png",
+    "characters/secutor_s_idle_03.png"
+  ]
+}

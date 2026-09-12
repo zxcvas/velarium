@@ -1,0 +1,35 @@
+{
+  "id": "wave3a_thraex_walk",
+  "endpoint": "/animate-character",
+  "seed": 1811,
+  "image_size": {
+    "width": 48,
+    "height": 48
+  },
+  "view": "low top-down",
+  "direction": "south",
+  "no_background": true,
+  "outline": "single color black outline",
+  "shading": "basic shading",
+  "detail": "low detail",
+  "color_image": true,
+  "description": "walking in place south, SNES 4-frame loop, limbs and kit move, keep silhouette, transparent background",
+  "usage": null,
+  "slug": "thraex",
+  "clip": "walk",
+  "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
+  "background_job_id": "c0859df0-5a6e-403e-ad96-4e4b1308af9a",
+  "mode": "v3",
+  "frame_count": 4,
+  "keep_first_frame": false,
+  "force_colors": true,
+  "directions": [
+    "south"
+  ],
+  "files": [
+    "characters/thraex_s_walk_00.png",
+    "characters/thraex_s_walk_01.png",
+    "characters/thraex_s_walk_02.png",
+    "characters/thraex_s_walk_03.png"
+  ]
+}
