@@ -1,0 +1,9 @@
+{
+  "name": "Amphiteater (.NET 10 console)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "user": "ubuntu",
+  "install": "dotnet restore Amphiteater.slnx && dotnet build src/Velarium -c Release -o dist"
+}
