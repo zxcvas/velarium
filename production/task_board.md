@@ -1,11 +1,11 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-12 (board-hygiene-godot-net8)
+**Last Updated:** 2026-09-12 (marketing-site-shell)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-(none — nothing in flight)
+- Marketing site shell (`marketing-site-shell`, this PR) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`. Docs/site only; no sim/gameplay changes.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.

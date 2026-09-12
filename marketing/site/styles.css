@@ -1,0 +1,508 @@
+/* Amphiteater marketing — NES / Pompeii lock from assets/art/STYLE.md */
+
+:root {
+  --soot: #221F22;
+  --charcoal-deep: #372E31;
+  --charcoal: #444548;
+  --iron: #505455;
+  --packed-dirt: #684335;
+  --iron-rust: #876C57;
+  --dirty-linen: #B7A181;
+  --pale-linen: #E8DCC0;
+  --ochre: #BB8715;
+  --pompeii-red: #A44A3E;
+  --dark-pompeii: #5B2D2D;
+  --sea-green: #4A8B7A;
+  --cold-iron: #7F99B0;
+  --bronze: #C4964A;
+  --outline: #0A0808;
+
+  --font-display: Cinzel, Trajan, "Trajan Pro", Georgia, serif;
+  --font-body: Georgia, "Times New Roman", Times, serif;
+  --measure: 44rem;
+  --chrome: 0.28rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--soot);
+  color: var(--pale-linen);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+img {
+  display: block;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+a {
+  color: var(--bronze);
+}
+
+a:hover {
+  color: var(--ochre);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--ochre);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: 0.75rem;
+  top: -4rem;
+  z-index: 20;
+  background: var(--pompeii-red);
+  color: var(--pale-linen);
+  padding: 0.4rem 0.8rem;
+  text-decoration: none;
+}
+
+.skip:focus {
+  top: 0.75rem;
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.65rem 1.25rem;
+  background: var(--dark-pompeii);
+  border-bottom: var(--chrome) solid var(--outline);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--pale-linen);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand img {
+  width: 32px;
+  height: 32px;
+  background: var(--packed-dirt);
+  border: 2px solid var(--outline);
+}
+
+.brand:hover {
+  color: var(--ochre);
+}
+
+.masthead nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.15rem;
+}
+
+.masthead nav a {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dirty-linen);
+  text-decoration: none;
+}
+
+.masthead nav a:hover {
+  color: var(--ochre);
+}
+
+.hero {
+  padding: 0 0 1.5rem;
+}
+
+.yard {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 7;
+  min-height: 14rem;
+  overflow: hidden;
+  background-color: var(--packed-dirt);
+  background-image: url("img/sample_dirt.png");
+  background-size: 64px 64px;
+  background-repeat: repeat;
+  border-bottom: var(--chrome) solid var(--outline);
+}
+
+.yard .prop,
+.yard .body {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+.yard .porta { left: 6%; bottom: 18%; width: 96px; height: auto; }
+.yard .cellae { left: 22%; bottom: 28%; width: 88px; height: auto; }
+.yard .hearth { right: 22%; bottom: 26%; width: 88px; height: auto; }
+.yard .palus { left: 48%; bottom: 34%; width: 72px; height: auto; }
+.yard .medicus { right: 8%; bottom: 16%; width: 88px; height: auto; }
+.yard .household { left: 28%; bottom: 8%; width: 96px; height: auto; }
+.yard .murmillo { left: 44%; bottom: 6%; width: 104px; height: auto; }
+.yard .thraex { left: 58%; bottom: 10%; width: 96px; height: auto; }
+
+.yard figcaption {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.45rem;
+  margin: 0;
+  padding: 0.15rem 0.4rem;
+  background: rgba(34, 31, 34, 0.78);
+  color: var(--dirty-linen);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.hero-copy {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2rem 1.25rem 0;
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--iron-rust);
+}
+
+h1 {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.1rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pale-linen);
+}
+
+.one-liner {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.3vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--bronze);
+}
+
+.hero-line {
+  margin: 0 0 1.4rem;
+  color: var(--dirty-linen);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cta {
+  appearance: none;
+  display: inline-block;
+  padding: 0.55rem 1.1rem 0.45rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 3px solid var(--outline);
+  cursor: pointer;
+}
+
+.cta-github {
+  background: var(--pompeii-red);
+  color: var(--pale-linen);
+}
+
+.cta-github:hover {
+  background: var(--dark-pompeii);
+  color: var(--pale-linen);
+}
+
+.cta-ghost {
+  background: var(--charcoal-deep);
+  color: var(--pale-linen);
+}
+
+.cta-ghost:hover {
+  color: var(--ochre);
+}
+
+.cta-wish {
+  background: var(--charcoal);
+  color: var(--dirty-linen);
+  cursor: not-allowed;
+}
+
+.cta-wish:disabled {
+  opacity: 1;
+}
+
+.cta-note {
+  margin: 0.85rem 0 0;
+  font-size: 0.9rem;
+  color: var(--iron-rust);
+}
+
+.panel {
+  max-width: var(--measure);
+  margin: 0 0.85rem 1.75rem;
+  padding: 1.5rem 1.25rem 1.75rem;
+  background: var(--charcoal-deep);
+  border: 3px solid var(--outline);
+  box-shadow: 0 0 0 6px var(--dark-pompeii);
+}
+
+@media (min-width: 46rem) {
+  .panel {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 3px solid var(--pompeii-red);
+  padding-bottom: 0.4rem;
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--ochre);
+  letter-spacing: 0.12em;
+}
+
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.panel p {
+  margin: 0.85rem 0 0;
+}
+
+.not-list-lead {
+  margin-top: 1.1rem;
+}
+
+.not-list {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.not-list li {
+  margin: 0.25rem 0;
+}
+
+.loop {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.loop li {
+  padding: 0.85rem 1rem;
+  background: var(--soot);
+  border: 2px solid var(--outline);
+}
+
+.loop-n {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ochre);
+}
+
+.loop strong {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.loop p {
+  margin: 0.35rem 0 0;
+  color: var(--dirty-linen);
+}
+
+.kit,
+.props {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.4rem;
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.kit li,
+.props li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.kit img {
+  width: 96px;
+  height: 96px;
+  background: var(--packed-dirt);
+  border: 3px solid var(--outline);
+}
+
+.props img {
+  width: 64px;
+  height: 64px;
+  background: var(--packed-dirt);
+  border: 2px solid var(--outline);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.role,
+.props span {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--iron-rust);
+}
+
+.palette-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.palette-row img {
+  width: 192px;
+  height: 48px;
+  border: 2px solid var(--outline);
+}
+
+.palette-row span {
+  color: var(--iron-rust);
+  font-size: 0.9rem;
+}
+
+.facts {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--charcoal);
+}
+
+.facts span {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ochre);
+}
+
+code {
+  font-size: 0.88em;
+  color: var(--cold-iron);
+}
+
+.colophon {
+  margin-top: 2rem;
+  padding: 1.75rem 1.25rem 2.25rem;
+  background: var(--dark-pompeii);
+  color: var(--pale-linen);
+  text-align: center;
+  border-top: var(--chrome) solid var(--outline);
+}
+
+.colophon .tag {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.colophon p {
+  margin: 0.35rem 0;
+}
+
+.colophon a {
+  color: var(--pale-linen);
+}
+
+.colophon a:hover {
+  color: var(--ochre);
+}
+
+.wish-foot {
+  color: var(--dirty-linen);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 800px) {
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .yard {
+    aspect-ratio: 4 / 3;
+  }
+
+  .yard .porta { width: 72px; }
+  .yard .murmillo { width: 80px; }
+  .yard .thraex,
+  .yard .household { width: 72px; }
+
+  .facts li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
