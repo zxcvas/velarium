@@ -1,0 +1,35 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Amphiteater"
+config/description="Courtyard view of Amphiteater.Sim. Playable host stays the console."
+run/main_scene="res://scenes/courtyard.tscn"
+config/features=PackedStringArray("4.6", "C#")
+
+[display]
+
+window/size/viewport_width=320
+window/size/viewport_height=180
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/scale=4.0
+window/stretch/scale_mode="integer"
+
+[dotnet]
+
+project/assembly_name="Amphiteater.Godot"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

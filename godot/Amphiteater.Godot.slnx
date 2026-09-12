@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="../src/Amphiteater.Sim/Amphiteater.Sim.csproj" />
+  </Folder>
+  <Folder Name="/godot/">
+    <Project Path="Amphiteater.Godot.csproj" />
+  </Folder>
+</Solution>

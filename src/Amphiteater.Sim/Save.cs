@@ -4,6 +4,8 @@ namespace Velarium;
 
 public static class Save
 {
+    public const string FileName = "amphiteater_save.json";
+
     static readonly JsonSerializerOptions Opts = new()
     {
         WriteIndented = true,
@@ -12,7 +14,7 @@ public static class Save
     };
 
     public static string DefaultPath()
-        => Path.Combine(AppContext.BaseDirectory, "amphiteater_save.json");
+        => Path.Combine(AppContext.BaseDirectory, FileName);
 
     public static bool Exists(string path) => File.Exists(path);
 
