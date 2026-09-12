@@ -1,0 +1,9 @@
+{
+  "name": "Amphiteater (.NET 8 + 10)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "user": "ubuntu",
+  "install": "dotnet restore Amphiteater.slnx && dotnet restore godot/Amphiteater.Godot.csproj && dotnet build src/Velarium -c Release -o dist"
+}

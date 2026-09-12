@@ -1,0 +1,16 @@
+<Project Sdk="Godot.NET.Sdk/4.6.3">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Amphiteater.Godot</RootNamespace>
+    <AssemblyName>Amphiteater.Godot</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Amphiteater.Sim\Amphiteater.Sim.csproj" />
+  </ItemGroup>
+
+</Project>

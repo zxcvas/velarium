@@ -1,14 +1,14 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-11 (board-hygiene)
+**Last Updated:** 2026-09-12 (godot-courtyard-net8)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-(none — nothing in flight)
+- Godot courtyard net8 (`godot-courtyard-net8`) — this agent; Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
 
 ## Next Up
-- Godot courtyard — blocked on .NET 8 targeting pack (see `godot/README.md`)
+(none — courtyard claim is in Now)
 
 ## Done this cycle
 - Board hygiene (`board-hygiene`, 2026-09-11) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked
@@ -37,4 +37,4 @@ Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / pal
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
-Godot 4.6 C# courtyard is blocked: this SDK is net10-only; Godot still wants net8. Mono zip is in Downloads. See `godot/README.md`.
+Godot 4.6 **editor** is still a local unzip: `Godot_v4.6.3-stable_mono_*.zip` → `tools/godot-editor/` (gitignored). C# restore / net8 targeting is the `godot-courtyard-net8` claim (Now). See `godot/README.md`.
