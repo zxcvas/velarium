@@ -28,4 +28,4 @@ Playtest **holds** ([`production/playtest_m2.md`](production/playtest_m2.md)):
 - Combat virtus / vigor / palmae retune this sitting
 - Engine switch before the console loop is loved ([`production/decisions/001_console_ludus.md`](production/decisions/001_console_ludus.md))
 
-**Godot editor zip** is still a local install (`tools/godot-editor/`, gitignored). .NET 8 targeting is the `godot-courtyard-net8` claim — see [`godot/README.md`](godot/README.md). Do not switch the playable host off the console.
+**Godot editor zip** is still a local install (`tools/godot-editor/`, gitignored). C# restore / .NET 8 targeting shipped in PR #12 — see [`godot/README.md`](godot/README.md). Do not switch the playable host off the console.

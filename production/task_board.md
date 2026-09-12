@@ -1,16 +1,18 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-12 (godot-courtyard-net8)
+**Last Updated:** 2026-09-12 (board-hygiene-godot-net8)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- Godot courtyard net8 (`godot-courtyard-net8`) — this agent; Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
+(none — nothing in flight)
 
 ## Next Up
-(none — courtyard claim is in Now)
+- Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 
 ## Done this cycle
+- Godot courtyard net8 (`godot-courtyard-net8`, 2026-09-12, PR #12) — Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
+- Board hygiene after PR #12 (`board-hygiene-godot-net8`, 2026-09-12) — closed the in-flight courtyard claim; Now empty; Next is editor unzip only
 - Board hygiene (`board-hygiene`, 2026-09-11) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked
 - Locatio-only career survival (`locatio-survival`, 2026-09-11, PR #7) — `--report --locatio` rest/skip/host; day-21 ruin ~6% (was ~100%); default UpgradeStall fine
 - CareerSim kitchen upgrade / stall AI (`career-kitchen-ai`, 2026-09-10, PR #6) — `--report` hires, upgrades culina, picks dishes
@@ -37,4 +39,4 @@ Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / pal
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
-Godot 4.6 **editor** is still a local unzip: `Godot_v4.6.3-stable_mono_*.zip` → `tools/godot-editor/` (gitignored). C# restore / net8 targeting is the `godot-courtyard-net8` claim (Now). See `godot/README.md`.
+Godot 4.6 **editor** is still a local unzip: `Godot_v4.6.3-stable_mono_*.zip` → `tools/godot-editor/` (gitignored). C# restore / net8 targeting shipped in PR #12. See `godot/README.md`.
