@@ -76,8 +76,8 @@ Single-scroll landing plus a thin press page. No blog, no analytics, no live Ste
 
 Sibling pattern (FOON `web/site/`, Infected `site/`, Latifundium `marketing/site/`):
 
-- Workflow: `.github/workflows/pages.yml` uploads `marketing/site/` as the Pages artifact.
-- Deploy on push to `master` (or `workflow_dispatch`). PRs package only.
+- Workflow: `.github/workflows/pages.yml`. PRs package `marketing/site/` as a regular artifact (no `configure-pages` / deploy).
+- Deploy + `configure-pages` on push to `master` (or `workflow_dispatch`) after Pages is enabled.
 - Human step after merge: repo **Settings → Pages → Source = GitHub Actions**.
 - Do not create a repo-root `docs/` tree just to publish.
 
