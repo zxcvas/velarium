@@ -235,6 +235,7 @@ public static partial class Ludus
             s.NightOrder = NightOrder.Rest;
             s.NightActorId = 0;
         }
+        ReturnLoadout(s, g);
         s.Familia.Remove(g);
         s.Rudiarii.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()} — rudiarius");
         return null;
@@ -417,6 +418,7 @@ public static partial class Ludus
 
     public static void Kill(GameState s, Gladiator g)
     {
+        ReturnLoadout(s, g);
         g.Status = GladiatorStatus.Mortuus;
         g.Vigor = 0;
         s.AdLibitinam.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()}");

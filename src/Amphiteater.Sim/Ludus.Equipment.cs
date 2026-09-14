@@ -24,4 +24,47 @@ public static partial class Ludus
         s.Armory.RemoveAt(armoryIndex);
         return null;
     }
+
+    // Armory → living man. Occupied slot: previous piece returns to the rack first.
+    // Retiarius may wear Helmet / Armor / Weapon of any culture; Shield is N/A (`SlotUsable`).
+    public static string? Assign(GameState s, Gladiator g, int itemId)
+    {
+        if (!g.Alive || !s.Familia.Contains(g)) return "gone";
+        s.Armory ??= new();
+        int idx = s.Armory.FindIndex(i => i.Id == itemId);
+        if (idx < 0) return "gone";
+        var item = s.Armory[idx];
+        if (!EquipmentItem.SlotUsable(g.Armatura, item.Slot)) return "slot";
+
+        var previous = g.Equipped(item.Slot);
+        s.Armory.RemoveAt(idx);
+        if (previous != null)
+            s.Armory.Add(previous);
+        g.SetEquipped(item.Slot, item);
+        return null;
+    }
+
+    public static string? Unequip(GameState s, Gladiator g, EquipmentSlot slot)
+    {
+        if (!g.Alive || !s.Familia.Contains(g)) return "gone";
+        var item = g.Equipped(slot);
+        if (item == null) return "gone";
+        s.Armory ??= new();
+        s.Armory.Add(item);
+        g.SetEquipped(slot, null);
+        return null;
+    }
+
+    // House keeps the bronze: every equipped piece back to the Armory. Used on death and rudis.
+    public static void ReturnLoadout(GameState s, Gladiator g)
+    {
+        s.Armory ??= new();
+        foreach (EquipmentSlot slot in Enum.GetValues<EquipmentSlot>())
+        {
+            var item = g.Equipped(slot);
+            if (item == null) continue;
+            s.Armory.Add(item);
+            g.SetEquipped(slot, null);
+        }
+    }
 }

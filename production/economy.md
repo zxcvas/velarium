@@ -117,7 +117,7 @@ All `--report` policies now rest tired men and skip a bad locatio (that was the 
 
 ## Forum equipment (v1 lock)
 
-Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). **Forum buy** (`equip-forum-buy`): `Ludus.BuyEquipment` / `SellEquipment`; console stall in `Game.ForumScreen`. Assign / death return and combat additives stay later claims (`Ludus.cs` / `Combat.Score`). CareerSim / `--report` does not auto-buy kit.
+Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). **Forum buy** (`equip-forum-buy`): `Ludus.BuyEquipment` / `SellEquipment`; console stall in `Game.ForumScreen`. **Assign** (`equip-assign`): `Ludus.Assign` / `Unequip` / `ReturnLoadout`; death and *rudis* strip kit to the Armory; familia inspect UI. Combat additives stay `equip-combat` (`Combat.Score`). CareerSim / `--report` does not auto-buy or auto-assign kit.
 
 Starter roster still has **no free kit** — buy at the forum. Resale from the Armory ≈ **50%** of buy (integer denarii, round down).
 
