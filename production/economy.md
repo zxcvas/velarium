@@ -117,7 +117,7 @@ All `--report` policies now rest tired men and skip a bad locatio (that was the 
 
 ## Forum equipment (v1 lock)
 
-Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). **Forum buy** (`equip-forum-buy`): `Ludus.BuyEquipment` / `SellEquipment`; console stall in `Game.ForumScreen`. **Assign** (`equip-assign`): `Ludus.Assign` / `Unequip` / `ReturnLoadout`; death and *rudis* strip kit to the Armory; familia inspect UI. Combat additives stay `equip-combat` (`Combat.Score`). CareerSim / `--report` does not auto-buy or auto-assign kit.
+Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). **Forum buy** (`equip-forum-buy`): `Ludus.BuyEquipment` / `SellEquipment`; console stall in `Game.ForumScreen`. **Assign** (`equip-assign`): `Ludus.Assign` / `Unequip` / `ReturnLoadout`; death and *rudis* strip kit to the Armory; familia inspect UI. **Combat** (`equip-combat`): additive `Combat.Score` knobs (`EquipmentScore`) and locatio culture dock in `Ludus.SettleBout` (reuse `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock`, no stack). CareerSim / `--report` does not auto-buy or auto-assign kit.
 
 Starter roster still has **no free kit** — buy at the forum. Resale from the Armory ≈ **50%** of buy (integer denarii, round down).
 
@@ -134,17 +134,17 @@ Code: `EquipmentCatalog.BuyPrice` / `ResalePrice` (resale = `buy / 2`). Retiariu
 
 ### Combat additives (not a virtus / vigor / palmae retune)
 
-Playtest hold stands. These attach to `Combat.Score` only.
+Playtest hold stands. These attach to `Combat.Score` only (`Combat.EquipmentScore`). Foe loadouts stay unknobbed. Empty slots on murmillo / thraex / secutor have no naked penalty.
 
-| Knob | Value | Future home |
+| Knob | Value | Code |
 |---|---|---|
-| Per equipped item tier | T1 **+0**, T2 **+1**, T3 **+2** | `Combat.Score` |
-| Cap, sum of tier bonuses | **+4** | `Combat.Score` |
-| Retiarius without Roman Weapon (net+trident) | **−2** | `Combat.Score` |
-| Culture mismatch vs *armatura* affinity | **−1** (once per loadout) | `Combat.Score` |
-| Locatio, mismatched kit | reuse `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no second table, no stack on wrong *armatura*) | `Ludus.cs` |
+| Per equipped item tier | T1 **+0**, T2 **+1**, T3 **+2** | `Combat.GearTier1Bonus` / `GearTier2Bonus` / `GearTier3Bonus` (`TierBonus`) |
+| Cap, sum of tier bonuses | **+4** (sum, then clamp) | `Combat.GearBonusCap` |
+| Retiarius without Roman Weapon (net+trident) | **−2** | `Combat.RetiariusMissingRomanWeapon` |
+| Culture mismatch vs *armatura* affinity | **−1** (once per loadout) | `Combat.CultureMismatchDock` (`CultureMismatch`) |
+| Locatio, mismatched kit | reuse `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no second table, no stack on wrong *armatura*) | `Ludus.SettleBout` (`locatioDock`) |
 
-Affinity: murmillo / secutor → Roman; thraex → Greek (Punic exotic ok); retiarius → Roman light, shield N/A.
+Affinity: murmillo / secutor → Roman; thraex → Greek (Punic exotic ok); retiarius → Roman light, shield N/A (`Combat.PieceMatchesAffinity`).
 
 ## Market prices already in code
 
