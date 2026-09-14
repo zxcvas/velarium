@@ -216,8 +216,8 @@ Crowd is a **tile** of heads, not a sim of pollice verso.
 
 ## Next action (human)
 
-1. Wave 0–2 idles are generated (murmillo wave 0; thraex / secutor wave 2; retiarius + household recreate 2026-09-12).
-2. Wave 3a south idle/walk/attack jobs shipped (12 ids in `WAVE3A_SOUTH_LOG.md`). **PNGs still need `--pull`** if this tree has no token — Art Director pushes the 48 frames + recreate idles.
-3. Re-pull zips (no create): `python tools/pixellab_wave3a.py --pull`. Wave 2 still: `python tools/pixellab_gen.py --wave 2 --only char_<id> --from-character-id <uuid>`.
+1. Wave 0–2 idles are generated (murmillo wave 0; thraex / secutor wave 2; retiarius + household recreate 2026-09-12). Soft-fail retiarius kit + secutor crest notes stay.
+2. Wave 3a south idle/walk/attack **shipped with PNGs** — 48 frames under `characters/{slug}_s_{clip}_{00..03}.png` plus recreate 4-dir idles. Jobs in `WAVE3A_SOUTH_LOG.md`. **Hold Wave 3b** until Godot walk/palus hook.
+3. Re-pull zips only if a frame is missing (no create, no `--animate`): `python tools/pixellab_wave3a.py --pull`. Wave 2 still: `python tools/pixellab_gen.py --wave 2 --only char_<id> --from-character-id <uuid>`.
 
 Imagine `assets/art/style_lock.png` is mood only — never `color_image`.
