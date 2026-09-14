@@ -1,19 +1,19 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`equip-combat`)
+**Last Updated:** 2026-09-14 (`equip-sprint-complete`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
-- Additive equipment combat (`equip-combat`, this PR) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
-- Equipment sprint completes when `equip-combat` merges. No further forum-equipment claims.
 
 ## Done this cycle
+- Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
+- Additive equipment combat (`equip-combat`, 2026-09-14, PR #23) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.
 - Assign / unequip from Armory (`equip-assign`, 2026-09-14, PR #22) — `Ludus.Assign` / `Unequip`; occupied slot returns the old piece first; death and *rudis* strip loadout → Armory; familia inspect UI. No `Combat.Score`.
 - Forum equipment buy (`equip-forum-buy`, 2026-09-14, PR #21) — console forum stall: browse by culture/slot, buy into the Ludus Armory with purse check; resale from unequipped Armory at `ResalePrice`. No assign UI.
 - Static equipment catalog (`equip-catalog`, 2026-09-14, PR #20) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
