@@ -1,19 +1,20 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`equip-model-save`)
+**Last Updated:** 2026-09-14 (`equip-catalog`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
-- Ludus Armory + loadout model/save (`equip-model-save`, PR #19) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`. No forum buy UI, catalog prices, or Combat.Score.
+- Static equipment catalog (`equip-catalog`, PR #20) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
-- Forum equipment market sprint (console). Remaining chain: `equip-catalog` → `equip-forum-buy` → `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. Model/save is `equip-model-save` (Now).
+- Forum equipment market sprint (console). Remaining chain: `equip-forum-buy` → `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. Catalog is `equip-catalog` (Now).
 
 ## Done this cycle
+- Ludus Armory + loadout model/save (`equip-model-save`, 2026-09-14, PR #19) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`
 - Forum equipment design lock (`equip-design-lock`, 2026-09-14, PR #18) — `docs/design/02_equipment.md` + Forum equipment knobs in `production/economy.md`. No C#.
 - Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, PR #17) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
 - Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14; CI fix #15) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`

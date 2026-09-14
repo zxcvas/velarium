@@ -36,13 +36,7 @@ public class EquipmentSaveTests
     }
 
     static EquipmentItem Mint(GameState s, EquipmentSlot slot, EquipmentCulture culture, EquipmentTier tier)
-        => new()
-        {
-            Id = s.NextId++,
-            Slot = slot,
-            Culture = culture,
-            Tier = tier
-        };
+        => EquipmentCatalog.CreateInstance(s.NextId++, slot, culture, tier);
 
     [Fact]
     public void Start_tiros_and_market_have_empty_armory_and_loadout()

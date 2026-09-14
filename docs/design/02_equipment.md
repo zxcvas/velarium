@@ -20,13 +20,15 @@ Combat stays the M1 `Combat.Score` formula. Equipment **adds** (or subtracts) a 
 
 ## Model sketch
 
-Future code homes (not in this PR):
+Code homes:
 
 | Piece | Home |
 |---|---|
 | Slot, culture, tier, item identity | `src/Amphiteater.Sim/Models.cs` |
 | Armory list on `GameState`; equipped refs on `Gladiator` | `Models.cs` + `Save.cs` (`amphiteater_save.json`) |
-| Catalog prices, resale, affinity | `Content.cs` / `Ludus.cs` constants (sheet: `production/economy.md`) |
+| Catalog prices, resale | `EquipmentCatalog` (`BuyPrice` / `ResalePrice` / `CreateInstance`; sheet: `production/economy.md`) |
+| Display names | `Content.EquipmentNom` (Roman Weapon = rete+fuscina) |
+| Affinity | later `Combat.cs` / `Ludus.cs` |
 | Buy into Armory | `Ludus.cs` + forum menu in `src/Velarium/Game.cs` |
 | Assign / unassign / death return | `Ludus.cs` |
 | Fight-score additives + locatio culture dock | `Combat.cs` (`Score`) and `Ludus.cs` (`LocatioWrongSudoreDock` / `LocatioWrongOccisusDock`) |
@@ -136,7 +138,7 @@ Starter purse stays 620. A full T1 Roman kit for a murmillo (helm 45 + armour 60
 
 ## Implementation order (board Next)
 
-Docs (this file) → model + save → catalog constants → forum buy → assign / death return → `Combat.Score` + locatio dock.
+Docs (this file) → model + save → catalog constants (`EquipmentCatalog` + `Content.EquipmentNom`) → forum buy → assign / death return → `Combat.Score` + locatio dock.
 
 Claims: `equip-design-lock` → `equip-model-save` → `equip-catalog` → `equip-forum-buy` → `equip-assign` → `equip-combat`.
 
