@@ -3,6 +3,7 @@
 Living high-level design. M1 is the playable console slice.
 
 **Expansion (Godot + ludus builder + PixelLab):** see [`01_expansion.md`](01_expansion.md).  
+**Forum equipment (v1 lock):** see [`02_equipment.md`](02_equipment.md).  
 **Citations:** [`../research/ludus_sources.md`](../research/ludus_sources.md).
 
 ## Core Fantasy

@@ -32,7 +32,7 @@ public static class Combat
         int totalSwing = 0;
 
         int P() => Score(rng, player, foe, pv);
-        int F() => Score(rng, foe, player, fv);
+        int F() => Score(rng, foe, player, fv, applyEquipment: false);
 
         while (pv > 0 && fv > 0 && rounds < 6)
         {
@@ -116,7 +116,16 @@ public static class Combat
         return report;
     }
 
-    static int Score(Random rng, Gladiator self, Gladiator other, int currentVigor)
+    // Additive kit knobs. Sheet: production/economy.md § Forum equipment → Combat additives.
+    // Do not retune virtus / vigor / palmae / rounds / Ville. Foe loadouts stay unknobbed (v1).
+    public const int GearTier1Bonus = 0;
+    public const int GearTier2Bonus = 1;
+    public const int GearTier3Bonus = 2;
+    public const int GearBonusCap = 4;
+    public const int RetiariusMissingRomanWeapon = 2;
+    public const int CultureMismatchDock = 1;
+
+    public static int Score(Random rng, Gladiator self, Gladiator other, int currentVigor, bool applyEquipment = true)
     {
         int n = self.Virtus
             + currentVigor / 4
@@ -128,6 +137,57 @@ public static class Combat
         if (self.Pugnat == 0) n -= 1; // tiro
         if (Content.ClassicPair(self.Armatura, other.Armatura)) n += 1;
         if (self.Source == "auctoratus") n += 1;
+        if (applyEquipment) n += EquipmentScore(self);
+        return n;
+    }
+
+    public static int TierBonus(EquipmentTier tier) => tier switch
+    {
+        EquipmentTier.T1 => GearTier1Bonus,
+        EquipmentTier.T2 => GearTier2Bonus,
+        EquipmentTier.T3 => GearTier3Bonus,
+        _ => 0
+    };
+
+    public static bool HasRomanWeapon(Gladiator g)
+        => g.Weapon is { Slot: EquipmentSlot.Weapon, Culture: EquipmentCulture.Roman };
+
+    // Natural culture is the armatura, not Origin. Thraex: Punic exotic ok.
+    // Retiarius weapon is the −2 track (only Roman Weapon clears it); mismatch is helm / armour.
+    public static bool PieceMatchesAffinity(Armatura armatura, EquipmentItem item) => armatura switch
+    {
+        Armatura.Murmillo or Armatura.Secutor => item.Culture == EquipmentCulture.Roman,
+        Armatura.Thraex => item.Culture is EquipmentCulture.Greek or EquipmentCulture.Punic,
+        Armatura.Retiarius when item.Slot == EquipmentSlot.Weapon => true,
+        Armatura.Retiarius => item.Culture == EquipmentCulture.Roman,
+        _ => true
+    };
+
+    public static bool CultureMismatch(Gladiator g)
+    {
+        foreach (EquipmentSlot slot in Enum.GetValues<EquipmentSlot>())
+        {
+            var item = g.Equipped(slot);
+            if (item != null && !PieceMatchesAffinity(g.Armatura, item))
+                return true;
+        }
+        return false;
+    }
+
+    public static int EquipmentScore(Gladiator g)
+    {
+        int bonus = 0;
+        foreach (EquipmentSlot slot in Enum.GetValues<EquipmentSlot>())
+        {
+            var item = g.Equipped(slot);
+            if (item != null)
+                bonus += TierBonus(item.Tier);
+        }
+        int n = Math.Min(GearBonusCap, bonus);
+        if (g.Armatura == Armatura.Retiarius && !HasRomanWeapon(g))
+            n -= RetiariusMissingRomanWeapon;
+        if (CultureMismatch(g))
+            n -= CultureMismatchDock;
         return n;
     }
 

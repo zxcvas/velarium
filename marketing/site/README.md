@@ -1,6 +1,6 @@
-# Amphiteater marketing site
+# Velarium marketing site
 
-Static landing for **Amphiteater** (product) / **Velarium** (repo). HTML + CSS. No framework.
+Static landing for **Velarium**. HTML + CSS. No framework.
 
 Sprites in `img/` are a curated copy of existing PixelLab stills from `assets/art/`. Do not call PixelLab from here. Do not deep-link `../assets` (breaks when this folder is the web root).
 

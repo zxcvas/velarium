@@ -1,4 +1,4 @@
-# Amphiteater / Velarium — marketing brief
+# Velarium — marketing brief
 
 **Owner:** Velarium Director (site + copy only)  
 **Date:** 2026-09-12  
@@ -17,8 +17,11 @@ This file is planning. It is **not** served by GitHub Pages. Public files live u
 | Economy verbs | *Infamia*, *locatio*, *ludus*; *munus* when the house has *fama* and a *palma*. |
 | Tone | Honest grit + cartoon KO pixel presentation (NES/SNES). Red pixels and a prone sprite, not anatomy. |
 | Forbidden promises | No sexual content. No child fighters. No “become consul.” Infamia closes the curia. |
+| Store name | **Velarium** — product, Steam/itch wordmark, and landing title. Locked 2026-09-12 (Victor). Do not reopen Amphiteater-vs-Velarium. |
 
-The product name on the page is **Amphiteater**. The repo is **Velarium** (the awning). That split is a store-name question, not a rewrite of the fantasy.
+Design stubs and `PROJECT_PLAN.md` may still say Amphiteater as historical flavor or a subtitle. That is not the store title. The public page leads with **Velarium**.
+
+Cloud env: PR #9 (net10-only Dockerfile) is superseded by PR #12 (SDKs 8+10). Leave #9 open unless a human closes it.
 
 ---
 
@@ -26,13 +29,9 @@ The product name on the page is **Amphiteater**. The repo is **Velarium** (the a
 
 These are why this brief exists. The public site must not invent answers.
 
-### 1. Store name — Amphiteater vs Velarium vs other
+Store name is **locked** (Velarium). Do not treat Amphiteater-vs-Velarium as open.
 
-- **Amphiteater** is the game name in `PROJECT_PLAN.md` and the design stubs.
-- **Velarium** is the GitHub repo and the awning over the cavea — shade, not the curia.
-- Steam / itch listing cannot stay “working title” forever. Pick one wordmark before the wishlist goes live.
-
-### 2. Price band
+### 1. Price band
 
 Internal hypothesis from the marketing plan (not locked, not on the landing):
 
@@ -42,7 +41,7 @@ Internal hypothesis from the marketing plan (not locked, not on the landing):
 
 Confirm against sibling titles when a Steam stub exists. Do not print a price on Pages.
 
-### 3. Demo scope
+### 2. Demo scope
 
 Options on the table:
 
@@ -52,7 +51,7 @@ Options on the table:
 
 Do not ship a public demo until that call is made. The landing must not claim a download.
 
-### 4. Publisher / Steam org
+### 3. Publisher / Steam org
 
 Who lists the page: personal Steam org, a house name, or a third-party publisher?  
 Until that exists, the wishlist control stays a **disabled stub** (`#` / `disabled`), with a note that there is no store listing yet.
@@ -96,6 +95,6 @@ Sibling pattern (FOON `web/site/`, Infected `site/`, Latifundium `marketing/site
 
 ## Next (after this shell)
 
-1. Victor: store name + publisher + whether a demo is console or courtyard.
+1. Victor: publisher + whether a demo is console or courtyard. Store name is Velarium.
 2. Art Director: composed 16:9 hero / wordmark from **existing** assets if the CSS courtyard is not enough. No new generate.
 3. Wishlist campaign only once a courtyard GIF exists (south idle + End Day) **and** a Steam URL exists.

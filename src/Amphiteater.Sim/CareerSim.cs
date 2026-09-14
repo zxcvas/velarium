@@ -32,6 +32,7 @@ public sealed class CareerStats
     public int? DenariiDay7 { get; set; }
     public int? DenariiDay12 { get; set; }
     public int? DenariiDay30 { get; set; }
+    public int ArmoryCount { get; set; }
 }
 
 public sealed class AggregateReport
@@ -132,6 +133,7 @@ public static class CareerSim
         stats.Denarii = s.Denarii;
         stats.Fama = s.Fama;
         stats.Ruined = s.Ended;
+        stats.ArmoryCount = s.Armory.Count;
         return stats;
     }
 

@@ -1,17 +1,26 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-12 (art-wave3a-south)
+**Last Updated:** 2026-09-14 (`art-wave3a-south`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- Wave 3a south anims + Wave 2 retiarius/household recreate (`art-wave3a-south`, PR #16) — 12 south idle/walk/attack jobs logged; tooling `tools/pixellab_wave3a.py`; PNG pull still needs `pixellab.env`; no household anims; no Infected/Latifundium.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
+- Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
 
 ## Done this cycle
-- Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14) — static `marketing/site/` landing + Pages workflow
+- PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
+- Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
+- Additive equipment combat (`equip-combat`, 2026-09-14, PR #23) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.
+- Assign / unequip from Armory (`equip-assign`, 2026-09-14, PR #22) — `Ludus.Assign` / `Unequip`; occupied slot returns the old piece first; death and *rudis* strip loadout → Armory; familia inspect UI. No `Combat.Score`.
+- Forum equipment buy (`equip-forum-buy`, 2026-09-14, PR #21) — console forum stall: browse by culture/slot, buy into the Ludus Armory with purse check; resale from unequipped Armory at `ResalePrice`. No assign UI.
+- Static equipment catalog (`equip-catalog`, 2026-09-14, PR #20) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
+- Ludus Armory + loadout model/save (`equip-model-save`, 2026-09-14, PR #19) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`
+- Forum equipment design lock (`equip-design-lock`, 2026-09-14, PR #18) — `docs/design/02_equipment.md` + Forum equipment knobs in `production/economy.md`. No C#.
+- Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, PR #17) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
+- Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14; CI fix #15) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`
 - Godot courtyard net8 (`godot-courtyard-net8`, 2026-09-12, PR #12) — Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.
 - Board hygiene after PR #12 (`board-hygiene-godot-net8`, 2026-09-12) — closed the in-flight courtyard claim; Now empty; Next is editor unzip only
 - Board hygiene (`board-hygiene`, 2026-09-11) — Now cleared of finished claims; locatio-survival results recorded; Godot stays Next/Blocked
@@ -36,7 +45,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 - Hosted munus: two pairs, one gate fee
 
 ## Blocked / Questions
-Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved.
+Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved. Equipment (2026-09-14) is **additive** knobs only — see `docs/design/02_equipment.md`.
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).

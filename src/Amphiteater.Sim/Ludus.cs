@@ -235,6 +235,7 @@ public static partial class Ludus
             s.NightOrder = NightOrder.Rest;
             s.NightActorId = 0;
         }
+        ReturnLoadout(s, g);
         s.Familia.Remove(g);
         s.Rudiarii.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()} — rudiarius");
         return null;
@@ -307,6 +308,8 @@ public static partial class Ludus
         var report = bout.Report;
         bool hosted = bout.Hosted;
         bool wrongType = bout.WrongType;
+        // Culture-mismatched kit reuses the wrong-armatura docks. One dock if already wrong type.
+        bool locatioDock = !hosted && (wrongType || Combat.CultureMismatch(g));
         var lines = new List<string>();
         int pay = 0;
         int famaDelta = 0;
@@ -319,7 +322,7 @@ public static partial class Ludus
             g.Stantes++;
             g.Virtus = Math.Min(18, g.Virtus + (rng.Next(2) == 0 ? 1 : 0));
             g.Fama++;
-            pay = hosted ? rng.Next(90, 140) : LocatioSudore(bout.Offer, wrongType);
+            pay = hosted ? rng.Next(90, 140) : LocatioSudore(bout.Offer, locatioDock);
             famaDelta = report.Spectacular ? 2 : 1;
             lines.Add($"Stans. Both leave the sand. The crowd is divided; the clerks are not. Pro sudore: {pay} denarii.");
         }
@@ -340,7 +343,7 @@ public static partial class Ludus
             g.Vigor = Math.Max(g.Vigor, 3);
             pay = hosted
                 ? rng.Next(160, 280) + (killFoe ? 40 : 0) + (report.Spectacular ? 30 : 0)
-                : LocatioSudore(bout.Offer, wrongType) + LocatioPalmaFlat + g.Palmae * LocatioPalmaPerWin;
+                : LocatioSudore(bout.Offer, locatioDock) + LocatioPalmaFlat + g.Palmae * LocatioPalmaPerWin;
             famaDelta = (killFoe ? 2 : 1) + (report.Spectacular ? 1 : 0) + (hosted ? 3 : 0);
             if (wrongType) famaDelta = Math.Max(0, famaDelta - 1);
             lines.Add($"{g.Name} takes the palma. {(hosted ? "Gate and gifts" : "The editor's purse")}: {pay} denarii.");
@@ -363,7 +366,7 @@ public static partial class Ludus
 
             if (iugula)
             {
-                pay = hosted ? rng.Next(40, 90) : LocatioOccisus(bout.Offer, wrongType);
+                pay = hosted ? rng.Next(40, 90) : LocatioOccisus(bout.Offer, locatioDock);
                 famaDelta = hosted ? 1 : 0;
                 occisusPay = !hosted;
                 ownDied = true;
@@ -376,7 +379,7 @@ public static partial class Ludus
                 g.Status = GladiatorStatus.Vulneratus;
                 g.Vigor = Math.Max(1, g.VigorMax / 4);
                 g.Virtus = Math.Min(18, g.Virtus + (rng.Next(3) == 0 ? 1 : 0));
-                pay = hosted ? rng.Next(70, 120) : LocatioSudore(bout.Offer, wrongType) * 2 / 3;
+                pay = hosted ? rng.Next(70, 120) : LocatioSudore(bout.Offer, locatioDock) * 2 / 3;
                 famaDelta = report.Spectacular ? 1 : 0;
                 lines.Add($"Missio. {g.Name} will eat barley on his back for a while. Pay: {pay} denarii.");
             }
@@ -417,6 +420,7 @@ public static partial class Ludus
 
     public static void Kill(GameState s, Gladiator g)
     {
+        ReturnLoadout(s, g);
         g.Status = GladiatorStatus.Mortuus;
         g.Vigor = 0;
         s.AdLibitinam.Add($"{g.Name}, {Content.ArmaturaNom(g.Armatura)} {g.Origin}, {g.Record()}");

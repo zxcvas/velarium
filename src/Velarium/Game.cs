@@ -229,24 +229,136 @@ sealed class Game
 
     void Inspect(Gladiator g)
     {
+        while (s.Familia.Contains(g) && g.Alive)
+        {
+            Ui.Clear();
+            Ui.Title(g.Name);
+            Console.WriteLine($"{Content.ArmaturaNom(g.Armatura).ToUpperInvariant()}  |  natus {g.Origin}  |  {g.Source}");
+            Console.WriteLine(g.Record());
+            Console.WriteLine($"Vigor {g.Vigor}/{g.VigorMax}    Virtus {g.Virtus}    Fama {g.Fama}    Value {g.Value()} denarii");
+            Console.WriteLine("Arms: " + Content.ArmaturaKit(g.Armatura));
+            Console.WriteLine("Status: " + Content.StatusLat(g.Status) + "    Order: " + Content.OrderLat(g.Order));
+            Console.WriteLine();
+            PrintLoadout(g);
+            Console.WriteLine();
+            Ui.Wrap(g.Pugnat == 0
+                ? "A tiro. He has not yet seen the harena. The palus knows him; the crowd does not."
+                : $"{g.Name} has gone down onto the sand {g.Pugnat} time(s). The familia measures him by palmae, not by years.");
+            Console.WriteLine();
+            if (g.Palmae >= Ludus.RudisPalmaeNeed)
+                Ui.Wrap($"He has {g.Palmae} palmae. The rudis would cost {Ludus.RudisCost(g)} denarii and raise fama by {Ludus.RudisFamaGain}. He would leave the roster.");
+            else
+                Ui.Wrap($"Discharge needs {Ludus.RudisPalmaeNeed} palmae (he has {g.Palmae}) and fama ludi {Ludus.RudisFamaNeed}. The wooden sword is late, and it costs the asset.");
+            int c = Ui.Menu(g.Name, new[]
+            {
+                "Assign from the Armory",
+                "Unequip a slot (return to the rack)",
+                "Grant the rudis (discharge — he walks free)"
+            });
+            if (c == 0) return;
+            if (c == 1) AssignScreen(g);
+            else if (c == 2) UnequipScreen(g);
+            else OfferRudis(g);
+        }
+    }
+
+    void PrintLoadout(Gladiator g)
+    {
+        Console.WriteLine("Loadout (ludus bronze — assign from the Armory):");
+        foreach (EquipmentSlot slot in Enum.GetValues<EquipmentSlot>())
+        {
+            string label = Content.EquipmentSlotNom(slot);
+            if (!EquipmentItem.SlotUsable(g.Armatura, slot))
+            {
+                Console.WriteLine($"  {label,-8} N/A");
+                continue;
+            }
+            var item = g.Equipped(slot);
+            Console.WriteLine(item == null
+                ? $"  {label,-8} —"
+                : $"  {label,-8} {Content.EquipmentNom(item)}");
+        }
+    }
+
+    void AssignScreen(Gladiator g)
+    {
+        s.Armory ??= new();
         Ui.Clear();
-        Ui.Title(g.Name);
-        Console.WriteLine($"{Content.ArmaturaNom(g.Armatura).ToUpperInvariant()}  |  natus {g.Origin}  |  {g.Source}");
-        Console.WriteLine(g.Record());
-        Console.WriteLine($"Vigor {g.Vigor}/{g.VigorMax}    Virtus {g.Virtus}    Fama {g.Fama}    Value {g.Value()} denarii");
-        Console.WriteLine("Arms: " + Content.ArmaturaKit(g.Armatura));
-        Console.WriteLine("Status: " + Content.StatusLat(g.Status) + "    Order: " + Content.OrderLat(g.Order));
+        Ui.Title("Assign from the Armory");
+        Ui.Wrap("The rack is the house's bronze. A living man may wear one piece per slot. Occupied slot: the old piece returns to the rack first. A retiarius takes no scutum.");
         Console.WriteLine();
-        Ui.Wrap(g.Pugnat == 0
-            ? "A tiro. He has not yet seen the harena. The palus knows him; the crowd does not."
-            : $"{g.Name} has gone down onto the sand {g.Pugnat} time(s). The familia measures him by palmae, not by years.");
+        PrintLoadout(g);
         Console.WriteLine();
-        if (g.Palmae >= Ludus.RudisPalmaeNeed)
-            Ui.Wrap($"He has {g.Palmae} palmae. The rudis would cost {Ludus.RudisCost(g)} denarii and raise fama by {Ludus.RudisFamaGain}. He would leave the roster.");
-        else
-            Ui.Wrap($"Discharge needs {Ludus.RudisPalmaeNeed} palmae (he has {g.Palmae}) and fama ludi {Ludus.RudisFamaNeed}. The wooden sword is late, and it costs the asset.");
-        int c = Ui.Menu(g.Name, new[] { "Grant the rudis (discharge — he walks free)" });
-        if (c == 1) OfferRudis(g);
+        var pieces = s.Armory.Where(item => EquipmentItem.SlotUsable(g.Armatura, item.Slot)).ToList();
+        if (pieces.Count == 0)
+        {
+            Ui.Wrap(s.Armory.Count == 0
+                ? "The rack is empty. Buy bronze at the forum."
+                : "Nothing on the rack that this man may wear. A retiarius takes no scutum.");
+            Ui.Pause();
+            return;
+        }
+        var labels = pieces.Select(item =>
+        {
+            var worn = g.Equipped(item.Slot);
+            string note = worn == null ? "" : $" (replaces {Content.EquipmentNom(worn)})";
+            return $"{Content.EquipmentNom(item)}{note}";
+        }).ToList();
+        int c = Ui.Menu("Which piece?", labels);
+        if (c == 0) return;
+        var item = pieces[c - 1];
+        var previous = g.Equipped(item.Slot);
+        string? err = Ludus.Assign(s, g, item.Id);
+        if (err == "slot")
+        {
+            Console.WriteLine("He cannot wear that slot.");
+            Ui.Pause();
+            return;
+        }
+        if (err != null)
+        {
+            Console.WriteLine("That piece is gone from the rack.");
+            Ui.Pause();
+            return;
+        }
+        Console.WriteLine(previous == null
+            ? $"{Content.EquipmentNom(item)} is given to {g.Name}."
+            : $"{Content.EquipmentNom(item)} replaces {Content.EquipmentNom(previous)} on {g.Name}. The old piece returns to the rack.");
+        Autosave();
+        Ui.Pause();
+    }
+
+    void UnequipScreen(Gladiator g)
+    {
+        Ui.Clear();
+        Ui.Title("Unequip");
+        Ui.Wrap("Take bronze off the man. It returns to the Armory. Sell is the forum stall, from the rack only.");
+        Console.WriteLine();
+        PrintLoadout(g);
+        Console.WriteLine();
+        var occupied = Enum.GetValues<EquipmentSlot>().Where(slot => g.Equipped(slot) != null).ToList();
+        if (occupied.Count == 0)
+        {
+            Ui.Wrap("He wears nothing from the rack.");
+            Ui.Pause();
+            return;
+        }
+        var labels = occupied.Select(slot =>
+            $"{Content.EquipmentSlotNom(slot)} — {Content.EquipmentNom(g.Equipped(slot)!)}").ToList();
+        int c = Ui.Menu("Return which?", labels);
+        if (c == 0) return;
+        var slot = occupied[c - 1];
+        var item = g.Equipped(slot)!;
+        string? err = Ludus.Unequip(s, g, slot);
+        if (err != null)
+        {
+            Console.WriteLine("That piece is already off him.");
+            Ui.Pause();
+            return;
+        }
+        Console.WriteLine($"{Content.EquipmentNom(item)} returns to the rack.");
+        Autosave();
+        Ui.Pause();
     }
 
     void OrdersScreen()
@@ -302,20 +414,22 @@ sealed class Game
         {
             Ui.Clear();
             Ui.Title("Forum of Capua");
-            Ui.Wrap("Slave-dealers in the shade of the portico. Oil, barley, a medicus who has worked the ludi before. Somewhere an aedile's clerk is nailing an edictum muneris to a wall — a velarium promised, if the wind allows.");
+            Ui.Wrap("Slave-dealers in the shade of the portico. Oil, barley, bronze on a rack, a medicus who has worked the ludi before. Somewhere an aedile's clerk is nailing an edictum muneris to a wall — a velarium promised, if the wind allows.");
             Console.WriteLine();
-            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, Ludus.Beds(s) - s.Living.Count())} of {Ludus.Beds(s)}.");
+            Console.WriteLine($"Your purse: {s.Denarii} denarii. Cells free: {Math.Max(0, Ludus.Beds(s) - s.Living.Count())} of {Ludus.Beds(s)}. Armory: {s.Armory.Count}.");
             int c = Ui.Menu("Forum", new[]
             {
                 "Gladiators for sale",
                 "Household slaves (cooks, watch, hands)",
+                "Arms and armour (buy into the Armory)",
                 $"Medicus ({Ludus.TreatFee(s)} denarii a man — wounds and fever)",
                 "Rumors"
             });
             if (c == 0) return;
             if (c == 1) MarketScreen();
             else if (c == 2) LaborScreen();
-            else if (c == 3) MedicusScreen();
+            else if (c == 3) EquipmentScreen();
+            else if (c == 4) MedicusScreen();
             else Rumors();
         }
     }
@@ -366,6 +480,123 @@ sealed class Game
             }
             if (err != null) continue;
             Console.WriteLine($"{g.Name} is led through the porta of the ludus. The familia has a new mouth to feed.");
+            Autosave();
+            Ui.Pause();
+        }
+    }
+
+    void EquipmentScreen()
+    {
+        while (true)
+        {
+            s.Armory ??= new();
+            Ui.Clear();
+            Ui.Title("Arms and armour");
+            Ui.Wrap("Bronzesmiths under the portico. Helmets, lorica, shields, and blades — Punic, Greek, Roman. Coin buys a piece onto the ludus rack. Assign from the familia tablet; death and the rudis return kit to the house.");
+            Console.WriteLine();
+            Console.WriteLine($"Your purse: {s.Denarii} denarii. Armory: {s.Armory.Count} piece(s).");
+            int c = Ui.Menu("Stall", new[]
+            {
+                "Browse by culture (Punic, Greek, Roman)",
+                "Browse by slot (galea, lorica, scutum, arma)",
+                "Sell from the Armory (unequipped, half the stall price)"
+            });
+            if (c == 0) return;
+            if (c == 1) EquipmentBrowseCulture();
+            else if (c == 2) EquipmentBrowseSlot();
+            else EquipmentSellScreen();
+        }
+    }
+
+    void EquipmentBrowseCulture()
+    {
+        var cultures = Enum.GetValues<EquipmentCulture>();
+        int c = Ui.Menu("Whose bronze?", cultures.Select(Content.EquipmentCultureNom).ToList());
+        if (c == 0) return;
+        BuyEquipmentList(EquipmentCatalog.Templates.Where(t => t.Culture == cultures[c - 1]).ToList());
+    }
+
+    void EquipmentBrowseSlot()
+    {
+        var slots = Enum.GetValues<EquipmentSlot>();
+        var labels = slots.Select(slot => slot switch
+        {
+            EquipmentSlot.Helmet => "galea (helmet)",
+            EquipmentSlot.Armor => "lorica (armour)",
+            EquipmentSlot.Shield => "scutum (shield)",
+            EquipmentSlot.Weapon => "arma (weapon)",
+            _ => Content.EquipmentSlotNom(slot)
+        }).ToList();
+        int c = Ui.Menu("Which slot?", labels);
+        if (c == 0) return;
+        BuyEquipmentList(EquipmentCatalog.Templates.Where(t => t.Slot == slots[c - 1]).ToList());
+    }
+
+    void BuyEquipmentList(List<EquipmentTemplate> list)
+    {
+        while (true)
+        {
+            Ui.Clear();
+            Ui.Title("On the stall");
+            Console.WriteLine($"Your purse: {s.Denarii} denarii. Armory: {s.Armory.Count} piece(s).");
+            var labels = list.Select(t =>
+                $"{Content.EquipmentNom(t.Slot, t.Culture, t.Tier)} — {t.Buy} den.").ToList();
+            int c = Ui.Menu("Buy which?", labels);
+            if (c == 0) return;
+            var t = list[c - 1];
+            string nom = Content.EquipmentNom(t.Slot, t.Culture, t.Tier);
+            if (s.Denarii < t.Buy)
+            {
+                Console.WriteLine($"The smith wants {t.Buy} denarii for {nom}. Your purse is {s.Denarii}. Come back with coin, lanista.");
+                Ui.Pause();
+                continue;
+            }
+            if (!Ui.Confirm($"Pay {t.Buy} denarii for {nom}?")) continue;
+            string? err = Ludus.BuyEquipment(s, t);
+            if (err == "coin")
+            {
+                Console.WriteLine($"The smith wants {t.Buy} denarii for {nom}. Your purse is {s.Denarii}. Come back with coin, lanista.");
+                Ui.Pause();
+                continue;
+            }
+            if (err != null) continue;
+            Console.WriteLine($"{nom} is carried to the ludus rack. Assign it from the familia tablet.");
+            Autosave();
+            Ui.Pause();
+        }
+    }
+
+    void EquipmentSellScreen()
+    {
+        while (true)
+        {
+            Ui.Clear();
+            Ui.Title("Sell from the Armory");
+            Ui.Wrap("The stall takes back what sits on the rack — not what a man is wearing. Half the buy price, rounded down.");
+            Console.WriteLine();
+            Console.WriteLine($"Your purse: {s.Denarii} denarii.");
+            if (s.Armory.Count == 0)
+            {
+                Ui.Wrap("The rack is empty. Buy bronze first.");
+                Ui.Pause();
+                return;
+            }
+            var labels = s.Armory.Select(item =>
+                $"{Content.EquipmentNom(item)} — {EquipmentCatalog.ResalePrice(item)} den.").ToList();
+            int c = Ui.Menu("Sell which?", labels);
+            if (c == 0) return;
+            var item = s.Armory[c - 1];
+            string nom = Content.EquipmentNom(item);
+            int price = EquipmentCatalog.ResalePrice(item);
+            if (!Ui.Confirm($"Sell {nom} for {price} denarii?")) continue;
+            string? err = Ludus.SellEquipment(s, c - 1);
+            if (err != null)
+            {
+                Console.WriteLine("That piece is gone from the rack.");
+                Ui.Pause();
+                continue;
+            }
+            Console.WriteLine($"{nom} leaves the rack. +{price} denarii.");
             Autosave();
             Ui.Pause();
         }

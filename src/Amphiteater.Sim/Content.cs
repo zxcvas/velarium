@@ -167,6 +167,55 @@ public static class Content
             "Quick-handed and quicker-tongued. He talks like a duumvir and pays like a lanista. The aediles already dislike him, which is a kind of fame.")
     };
 
+    public static string EquipmentSlotNom(EquipmentSlot slot) => slot switch
+    {
+        EquipmentSlot.Helmet => "galea",
+        EquipmentSlot.Armor => "lorica",
+        EquipmentSlot.Shield => "scutum",
+        EquipmentSlot.Weapon => "arma",
+        _ => slot.ToString().ToLowerInvariant()
+    };
+
+    public static string EquipmentCultureNom(EquipmentCulture culture) => culture switch
+    {
+        EquipmentCulture.Punic => "Punic",
+        EquipmentCulture.Greek => "Greek",
+        EquipmentCulture.Roman => "Roman",
+        _ => culture.ToString()
+    };
+
+    public static string EquipmentTierNom(EquipmentTier tier) => tier switch
+    {
+        EquipmentTier.T1 => "T1",
+        EquipmentTier.T2 => "T2",
+        EquipmentTier.T3 => "T3",
+        _ => tier.ToString()
+    };
+
+    public static string EquipmentNom(EquipmentItem item)
+        => EquipmentNom(item.Slot, item.Culture, item.Tier);
+
+    public static string EquipmentNom(EquipmentSlot slot, EquipmentCulture culture, EquipmentTier tier)
+    {
+        string piece = (slot, culture) switch
+        {
+            (EquipmentSlot.Helmet, EquipmentCulture.Punic) => "cassida",
+            (EquipmentSlot.Helmet, EquipmentCulture.Greek) => "kranos",
+            (EquipmentSlot.Helmet, EquipmentCulture.Roman) => "galea",
+            (EquipmentSlot.Armor, EquipmentCulture.Punic) => "squamata",
+            (EquipmentSlot.Armor, EquipmentCulture.Greek) => "thorax",
+            (EquipmentSlot.Armor, EquipmentCulture.Roman) => "hamata",
+            (EquipmentSlot.Shield, EquipmentCulture.Punic) => "pelta",
+            (EquipmentSlot.Shield, EquipmentCulture.Greek) => "aspis",
+            (EquipmentSlot.Shield, EquipmentCulture.Roman) => "scutum",
+            (EquipmentSlot.Weapon, EquipmentCulture.Punic) => "falcata",
+            (EquipmentSlot.Weapon, EquipmentCulture.Greek) => "xiphos",
+            (EquipmentSlot.Weapon, EquipmentCulture.Roman) => "rete+fuscina",
+            _ => $"{slot}".ToLowerInvariant()
+        };
+        return $"{EquipmentCultureNom(culture)} {piece} {EquipmentTierNom(tier)}";
+    }
+
     public static string ArmaturaNom(Armatura a) => a switch
     {
         Armatura.Murmillo => "murmillo",
