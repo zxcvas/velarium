@@ -51,7 +51,7 @@ public class EquipmentAssignTests
         var first = Buy(s, EquipmentSlot.Helmet, EquipmentCulture.Roman, EquipmentTier.T1);
         var second = Buy(s, EquipmentSlot.Helmet, EquipmentCulture.Greek, EquipmentTier.T2);
         Assert.Null(Ludus.Assign(s, murmillo, first.Id));
-        Assert.Empty(s.Armory);
+        Assert.Same(second, Assert.Single(s.Armory));
         Assert.Same(first, murmillo.Helmet);
 
         Assert.Null(Ludus.Assign(s, murmillo, second.Id));
