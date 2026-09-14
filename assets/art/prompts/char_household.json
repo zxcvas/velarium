@@ -1,7 +1,7 @@
 {
   "id": "char_household",
   "endpoint": "/create-character-with-4-directions",
-  "seed": 795,
+  "seed": 1795,
   "image_size": {
     "width": 48,
     "height": 48
@@ -13,10 +13,13 @@
   "shading": "basic shading",
   "detail": "low detail",
   "color_image": true,
-  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Household slave idle, SNES 3/4 low top-down like A Link to the Past. Undyed dirty-linen tunic, bare head, no helm, no weapon, no armor. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon.",
-  "usage": null,
-  "character_id": "673a08e7-1037-4f48-8fc5-8a0eb5375c09",
-  "background_job_id": null,
+  "description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline. Ochre, soot, iron, dirty linen, Pompeii red, charcoal, one sea-green. Household slave idle, SNES 3/4 low top-down like A Link to the Past. Civilian servant NOT a gladiator. Bare head with short hair \u2014 absolutely NO helmet, NO crest, NO armor, NO weapon, NO shield. Simple undyed dirty-linen tunic only, bare arms/legs, plain sandals. Unarmed. Stocky toy soldier, chunky 48px sprite, transparent background. not painterly, not 3D, not isometric diorama, not photoreal, not muscle cuirass, not gold leaf, not neon. not helmet, not armor, not gladiator, not fighter, not weapon.",
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "character_id": "a317ac42-f430-40b0-a295-cf13d6401306",
+  "background_job_id": "d47051ec-fdc0-4965-b4b7-dc9779ebcafe",
   "files": {
     "south": "characters/household_s_idle_00.png",
     "east": "characters/household_e_idle_00.png",

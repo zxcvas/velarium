@@ -241,7 +241,7 @@ WAVE2 = [
         "path": "characters/retiarius_s_idle_00.png",
         "kind": "character4",
         "slug": "retiarius",
-        "seed": 793,
+        "seed": 1793,
         "w": 48,
         "h": 48,
         "view": "low top-down",
@@ -249,10 +249,12 @@ WAVE2 = [
         "no_bg": True,
         "description": (
             PREFIX
-            + "Retiarius gladiator idle, SNES 3/4 low top-down like A Link to the Past. "
-            "Bare head, no helm. Galerus on the shoulder, net and trident, short tunic. "
+            + "Retiarius net-fighter idle, SNES 3/4 low top-down like A Link to the Past. "
+            "BARE HEAD with short dark hair visible — absolutely NO helmet, NO crest, NO plume, NO galea. "
+            "Bronze galerus (shoulder guard) on ONE shoulder only. Holds a TRIDENT and a NET. Short tunic, bare arms/legs. "
             "Stocky toy soldier, chunky 48px sprite, transparent background. "
             + NEG
+            + " not helmet, not closed helm, not crest, not murmillo, not secutor."
         ),
     },
     {
@@ -280,7 +282,7 @@ WAVE2 = [
         "path": "characters/household_s_idle_00.png",
         "kind": "character4",
         "slug": "household",
-        "seed": 795,
+        "seed": 1795,
         "w": 48,
         "h": 48,
         "view": "low top-down",
@@ -289,9 +291,11 @@ WAVE2 = [
         "description": (
             PREFIX
             + "Household slave idle, SNES 3/4 low top-down like A Link to the Past. "
-            "Undyed dirty-linen tunic, bare head, no helm, no weapon, no armor. "
+            "Civilian servant NOT a gladiator. Bare head with short hair — absolutely NO helmet, NO crest, NO armor, NO weapon, NO shield. "
+            "Simple undyed dirty-linen tunic only, bare arms/legs, plain sandals. Unarmed. "
             "Stocky toy soldier, chunky 48px sprite, transparent background. "
             + NEG
+            + " not helmet, not armor, not gladiator, not fighter, not weapon."
         ),
     },
 ]

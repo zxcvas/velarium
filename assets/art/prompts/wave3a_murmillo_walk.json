@@ -1,0 +1,30 @@
+{
+  "id": "wave3a_murmillo_walk",
+  "endpoint": "/animate-character",
+  "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+  "animation_name": "walk",
+  "directions": [
+    "south"
+  ],
+  "frame_count": 4,
+  "mode": "v3",
+  "keep_first_frame": false,
+  "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. four-frame walk cycle in place, south facing, clear leg motion",
+  "seed": 794,
+  "background_job_id": "073601db-3b8d-4300-9a3b-06e5d0d869cd",
+  "color_image": true,
+  "force_colors": true,
+  "status": "completed",
+  "files": {
+    "walk_00": "characters/murmillo_s_walk_00.png",
+    "walk_01": "characters/murmillo_s_walk_01.png",
+    "walk_02": "characters/murmillo_s_walk_02.png",
+    "walk_03": "characters/murmillo_s_walk_03.png"
+  },
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "error": null,
+  "finished_at_utc": "2026-09-12T16:18:24.330874+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "wave3a_secutor_attack",
+  "endpoint": "/animate-character",
+  "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+  "animation_name": "attack",
+  "directions": [
+    "south"
+  ],
+  "frame_count": 4,
+  "mode": "v3",
+  "keep_first_frame": false,
+  "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. one short blade swing attack, not a loop, readable windup and strike",
+  "seed": 814,
+  "background_job_id": "41e28d27-a063-4a75-be53-1b565374e85c",
+  "color_image": true,
+  "force_colors": true,
+  "status": "completed",
+  "files": {
+    "attack_00": "characters/secutor_s_attack_00.png",
+    "attack_01": "characters/secutor_s_attack_01.png",
+    "attack_02": "characters/secutor_s_attack_02.png",
+    "attack_03": "characters/secutor_s_attack_03.png"
+  },
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "error": null,
+  "finished_at_utc": "2026-09-12T16:34:47.535529+00:00"
+}

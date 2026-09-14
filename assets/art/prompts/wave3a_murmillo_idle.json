@@ -1,0 +1,30 @@
+{
+  "id": "wave3a_murmillo_idle",
+  "endpoint": "/animate-character",
+  "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+  "animation_name": "idle",
+  "directions": [
+    "south"
+  ],
+  "frame_count": 4,
+  "mode": "v3",
+  "keep_first_frame": false,
+  "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. subtle breathing idle, tiny bob, loopable, no foot travel",
+  "seed": 784,
+  "background_job_id": "39974873-7a73-4257-a701-fcf386642b00",
+  "color_image": true,
+  "force_colors": true,
+  "status": "completed",
+  "files": {
+    "idle_00": "characters/murmillo_s_idle_00.png",
+    "idle_01": "characters/murmillo_s_idle_01.png",
+    "idle_02": "characters/murmillo_s_idle_02.png",
+    "idle_03": "characters/murmillo_s_idle_03.png"
+  },
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "error": null,
+  "finished_at_utc": "2026-09-12T16:17:03.227783+00:00"
+}

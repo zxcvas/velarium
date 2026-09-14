@@ -1,0 +1,30 @@
+{
+  "id": "wave3a_retiarius_walk",
+  "endpoint": "/animate-character",
+  "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+  "animation_name": "walk",
+  "directions": [
+    "south"
+  ],
+  "frame_count": 4,
+  "mode": "v3",
+  "keep_first_frame": false,
+  "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. four-frame walk cycle in place, south facing, clear leg motion",
+  "seed": 1803,
+  "background_job_id": "0d160659-563a-410e-b011-2627a2f3b66c",
+  "color_image": true,
+  "force_colors": true,
+  "status": "completed",
+  "files": {
+    "walk_00": "characters/retiarius_s_walk_00.png",
+    "walk_01": "characters/retiarius_s_walk_01.png",
+    "walk_02": "characters/retiarius_s_walk_02.png",
+    "walk_03": "characters/retiarius_s_walk_03.png"
+  },
+  "usage": {
+    "type": "generations",
+    "generations": 1.0
+  },
+  "error": null,
+  "finished_at_utc": "2026-09-12T16:29:24.035594+00:00"
+}

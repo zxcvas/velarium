@@ -1,17 +1,17 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`equip-sprint-complete`)
+**Last Updated:** 2026-09-14 (`art-wave3a-south`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
 
 ## Done this cycle
+- PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
 - Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
 - Additive equipment combat (`equip-combat`, 2026-09-14, PR #23) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.
 - Assign / unequip from Armory (`equip-assign`, 2026-09-14, PR #22) — `Ludus.Assign` / `Unequip`; occupied slot returns the old piece first; death and *rudis* strip loadout → Armory; familia inspect UI. No `Combat.Score`.
