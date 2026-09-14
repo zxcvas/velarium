@@ -115,9 +115,9 @@ All `--report` policies now rest tired men and skip a bad locatio (that was the 
 | Host (locatio-only) | unlocked, purse ≥ 220 + 80, two fresh men | `CareerSim.HostCushion` |
 | Buy replacement (locatio-only) | living < 2 and purse ≥ price + 50 + 80 | `CareerSim.HireRosterNeed` |
 
-## Forum equipment (design lock, not in code yet)
+## Forum equipment (v1 lock)
 
-Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Do not implement** buy / assign / combat in the design-lock PR. Future constants belong in `Models.cs` (item / Armory / loadout), `Ludus.cs` (buy, assign, death return, locatio dock), `Combat.cs` (`Score` additives), `Content.cs` (catalog copy).
+Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. Catalog prices, forum buy, assign / death return, and combat additives stay later claims (`Content.cs` / `Ludus.cs` / `Combat.Score`).
 
 Starter roster still has **no free kit** — buy at the forum. Resale from the Armory ≈ **50%** of buy (integer denarii, round down).
 
