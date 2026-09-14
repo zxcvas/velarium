@@ -6,7 +6,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
-- Ludus Armory + loadout model/save (`equip-model-save`, this PR) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`. No forum buy UI, catalog prices, or Combat.Score.
+- Ludus Armory + loadout model/save (`equip-model-save`, PR #19) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`. No forum buy UI, catalog prices, or Combat.Score.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
