@@ -166,6 +166,26 @@ public sealed class Gladiator
     public EquipmentItem? Shield { get; set; }
     public EquipmentItem? Weapon { get; set; }
 
+    public EquipmentItem? Equipped(EquipmentSlot slot) => slot switch
+    {
+        EquipmentSlot.Helmet => Helmet,
+        EquipmentSlot.Armor => Armor,
+        EquipmentSlot.Shield => Shield,
+        EquipmentSlot.Weapon => Weapon,
+        _ => null
+    };
+
+    public void SetEquipped(EquipmentSlot slot, EquipmentItem? item)
+    {
+        switch (slot)
+        {
+            case EquipmentSlot.Helmet: Helmet = item; break;
+            case EquipmentSlot.Armor: Armor = item; break;
+            case EquipmentSlot.Shield: Shield = item; break;
+            case EquipmentSlot.Weapon: Weapon = item; break;
+        }
+    }
+
     public bool Alive => Status != GladiatorStatus.Mortuus;
     public bool CanFight => Alive && Status != GladiatorStatus.Aeger && Vigor >= 4;
 

@@ -67,6 +67,8 @@ Market buy list is exactly four slots:
 
 **Retiarius weapon.** The Weapon row for a retiarius **is** the Roman net + trident. Greek and Punic weapons stay on the stall for the heavy *armaturae*; they do not fill a retiarius’s natural weapon. Until a **Roman Weapon** is assigned, the retiarius takes the missing-weapon penalty (combat knobs). Shield is not a slot for him — no *scutum* on a net-man.
 
+**Assign (v1).** `SlotUsable` blocks Shield on a retiarius only. Helmet / Armor / Weapon of any catalog culture may go on him (exotic mismatch is `equip-combat`). Only a Roman Weapon clears the −2.
+
 ---
 
 ## Armory, assign, death
