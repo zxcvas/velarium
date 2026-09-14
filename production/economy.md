@@ -84,6 +84,8 @@ Beds = `max(8, 6 + 2×cellae level)`.
 
 ## Combat (not denarii, but knobs)
 
+Do not retune this table for equipment. Gear is **additive** on `Combat.Score` — see **Forum equipment** below.
+
 | Knob | Value |
 |---|---|
 | Tiro virtus | 4–7 |
@@ -113,9 +115,40 @@ All `--report` policies now rest tired men and skip a bad locatio (that was the 
 | Host (locatio-only) | unlocked, purse ≥ 220 + 80, two fresh men | `CareerSim.HostCushion` |
 | Buy replacement (locatio-only) | living < 2 and purse ≥ price + 50 + 80 | `CareerSim.HireRosterNeed` |
 
+## Forum equipment (design lock, not in code yet)
+
+Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Do not implement** buy / assign / combat in the design-lock PR. Future constants belong in `Models.cs` (item / Armory / loadout), `Ludus.cs` (buy, assign, death return, locatio dock), `Combat.cs` (`Score` additives), `Content.cs` (catalog copy).
+
+Starter roster still has **no free kit** — buy at the forum. Resale from the Armory ≈ **50%** of buy (integer denarii, round down).
+
+### Catalog buy prices (denarii)
+
+| Slot | Punic T1/T2/T3 | Greek | Roman |
+|---|---|---|---|
+| Helmet | 35/55/80 | 40/60/90 | 45/70/100 |
+| Armor | 50/80/120 | 55/90/130 | 60/100/150 |
+| Shield | 25/40/60 | 30/45/70 | 35/55/85 |
+| Weapon | 30/50/75 | 35/55/85 | 40/60/95 |
+
+Retiarius: Weapon = Roman net+trident (Roman Weapon row); Shield slot N/A.
+
+### Combat additives (not a virtus / vigor / palmae retune)
+
+Playtest hold stands. These attach to `Combat.Score` only.
+
+| Knob | Value | Future home |
+|---|---|---|
+| Per equipped item tier | T1 **+0**, T2 **+1**, T3 **+2** | `Combat.Score` |
+| Cap, sum of tier bonuses | **+4** | `Combat.Score` |
+| Retiarius without Roman Weapon (net+trident) | **−2** | `Combat.Score` |
+| Culture mismatch vs *armatura* affinity | **−1** (once per loadout) | `Combat.Score` |
+| Locatio, mismatched kit | reuse `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no second table, no stack on wrong *armatura*) | `Ludus.cs` |
+
+Affinity: murmillo / secutor → Roman; thraex → Greek (Punic exotic ok); retiarius → Roman light, shield N/A.
+
 ## Market prices already in code
 
-There is **no** food/ingredient market. The only “price” rolls are locatio *pro sudore* / *pro occiso* (`RefreshOffer`) and hosted gate gifts (`SettleBout`). Rumors in the forum do not move those numbers.
+There is **no** food/ingredient market. Equipment catalog above is a **lock**, not live prices. The only “price” rolls in code today are locatio *pro sudore* / *pro occiso* (`RefreshOffer`) and hosted gate gifts (`SettleBout`). Rumors in the forum do not move those numbers.
 
 ## Thermopolium (implemented)
 

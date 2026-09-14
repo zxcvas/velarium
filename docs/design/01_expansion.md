@@ -102,7 +102,7 @@ Start (small Capuan ludus): porta, palus in a dirt yard, 3–4 *cellae*, kitchen
 | *Cellae* | Jacobelli / Bomgardner | +2–3 beds each. Straw. |
 | Second storey | Pompeii two-level cells | Density vs unrest |
 | Kitchen / mess | Barracks dining | Diet quality (barley/beans) |
-| Armamentarium | Helmets, greaves, *galerus* | Gear by *armatura*; wrong kit = crowd penalty |
+| Armamentarium | Helmets, greaves, *galerus* | Gear by *armatura*; wrong kit = crowd penalty. **v1 console** is a ludus Armory **pool**, not this room — lock: [`02_equipment.md`](02_equipment.md). |
 | Medicus / sick cells | Imperial *saniarium* as analogue; Galen as *method* | Heal rate; ash-drink upgrade |
 | Training ellipse | Ludus Magnus (late analogue) | Sparring without locatio |
 | Watch / porta | Single guarded entrance | Escape / Spartacus-memory events |

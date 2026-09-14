@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-12 (board-hygiene-velarium-name)
+**Last Updated:** 2026-09-14 (`equip-design-lock`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
@@ -10,6 +10,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
+- Forum equipment market sprint (console; docs + knobs first, then code). Claim chain: `equip-design-lock` (**this PR**, claimed 2026-09-14) → `equip-model-save` → `equip-catalog` → `equip-forum-buy` → `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. No C# in the design-lock PR.
 
 ## Done this cycle
 - Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, PR #17) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
@@ -38,7 +39,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 - Hosted munus: two pairs, one gate fee
 
 ## Blocked / Questions
-Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved.
+Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved. Equipment (2026-09-14) is **additive** knobs only — see `docs/design/02_equipment.md`.
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
