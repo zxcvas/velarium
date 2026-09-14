@@ -6,7 +6,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
-- Static equipment catalog (`equip-catalog`, this PR) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
+- Static equipment catalog (`equip-catalog`, PR #20) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
