@@ -1,6 +1,6 @@
 # Amphiteater — PixelLab asset map
 
-**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Wave 2 4-dir idle bodies **generated** (thraex / secutor 2026-09-09; retiarius seed 1793 + household seed 1795 Victor-approved recreate 2026-09-12). Wave 3a **shipped south** — 12 idle/walk/attack jobs logged; PNG pull is `python tools/pixellab_wave3a.py --pull`. Household: idles only, no 3a anims.  
+**Status:** wave 0 locked. Wave 1 generated 2026-08-31 (32px tileset + six props). Wave 2 4-dir idle bodies **generated** (thraex / secutor 2026-09-09; retiarius seed 1793 + household seed 1795 Victor-approved recreate 2026-09-12; retiarius + secutor soft-fail kit accepted for 3a). Wave 3a **shipped south with PNGs on branch** — 12 idle/walk/attack × 4 frames under `characters/{slug}_s_{clip}_{00..03}.png`. Household: idles only, no 3a anims. Hold Wave 3b until Godot walk/palus hook.  
 **Engine:** PixelLab v2 only for production art.  
 **Consumers:** later Godot; console stays text.  
 **Style:** `STYLE.md` — NES/SNES, cartoon KO, Pompeii kit.

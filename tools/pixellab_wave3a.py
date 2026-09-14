@@ -1,354 +1,364 @@
 #!/usr/bin/env python3
-"""Wave 3a south idle / walk / attack (4 frames) for the four armaturae.
-
-Imports helpers from pixellab_gen. Token from pixellab.env or PIXELLAB_API_TOKEN.
-Never prints the secret.
-
-Usage:
-  python tools/pixellab_wave3a.py --list
-  python tools/pixellab_wave3a.py --pull
-  python tools/pixellab_wave3a.py --animate
-  python tools/pixellab_wave3a.py --check
-"""
+"""Wave 3a: south-only idle/walk/attack animations for 4 armaturae via PixelLab."""
 
 from __future__ import annotations
 
-import argparse
 import io
 import json
 import re
-import sys
+import shutil
+import time
 import zipfile
+from datetime import datetime, timezone
 from pathlib import Path
 
-TOOLS = Path(__file__).resolve().parent
-if str(TOOLS) not in sys.path:
-    sys.path.insert(0, str(TOOLS))
-
-from pixellab_gen import (  # noqa: E402
+from pixellab_gen import (
     ART,
-    DIR_SHORT,
     PROMPTS,
     api,
     api_bytes,
     palette_body,
-    poll_job,
     print_balance,
     save_image,
-    token,
-    write_log,
+    token,  # noqa: F401 — load/validate token path exists
 )
 
-CLIPS = ("idle", "walk", "attack")
+# Confirm token loads without printing it.
+_ = token()
+
+BACKUP_DIR = Path("/workspace/velarium/wave3a_idle_still_backup")
+ENDPOINT = "/animate-character"
 FRAME_COUNT = 4
+POLL_TIMEOUT_S = 600  # ≥ 10 min
+STYLE_PREFIX = (
+    "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, "
+    "low top-down south facing. "
+)
 
-ACTIONS = {
-    "idle": (
-        "breathing idle, tiny weight shift, feet planted, SNES 4-frame loop, "
-        "facing south, keep kit silhouette, transparent background"
-    ),
-    "walk": (
-        "walking in place south, SNES 4-frame loop, limbs and kit move, "
-        "keep silhouette, transparent background"
-    ),
-    "attack": (
-        "south-facing attack, 4 frames, commit the swing, not a loop, "
-        "keep kit silhouette, transparent background"
-    ),
-}
-
-FIGHTERS = [
+ARMATURAE = [
     {
         "slug": "murmillo",
         "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
-        "wave2_id": "sample_murmillo_s",
-        "seed_base": 1800,
+        "seed_base": 784,
+        "attack": "one short blade swing attack, not a loop, readable windup and strike",
     },
     {
         "slug": "thraex",
         "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
-        "wave2_id": "char_thraex",
-        "seed_base": 1810,
+        "seed_base": 792,
+        "attack": "one short blade swing attack, not a loop, readable windup and strike",
     },
     {
         "slug": "retiarius",
         "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
-        "wave2_id": "char_retiarius",
-        "seed_base": 1820,
+        "seed_base": 1793,
+        "attack": "one trident thrust attack, not a loop, readable windup and strike",
     },
     {
         "slug": "secutor",
         "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
-        "wave2_id": "char_secutor",
-        "seed_base": 1830,
+        "seed_base": 794,
+        "attack": "one short blade swing attack, not a loop, readable windup and strike",
     },
 ]
 
-HOUSEHOLD = {
-    "slug": "household",
-    "character_id": "a317ac42-f430-40b0-a295-cf13d6401306",
-    "wave2_id": "char_household",
+CLIPS = {
+    "idle": "subtle breathing idle, tiny bob, loopable, no foot travel",
+    "walk": "four-frame walk cycle in place, south facing, clear leg motion",
+    "attack": None,  # per-armatura
 }
 
-# Jobs already billed on box (2026-09-12). --animate skips these unless --force.
-SHIPPED_JOBS: dict[tuple[str, str], str] = {
-    ("murmillo", "idle"): "39974873-7a73-4257-a701-fcf386642b00",
-    ("murmillo", "walk"): "073601db-3b8d-4300-9a3b-06e5d0d869cd",
-    ("murmillo", "attack"): "d0e936f1-e5f4-4f73-bbe9-7a48f1d31958",
-    ("thraex", "idle"): "907c3a7e-a80e-451c-a3ee-44cf65fe96c5",
-    ("thraex", "walk"): "c0859df0-5a6e-403e-ad96-4e4b1308af9a",
-    ("thraex", "attack"): "cadc0eae-267e-4f47-ab67-89b8501f25bb",
-    ("retiarius", "idle"): "ccca08ac-9649-46d2-8cda-b09258277d42",
-    ("retiarius", "walk"): "0d160659-563a-410e-b011-2627a2f3b66c",
-    ("retiarius", "attack"): "cefbd92d-5dc5-4aae-993e-be303cc115e2",
-    ("secutor", "idle"): "0ceb4d86-f439-491a-8b9f-a8342b6695ee",
-    ("secutor", "walk"): "22a6f499-0918-4dd7-aa91-8d011224975a",
-    ("secutor", "attack"): "41e28d27-a063-4a75-be53-1b565374e85c",
-}
-
-ALWAYS_REPLACE_IDLES = {"retiarius", "household"}
+SEED_OFFSET = {"idle": 0, "walk": 10, "attack": 20}
 
 
-def wave3a_jobs(only: list[str] | None = None) -> list[dict]:
-    want = None if only is None else set(only)
-    jobs: list[dict] = []
-    for fighter in FIGHTERS:
-        if want is not None and fighter["slug"] not in want:
+def action_for(arm: dict, clip: str) -> str:
+    body = CLIPS[clip] if clip != "attack" else arm["attack"]
+    return STYLE_PREFIX + body
+
+
+def backup_idle_stills() -> list[str]:
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    copied: list[str] = []
+    for arm in ARMATURAE:
+        src = ART / "characters" / f"{arm['slug']}_s_idle_00.png"
+        if src.is_file():
+            dest = BACKUP_DIR / src.name
+            shutil.copy2(src, dest)
+            copied.append(src.name)
+            print(f"backup {src.name} -> {dest}")
+    return copied
+
+
+def poll_job_soft(job_id: str, timeout_s: int = POLL_TIMEOUT_S) -> dict:
+    deadline = time.time() + timeout_s
+    last = ""
+    while time.time() < deadline:
+        job = api("GET", f"/background-jobs/{job_id}")
+        status = (job.get("status") or "").lower()
+        if status != last:
+            print(f"  job {job_id[:8]}… {status}")
+            last = status
+        if status in {"completed", "complete", "success"}:
+            return job
+        if status in {"failed", "error"}:
+            raise RuntimeError(f"job failed: {json.dumps(job.get('last_response'))[:400]}")
+        time.sleep(5)
+    raise TimeoutError(f"job timed out after {timeout_s}s: {job_id}")
+
+
+def _frame_index(name: str) -> int | None:
+    m = re.search(r"frame[_-]?(\d+)\.png$", name.lower())
+    return int(m.group(1)) if m else None
+
+
+def extract_south_frames(zf: zipfile.ZipFile, animation_name: str) -> list[tuple[int, bytes]]:
+    names = [n.replace("\\", "/") for n in zf.namelist()]
+    # Prefer animations/{name}/south/frame_*.png (case-insensitive).
+    needle = f"animations/{animation_name}/south/"
+    candidates = [
+        n
+        for n in names
+        if needle.lower() in n.lower() and n.lower().endswith(".png")
+    ]
+    if not candidates:
+        # Fallback: any path with animation_name + south + frame
+        candidates = [
+            n
+            for n in names
+            if animation_name.lower() in n.lower()
+            and "south" in n.lower()
+            and "frame" in n.lower()
+            and n.lower().endswith(".png")
+        ]
+    frames: list[tuple[int, bytes]] = []
+    for n in candidates:
+        idx = _frame_index(n)
+        if idx is None:
             continue
-        for i, clip in enumerate(CLIPS):
-            jobs.append(
-                {
-                    "id": f"wave3a_{fighter['slug']}_{clip}",
-                    "slug": fighter["slug"],
-                    "clip": clip,
-                    "character_id": fighter["character_id"],
-                    "wave2_id": fighter["wave2_id"],
-                    "seed": fighter["seed_base"] + i,
-                    "w": 48,
-                    "h": 48,
-                    "view": "low top-down",
-                    "direction": "south",
-                    "no_bg": True,
-                    "description": ACTIONS[clip],
-                    "job_id": SHIPPED_JOBS[(fighter["slug"], clip)],
-                }
-            )
-    return jobs
+        frames.append((idx, zf.read(n)))
+    frames.sort(key=lambda t: t[0])
+    # Deduplicate by index (keep first)
+    seen: set[int] = set()
+    unique: list[tuple[int, bytes]] = []
+    for idx, png in frames:
+        if idx in seen:
+            continue
+        seen.add(idx)
+        unique.append((idx, png))
+    return unique
 
 
-def _zip_names(zf: zipfile.ZipFile) -> list[str]:
-    return [n.replace("\\", "/") for n in zf.namelist() if not n.endswith("/")]
-
-
-def _find_rotation(names: list[str], direction: str) -> str | None:
-    tail = f"rotations/{direction}.png"
-    for n in names:
-        low = n.lower()
-        if low.endswith(tail) or low == f"{direction}.png":
-            return n
-    return None
-
-
-def _find_anim_frame(names: list[str], clip: str, direction: str, index: int) -> str | None:
-    pats = (
-        re.compile(
-            rf"(?:^|/)animations/{re.escape(clip)}/{re.escape(direction)}/frame_{index:03}\.png$",
-            re.I,
-        ),
-        re.compile(
-            rf"(?:^|/){re.escape(clip)}/{re.escape(direction)}/frame_{index:03}\.png$",
-            re.I,
-        ),
-        re.compile(
-            rf"(?:^|/)animations/{re.escape(clip)}/{re.escape(direction)}/{index:02}\.png$",
-            re.I,
-        ),
-    )
-    for n in names:
-        if any(p.search(n) for p in pats):
-            return n
-    return None
-
-
-def unpack_rotations(zf: zipfile.ZipFile, slug: str, replace: bool) -> dict[str, str]:
-    names = _zip_names(zf)
+def pull_and_save(slug: str, clip: str, character_id: str) -> dict[str, str]:
+    raw = api_bytes(f"/characters/{character_id}/zip")
+    zf = zipfile.ZipFile(io.BytesIO(raw))
+    names = [n.replace("\\", "/") for n in zf.namelist()]
+    print(f"  zip members ({len(names)}): sample={names[:12]}")
+    frames = extract_south_frames(zf, clip)
+    if len(frames) < FRAME_COUNT:
+        # List animation-ish paths for debug
+        anim_paths = [n for n in names if "anim" in n.lower() or "frame" in n.lower()]
+        raise RuntimeError(
+            f"expected ≥{FRAME_COUNT} {clip}/south frames, got {len(frames)}; "
+            f"anim_paths={anim_paths[:40]}"
+        )
+    # Take first FRAME_COUNT in sorted order; reindex 00..03 for Godot.
     files: dict[str, str] = {}
-    for direction, short in DIR_SHORT.items():
-        rel = f"characters/{slug}_{short}_idle_00.png"
-        dest = ART / rel
-        if dest.is_file() and not replace:
-            files[direction] = rel
-            continue
-        member = _find_rotation(names, direction)
-        if not member:
-            continue
-        save_image(rel, zf.read(member))
-        files[direction] = rel
-        print(f"save {rel}")
+    for out_i, (_src_i, png) in enumerate(frames[:FRAME_COUNT]):
+        rel = f"characters/{slug}_s_{clip}_{out_i:02}.png"
+        save_image(rel, png)
+        files[f"{clip}_{out_i:02}"] = rel
+        print(f"  save {rel} ({len(png)} bytes)")
     return files
 
 
-def unpack_south_anims(zf: zipfile.ZipFile, slug: str, clips: tuple[str, ...] = CLIPS) -> dict[str, list[str]]:
-    names = _zip_names(zf)
-    out: dict[str, list[str]] = {}
-    for clip in clips:
-        frames: list[str] = []
-        for i in range(FRAME_COUNT):
-            member = _find_anim_frame(names, clip, "south", i)
-            if not member:
-                print(f"miss {slug} {clip} south frame_{i:03} (zip has {len(names)} files)")
-                continue
-            rel = f"characters/{slug}_s_{clip}_{i:02}.png"
-            save_image(rel, zf.read(member))
-            frames.append(rel)
-            print(f"save {rel}")
-        if frames:
-            out[clip] = frames
-    return out
-
-
-def write_wave3a_stub(job: dict, extra: dict | None = None) -> None:
-    item = {
-        "id": job["id"],
-        "seed": job["seed"],
-        "w": job["w"],
-        "h": job["h"],
-        "view": job["view"],
-        "direction": job["direction"],
-        "no_bg": True,
-        "description": job["description"],
-    }
-    payload = {
-        "slug": job["slug"],
-        "clip": job["clip"],
-        "character_id": job["character_id"],
-        "background_job_id": job.get("job_id"),
-        "mode": "v3",
-        "frame_count": FRAME_COUNT,
-        "keep_first_frame": False,
-        "force_colors": True,
-        "directions": ["south"],
-        "files": [
-            f"characters/{job['slug']}_s_{job['clip']}_{i:02}.png" for i in range(FRAME_COUNT)
-        ],
-    }
-    if extra:
-        payload.update(extra)
-    write_log(item, None, palette_body() is not None, endpoint="/animate-character", extra=payload)
-
-
-def pull_character(slug: str, character_id: str, *, idles: bool, replace_idles: bool, anims: bool) -> None:
-    print(f"zip  {slug} {character_id}")
-    raw = api_bytes(f"/characters/{character_id}/zip")
-    zf = zipfile.ZipFile(io.BytesIO(raw))
-    names = _zip_names(zf)
-    print("     members", len(names))
-    if idles:
-        unpack_rotations(zf, slug, replace=replace_idles)
-    if anims:
-        unpack_south_anims(zf, slug)
-
-
-def animate_job(job: dict, force: bool) -> None:
-    dest0 = ART / f"characters/{job['slug']}_s_{job['clip']}_00.png"
-    if dest0.is_file() and not force:
-        print(f"skip {job['id']} (exists)")
-        return
-    pal = palette_body()
+def submit_animate(arm: dict, clip: str) -> tuple[str, dict, bool]:
+    action = action_for(arm, clip)
+    seed = arm["seed_base"] + SEED_OFFSET[clip]
     body: dict = {
-        "character_id": job["character_id"],
-        "animation_name": job["clip"],
-        "action_description": job["description"],
+        "character_id": arm["character_id"],
         "mode": "v3",
-        "frame_count": FRAME_COUNT,
-        "keep_first_frame": False,
         "directions": ["south"],
-        "isometric": False,
-        "force_colors": bool(pal),
-        "seed": job["seed"],
-        "enhance_prompt": False,
+        "frame_count": FRAME_COUNT,
+        "animation_name": clip,
+        "action_description": action,
+        "async_mode": True,
+        "keep_first_frame": False,  # store exactly frame_count generated frames
+        "seed": seed,
     }
+    pal = palette_body()
+    used_palette = False
     if pal:
         body["color_image"] = pal
-    print(f"anim {job['id']} seed={job['seed']} char={job['character_id']}")
-    resp = api("POST", "/animate-character", body)
+        body["force_colors"] = True
+        used_palette = True
+    print(
+        f"POST {ENDPOINT} {arm['slug']}/{clip} "
+        f"char={arm['character_id'][:8]}… seed={seed} palette={used_palette}"
+    )
+    resp = api("POST", ENDPOINT, body)
     job_ids = resp.get("background_job_ids") or []
     if not job_ids:
-        raise SystemExit(f"animate-character returned no jobs for {job['id']}: {list(resp)}")
-    job_id = job_ids[0]
-    print(f"     job={job_id}")
-    poll_job(job_id, timeout_s=300)
-    pull_character(job["slug"], job["character_id"], idles=False, replace_idles=False, anims=True)
-    write_wave3a_stub(job, extra={"background_job_id": job_id, "usage": resp.get("usage")})
+        # Some responses may use singular
+        jid = resp.get("background_job_id")
+        if jid:
+            job_ids = [jid]
+    if not job_ids:
+        raise RuntimeError(f"no job id in response keys={list(resp)}")
+    return job_ids[0], {"request": {k: v for k, v in body.items() if k != "color_image"}, "response_status": resp.get("status"), "directions": resp.get("directions"), "action_description": action, "seed": seed}, used_palette
+
+
+def write_prompt_json(
+    slug: str,
+    clip: str,
+    character_id: str,
+    job_id: str,
+    action: str,
+    seed: int,
+    files: dict[str, str],
+    used_palette: bool,
+    job: dict | None,
+    status: str,
+    error: str | None = None,
+) -> Path:
+    PROMPTS.mkdir(parents=True, exist_ok=True)
+    log = {
+        "id": f"wave3a_{slug}_{clip}",
+        "endpoint": ENDPOINT,
+        "character_id": character_id,
+        "animation_name": clip,
+        "directions": ["south"],
+        "frame_count": FRAME_COUNT,
+        "mode": "v3",
+        "keep_first_frame": False,
+        "action_description": action,
+        "seed": seed,
+        "background_job_id": job_id,
+        "color_image": used_palette,
+        "force_colors": used_palette,
+        "status": status,
+        "files": files,
+        "usage": (job or {}).get("usage"),
+        "error": error,
+        "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+    }
+    path = PROMPTS / f"wave3a_{slug}_{clip}.json"
+    path.write_text(json.dumps(log, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def write_summary(results: list[dict], bal_before: tuple[float, float], bal_after: tuple[float, float], backups: list[str]) -> Path:
+    PROMPTS.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "# Wave 3a south animations log",
+        "",
+        f"## {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC",
+        "",
+        "- Scope: idle / walk / attack × south only × murmillo, thraex, retiarius, secutor (household skipped)",
+        f"- Endpoint: `POST {ENDPOINT}` mode=v3 frame_count={FRAME_COUNT} keep_first_frame=false",
+        "- Palette: NES strip attached via color_image + force_colors when supported (is supported)",
+        f"- Idle still backup: `{BACKUP_DIR}` ({len(backups)} files: {', '.join(backups) or 'none'})",
+        f"- Balance before: USD={bal_before[0]} gens={bal_before[1]}",
+        f"- Balance after:  USD={bal_after[0]} gens={bal_after[1]}",
+        "",
+        "## Jobs",
+        "",
+        "| slug | clip | character_id | job_id | status | files |",
+        "|---|---|---|---|---|---|",
+    ]
+    ok = 0
+    for r in results:
+        nfiles = len(r.get("files") or {})
+        if r["status"] == "completed":
+            ok += 1
+        lines.append(
+            f"| {r['slug']} | {r['clip']} | `{r['character_id']}` | `{r['job_id']}` | "
+            f"{r['status']} | {nfiles} |"
+        )
+        if r.get("error"):
+            lines.append(f"|  |  |  |  | error | {r['error'][:120]} |")
+    lines.extend(
+        [
+            "",
+            f"## Summary",
+            "",
+            f"- Completed: {ok}/{len(results)}",
+            f"- Expected PNGs: 48; written: {sum(len(r.get('files') or {}) for r in results)}",
+            "",
+        ]
+    )
+    path = PROMPTS / "WAVE3A_SOUTH_LOG.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Wave 3a south idle/walk/attack for four armaturae")
-    ap.add_argument("--check", action="store_true", help="GET /balance and exit")
-    ap.add_argument("--list", action="store_true", help="Print the 12 shipped jobs (no token)")
-    ap.add_argument("--pull", action="store_true", help="Download character zips; unpack south frames + approved idles")
-    ap.add_argument("--animate", action="store_true", help="POST /animate-character (bills generations)")
-    ap.add_argument("--force", action="store_true")
-    ap.add_argument("--only", nargs="*", help="Limit to slug(s): murmillo thraex retiarius secutor household")
-    args = ap.parse_args()
+    print("=== Wave 3a south animations ===")
+    bal0 = api("GET", "/balance")
+    usd0, gens0 = print_balance(bal0)
+    backups = backup_idle_stills()
 
-    if args.only:
-        known = {f["slug"] for f in FIGHTERS} | {HOUSEHOLD["slug"]}
-        missing = set(args.only) - known
-        if missing:
-            raise SystemExit(f"unknown slug(s): {sorted(missing)}")
-    if args.only is None:
-        jobs = wave3a_jobs()
-    else:
-        jobs = wave3a_jobs([s for s in args.only if s != HOUSEHOLD["slug"]])
+    results: list[dict] = []
+    for arm in ARMATURAE:
+        for clip in ("idle", "walk", "attack"):
+            row: dict = {
+                "slug": arm["slug"],
+                "clip": clip,
+                "character_id": arm["character_id"],
+                "job_id": "",
+                "status": "pending",
+                "files": {},
+                "error": None,
+            }
+            try:
+                job_id, meta, used_pal = submit_animate(arm, clip)
+                row["job_id"] = job_id
+                print(f"  queued job_id={job_id}")
+                job = poll_job_soft(job_id)
+                files = pull_and_save(arm["slug"], clip, arm["character_id"])
+                row["files"] = files
+                row["status"] = "completed"
+                write_prompt_json(
+                    arm["slug"],
+                    clip,
+                    arm["character_id"],
+                    job_id,
+                    meta["action_description"],
+                    meta["seed"],
+                    files,
+                    used_pal,
+                    job,
+                    "completed",
+                )
+            except Exception as e:
+                row["status"] = "failed"
+                row["error"] = str(e)[:500]
+                print(f"  FAIL {arm['slug']}/{clip}: {e}")
+                write_prompt_json(
+                    arm["slug"],
+                    clip,
+                    arm["character_id"],
+                    row["job_id"] or "none",
+                    action_for(arm, clip),
+                    arm["seed_base"] + SEED_OFFSET[clip],
+                    row["files"],
+                    palette_body() is not None,
+                    None,
+                    "failed",
+                    error=row["error"],
+                )
+            results.append(row)
+            # Gentle pause between jobs to reduce 429 risk
+            time.sleep(2)
 
-    if args.list or not (args.check or args.pull or args.animate):
-        print("Wave 3a south — 12 jobs (idle/walk/attack × 4 armaturae), household idles only")
-        for job in wave3a_jobs():
-            print(f"  {job['slug']:10} {job['clip']:6} job={job['job_id']} char={job['character_id']}")
-        print(f"  {HOUSEHOLD['slug']:10} idle   (no wave3a anims) char={HOUSEHOLD['character_id']}")
-        if not (args.check or args.pull or args.animate):
-            return
-
-    # Token only when talking to the API.
-    token()
-    bal = api("GET", "/balance")
-    print_balance(bal)
-    if args.check:
-        return
-
-    if args.pull:
-        ART.mkdir(parents=True, exist_ok=True)
-        want = set(args.only) if args.only else None
-        for fighter in FIGHTERS:
-            if want and fighter["slug"] not in want:
-                continue
-            pull_character(
-                fighter["slug"],
-                fighter["character_id"],
-                idles=True,
-                replace_idles=fighter["slug"] in ALWAYS_REPLACE_IDLES,
-                anims=True,
-            )
-        if want is None or HOUSEHOLD["slug"] in want:
-            pull_character(
-                HOUSEHOLD["slug"],
-                HOUSEHOLD["character_id"],
-                idles=True,
-                replace_idles=True,
-                anims=False,
-            )
-        for job in jobs:
-            write_wave3a_stub(job)
-        print("done pull")
-        return
-
-    if args.animate:
-        ART.mkdir(parents=True, exist_ok=True)
-        for job in jobs:
-            animate_job(job, args.force)
-        print("done animate")
-        return
+    bal1 = api("GET", "/balance")
+    usd1, gens1 = print_balance(bal1)
+    summary = write_summary(results, (usd0, gens0), (usd1, gens1), backups)
+    print(f"summary -> {summary}")
+    completed = sum(1 for r in results if r["status"] == "completed")
+    pngs = sum(len(r.get("files") or {}) for r in results)
+    print(f"DONE completed={completed}/{len(results)} pngs={pngs}")
+    if completed < len(results):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
