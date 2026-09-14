@@ -1,19 +1,20 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`equip-forum-buy`)
+**Last Updated:** 2026-09-14 (`equip-assign`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
-- Forum equipment buy (`equip-forum-buy`, this PR) — console forum stall: browse by culture/slot, buy into the Ludus Armory with purse check; resale from unequipped Armory at `ResalePrice`. No assign UI.
+- Assign / unequip from Armory (`equip-assign`, this PR) — `Ludus.Assign` / `Unequip`; occupied slot returns the old piece first; death and *rudis* strip loadout → Armory; familia inspect UI. No `Combat.Score`.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
-- Forum equipment remaining: `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. Catalog is Done (PR #20).
+- Forum equipment remaining: `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. Assign is this PR.
 
 ## Done this cycle
+- Forum equipment buy (`equip-forum-buy`, 2026-09-14, PR #21) — console forum stall: browse by culture/slot, buy into the Ludus Armory with purse check; resale from unequipped Armory at `ResalePrice`. No assign UI.
 - Static equipment catalog (`equip-catalog`, 2026-09-14, PR #20) — 36 templates Punic/Greek/Roman × Helmet/Armor/Shield/Weapon × T1/T2/T3; `EquipmentCatalog.BuyPrice` / `ResalePrice` / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). No forum UI.
 - Ludus Armory + loadout model/save (`equip-model-save`, 2026-09-14, PR #19) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`
 - Forum equipment design lock (`equip-design-lock`, 2026-09-14, PR #18) — `docs/design/02_equipment.md` + Forum equipment knobs in `production/economy.md`. No C#.
