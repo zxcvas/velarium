@@ -53,7 +53,7 @@ public class EquipmentBuyTests
         Assert.Equal(EquipmentSlot.Helmet, item.Slot);
         Assert.Equal(EquipmentCulture.Roman, item.Culture);
         Assert.Equal(EquipmentTier.T1, item.Tier);
-        Assert.False(taken.Contains(item.Id));
+        Assert.DoesNotContain(item.Id, taken);
         Assert.Equal(next + 1, s.NextId);
         Assert.All(s.Living, g => Assert.Null(g.Helmet));
     }
@@ -113,8 +113,8 @@ public class EquipmentBuyTests
         var a = s.Armory[0];
         var b = s.Armory[1];
         Assert.NotEqual(a.Id, b.Id);
-        Assert.False(taken.Contains(a.Id));
-        Assert.False(taken.Contains(b.Id));
+        Assert.DoesNotContain(a.Id, taken);
+        Assert.DoesNotContain(b.Id, taken);
         Assert.Equal(a.Slot, b.Slot);
         Assert.Equal(a.Culture, b.Culture);
         Assert.Equal(a.Tier, b.Tier);
