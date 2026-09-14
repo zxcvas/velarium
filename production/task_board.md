@@ -1,18 +1,20 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`equip-design-lock`)
+**Last Updated:** 2026-09-14 (`equip-model-save`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 - PixelLab wave 3a south (`art-wave3a-south`, Art Director, PR #16) — tooling/logs in on `cursor/art-wave3a-south-b223`; PNG binaries pending (`--pull` on a box with `pixellab.env`). Soft-fail retiarius noted (kit read weak; accepted for motion). Household recreate PASS; no household anims this wave.
+- Ludus Armory + loadout model/save (`equip-model-save`, this PR) — `EquipmentItem` / Armory on `GameState` / optional slots on `Gladiator`; round-trip in `amphiteater_save.json`. No forum buy UI, catalog prices, or Combat.Score.
 
 ## Next Up
 - Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
-- Forum equipment market sprint (console; docs + knobs first, then code). Claim chain: `equip-design-lock` (**PR #18**, claimed 2026-09-14) → `equip-model-save` → `equip-catalog` → `equip-forum-buy` → `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. No C# in the design-lock PR.
+- Forum equipment market sprint (console). Remaining chain: `equip-catalog` → `equip-forum-buy` → `equip-assign` → `equip-combat`. Lock: `docs/design/02_equipment.md` + `production/economy.md`. Additive combat only; no virtus / vigor / palmae retune. Model/save is `equip-model-save` (Now).
 
 ## Done this cycle
+- Forum equipment design lock (`equip-design-lock`, 2026-09-14, PR #18) — `docs/design/02_equipment.md` + Forum equipment knobs in `production/economy.md`. No C#.
 - Board hygiene + store name lock (`board-hygiene-velarium-name`, 2026-09-12, PR #17) — product/store name **Velarium**; Amphiteater stays historical flavor / subtitle only
 - Marketing site shell (`marketing-site-shell`, 2026-09-12, PR #14; CI fix #15) — static `marketing/site/` landing, Steam wishlist stub, `marketing/BRIEF.md`; Pages from `marketing/site/`
 - Godot courtyard net8 (`godot-courtyard-net8`, 2026-09-12, PR #12) — Sim `net8.0;net10.0`, cloud env SDKs 8+10, restorable Godot 4.6 C# project. Console host stays net10.

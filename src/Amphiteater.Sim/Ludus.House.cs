@@ -127,6 +127,7 @@ public static partial class Ludus
         s.Rooms ??= new();
         s.Household ??= new();
         s.LaborMarket ??= new();
+        s.Armory ??= new();
         if (s.Rooms.Count == 0)
         {
             s.Rooms.Add(new Room { Kind = RoomKind.Palus, Level = 1 });
