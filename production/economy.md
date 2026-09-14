@@ -117,7 +117,7 @@ All `--report` policies now rest tired men and skip a bad locatio (that was the 
 
 ## Forum equipment (v1 lock)
 
-Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). Forum buy, assign / death return, and combat additives stay later claims (`Ludus.cs` / `Combat.Score`).
+Locked 2026-09-14 (Victor). Rules: [`docs/design/02_equipment.md`](../docs/design/02_equipment.md). **Model + save** (`equip-model-save`): `EquipmentItem`, Armory on `GameState`, optional loadout slots on `Gladiator`, persisted in `amphiteater_save.json`. **Catalog** (`equip-catalog`): `EquipmentCatalog` buy / resale (`floor(buy/2)`) / `CreateInstance`; `Content.EquipmentNom` (Roman Weapon = rete+fuscina). **Forum buy** (`equip-forum-buy`): `Ludus.BuyEquipment` / `SellEquipment`; console stall in `Game.ForumScreen`. Assign / death return and combat additives stay later claims (`Ludus.cs` / `Combat.Score`). CareerSim / `--report` does not auto-buy kit.
 
 Starter roster still has **no free kit** — buy at the forum. Resale from the Armory ≈ **50%** of buy (integer denarii, round down).
 
@@ -148,7 +148,7 @@ Affinity: murmillo / secutor → Roman; thraex → Greek (Punic exotic ok); reti
 
 ## Market prices already in code
 
-There is **no** food/ingredient market. Equipment **buy/resale** numbers above are live in `EquipmentCatalog` (`BuyPrice` / `ResalePrice`); the forum stall does not sell them yet (`equip-forum-buy`). The only other “price” rolls in code today are locatio *pro sudore* / *pro occiso* (`RefreshOffer`) and hosted gate gifts (`SettleBout`). Rumors in the forum do not move those numbers.
+There is **no** food/ingredient market. Equipment **buy/resale** numbers above are live in `EquipmentCatalog` (`BuyPrice` / `ResalePrice`); the forum stall sells templates into the Armory (`Ludus.BuyEquipment`) and buys unequipped pieces back at resale (`Ludus.SellEquipment`). The only other “price” rolls in code today are locatio *pro sudore* / *pro occiso* (`RefreshOffer`) and hosted gate gifts (`SettleBout`). Rumors in the forum do not move those numbers.
 
 ## Thermopolium (implemented)
 
