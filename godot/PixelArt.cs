@@ -9,9 +9,6 @@ static class PixelArt
 {
     public const int Tile = 32;
 
-    // STYLE.md packed_dirt swatch — yard fill when sample_dirt.png is absent.
-    public static readonly Color PackedDirt = new(0x68 / 255f, 0x43 / 255f, 0x35 / 255f);
-
     public static string ArtRoot()
     {
         string project = ProjectSettings.GlobalizePath("res://");

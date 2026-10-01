@@ -29,6 +29,7 @@ public partial class Courtyard : Node2D
     public override void _Ready()
     {
         TextureFilter = TextureFilterEnum.Nearest;
+        ApplyTheme();
         _status = GetNode<Label>("Hud/Status");
         GetNode<Button>("Hud/EndDay").Pressed += OnEndDay;
 
@@ -41,10 +42,17 @@ public partial class Courtyard : Node2D
         RefreshHud("courtyard");
     }
 
+    void ApplyTheme()
+    {
+        var theme = VelariumTheme.Build();
+        foreach (var control in GetNode<CanvasLayer>("Hud").GetChildren().OfType<Control>())
+            control.Theme = theme;
+    }
+
     void FillDirt()
     {
         var yard = GetNode<Node2D>("Yard");
-        var tex = PixelArt.TryLoad("tiles/sample_dirt.png") ?? PixelArt.SolidTile(PixelArt.PackedDirt);
+        var tex = PixelArt.TryLoad("tiles/sample_dirt.png") ?? PixelArt.SolidTile(UiTokens.SurfaceSand);
         for (int y = 0; y < TilesY; y++)
         {
             for (int x = 0; x < TilesX; x++)

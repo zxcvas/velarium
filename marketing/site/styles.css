@@ -15,7 +15,42 @@
   --sea-green: #4A8B7A;
   --cold-iron: #7F99B0;
   --bronze: #C4964A;
+  --skin: #C8A87A;
   --outline: #0A0808;
+
+  /* Semantic roles — mirrored in godot/ui/UiTokens.cs; see docs/design/03_ui_tokens.md.
+     Components use these, not the primitives above. */
+  --surface-ground: var(--soot);
+  --surface-raised: var(--charcoal-deep);
+  --surface-banner: var(--dark-pompeii);
+  --surface-sand: var(--packed-dirt);
+  --border-chrome: var(--outline);
+  --text-primary: var(--pale-linen);
+  --text-secondary: var(--dirty-linen); /* 6.5:1 on ground; iron-rust was 3.4:1 */
+  --text-link: var(--bronze);
+  --text-link-hover: var(--ochre);
+  --focus-ring: var(--ochre);
+  --action-primary: var(--pompeii-red);
+  --action-primary-hover: var(--dark-pompeii);
+  --action-secondary: var(--charcoal-deep);
+  --action-disabled: var(--charcoal);
+
+  /* Gladiator status (GladiatorStatus) — light fills take outline text */
+  --status-validus: var(--sea-green);
+  --status-fessus: var(--ochre);
+  --status-vulneratus: var(--pompeii-red);
+  --status-aeger: var(--cold-iron);
+  --status-mortuus: var(--charcoal);
+
+  /* 4px = one art pixel at 4x */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
 
   --font-display: Cinzel, Trajan, "Trajan Pro", Georgia, serif;
   --font-body: Georgia, "Times New Roman", Times, serif;
@@ -189,7 +224,7 @@ button:focus-visible {
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--iron-rust);
+  color: var(--text-secondary);
 }
 
 h1 {
@@ -236,12 +271,17 @@ h1 {
 }
 
 .cta-github {
-  background: var(--pompeii-red);
+  /* pale-linen on pompeii-red is 4.3:1: label must be large text (>=18.66px bold) */
+  font-size: 1.1875rem;
+  font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  background: var(--action-primary);
   color: var(--pale-linen);
 }
 
 .cta-github:hover {
-  background: var(--dark-pompeii);
+  background: var(--action-primary-hover);
   color: var(--pale-linen);
 }
 
@@ -267,7 +307,7 @@ h1 {
 .cta-note {
   margin: 0.85rem 0 0;
   font-size: 0.9rem;
-  color: var(--iron-rust);
+  color: var(--text-secondary);
 }
 
 .panel {
@@ -405,7 +445,7 @@ h2 {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--iron-rust);
+  color: var(--text-secondary);
 }
 
 .palette-row {
@@ -423,7 +463,7 @@ h2 {
 }
 
 .palette-row span {
-  color: var(--iron-rust);
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
