@@ -1,6 +1,6 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-09-14 (`art-wave3a-south`)
+**Last Updated:** 2026-10-01 (`ui-tokens`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
@@ -11,6 +11,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 - Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
 
 ## Done this cycle
+- UI tokens v1 (`ui-tokens`, 2026-10-01) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label.
 - PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
 - Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
 - Additive equipment combat (`equip-combat`, 2026-09-14, PR #23) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.

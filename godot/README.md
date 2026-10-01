@@ -43,6 +43,7 @@ Locked in `project.godot` / `Courtyard.cs`:
 - Wave-1 props from `assets/art/props/` when present (`prop_palus`, `prop_cellae`, `prop_hearth`, `prop_porta`, `prop_medicus`). Unbuilt rooms (medicus starts at 0) stay off the yard.
 - Murmillo south idle when `characters/murmillo_s_idle_00.png` or `sample_murmillo_s.png` exists **and** the loaded familia has a living murmillo
 - Same save: `amphiteater_save.json` (`Save.FileName`). Prefers `dist/` next to the console exe, then Godot `user://`, then `Save.DefaultPath()`.
+- HUD theme: `ui/VelariumTheme.cs` from `ui/UiTokens.cs` (roles in `docs/design/03_ui_tokens.md`). Square chrome, 1px outline, Pompeii-red primary, Silkscreen pixel font (`fonts/`, OFL) at 8/16px.
 - **End Day** calls `Ludus.EndDay` and `Save.Write`. No new rooms, combat, or economy.
 
 PixelLab PNGs live under `assets/art/` (see `ASSET_MAP.md`). They are not required to restore. To let the editor import them as `res://art/...`, junction or copy `assets/art` → `godot/art`. Runtime also loads `../assets/art` from disk.
