@@ -15,6 +15,10 @@ static class VelariumTheme
     public static Theme Build()
     {
         var theme = new Theme { DefaultFontSize = UiTokens.FontBody };
+        if (PixelFont.TryLoad(PixelFont.Regular) is { } body)
+            theme.DefaultFont = body;
+        if (PixelFont.TryLoad(PixelFont.Bold) is { } bold)
+            theme.SetFont("font", "Button", bold);
 
         ButtonStyles(theme, "Button", UiTokens.ActionPrimary, UiTokens.ActionPrimaryHover);
         theme.SetTypeVariation(SecondaryButton, "Button");

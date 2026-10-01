@@ -61,7 +61,8 @@ static class UiTokens
     /// <summary>Never rounded.</summary>
     public const int Radius = 0;
 
-    // Font sizes in viewport px (×4 on screen, so all UI text is "large").
+    // Silkscreen (PixelFont) sizes in viewport px — whole multiples of 8 only,
+    // so glyphs stay on the art-pixel grid. ×4 on screen: all HUD text is "large".
     public const int FontBody = 8;
     public const int FontTitle = 16;
 

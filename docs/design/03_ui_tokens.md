@@ -61,4 +61,14 @@ One art pixel = 4 screen px (sprites and the Godot viewport are integer 4×). Th
 ## Type
 
 Site: Cinzel (display, caps, tracked) + Georgia (body). Latin in italics, lining tabular numerals for money and stats.  
-Godot: engine default font at 8 / 16 viewport px (32 / 64 on screen, so all HUD text counts as large). A pixel font is a separate decision; none is committed.
+Godot HUD: **Silkscreen** (OFL, `godot/fonts/`) — Regular for labels, Bold for buttons, at 8 / 16 viewport px only (32 / 64 on screen, so all HUD text counts as large). Antialiasing and hinting off (`godot/ui/PixelFont.cs`).
+
+| Candidate (8px) | Longest date line* | Verdict |
+|---|---|---|
+| Press Start 2P | 424px | NES-true but overflows the 304px status label |
+| Pixelify Sans | 209px | Mushy at 8px; built for display sizes |
+| **Silkscreen** | 276px | Crisp, fits; all caps echoes Cinzel's inscription voice |
+
+\* `ante diem XVIII Kalendas Septembres, a.u.c. DCCLXXXII` — `Calendar.Format`'s longest form.
+
+Silkscreen is caps-only, so Latin italics do not exist in the HUD; the site keeps them.
