@@ -52,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Kitchen *thermopolium* (lv2 stall / lv3 dishes) is the current systems beat. Godot waits.
+The queue is [`production/task_board.md`](production/task_board.md). Sprint **courtyard-morning** (2026-10-08): the Godot yard shows the living familia and their morning order; Forum and Locatio get a 320×180 design lock. Console stays the host. Holds: no virtus / vigor / palmae retune; no Wave 3b until the walk hook lands. Economy knobs stay in `production/economy.md`.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 
