@@ -29,3 +29,20 @@ Playtest **holds** ([`production/playtest_m2.md`](production/playtest_m2.md)):
 - Engine switch before the console loop is loved ([`production/decisions/001_console_ludus.md`](production/decisions/001_console_ludus.md))
 
 **Godot editor zip** is still a local install (`tools/godot-editor/`, gitignored). C# restore / .NET 8 targeting shipped in PR #12 — see [`godot/README.md`](godot/README.md). Do not switch the playable host off the console.
+
+## Cursor Cloud specific instructions
+
+Image (`.cursor/Dockerfile`) has .NET SDK 8 and 10 in `/usr/share/dotnet` (`dotnet` on `PATH`) plus Python 3 and Pillow. There is no boot daemon: the playable host is the console build, not a server.
+
+```bash
+dotnet restore Amphiteater.slnx
+dotnet restore godot/Amphiteater.Godot.csproj
+dotnet build src/Velarium -c Release -o dist
+dotnet test src/Amphiteater.Sim.Tests --nologo
+./dist/Amphiteater --report 200
+dotnet build godot/Amphiteater.Godot.csproj -f net8.0
+```
+
+On Linux the host is `dist/Amphiteater` (the `.exe` name in `build.ps1` / `run.ps1` is the Windows output). Godot editor unzip stays local; restore and `-f net8.0` build do not need it.
+
+PixelLab art batches: `python3 tools/pixellab_gen.py --check` then a wave only when the board allows it. Token is `PIXELLAB_API_TOKEN` or gitignored `pixellab.env` — never commit it. Palette writes need Pillow (`python3-pil`).
