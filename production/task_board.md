@@ -1,16 +1,27 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-10-01 (`ui-tokens`)
+**Last Updated:** 2026-10-08 (`sprint-courtyard-morning`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 
 ## Next Up
-- Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
-- Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
+
+Sprint **courtyard-morning** (planned 2026-10-08 from `master` `f9e3093`). Claim **one** bullet. Console stays the playable host. No virtus / vigor / palmae retune. No PixelLab. Wave 3b stays blocked until `yard-walk-hook` is Done.
+
+- `yard-familia` — Place every **living** gladiator on the yard from the loaded save. South idle frame 0 only: `characters/{murmillo,thraex,retiarius,secutor}_s_idle_00.png` (murmillo may fall back to `sample_murmillo_s.png`). Skip a man whose PNG is missing. Dead men and household stay off the yard. No new art, no animation, no new `Ludus` verbs. End Day stays `Ludus.EndDay` + `Save.Write`. Editor unzip is not required. Verify: `dotnet test src/Amphiteater.Sim.Tests` and `dotnet build godot/Amphiteater.Godot.csproj -f net8.0`.
+- `yard-day-order` — Set `Gladiator.Order` to Palus, Sparring, or Requies (the field `FamiliaScreen` already writes; Latin via `Content.OrderLat`). Click the man, or a HUD cycle if hit-testing needs the editor. No new order, no combat, no forum. End Day still goes through `Ludus.EndDay`, which consumes the order. HUD shows the order. Same verify as `yard-familia`.
+- `yard-walk-hook` — While `Order` is Palus or Sparring, play the wave-3a south walk already on disk: `characters/{slug}_s_walk_00.png` … `_03.png`. Requies and None stay on idle frame 0. After End Day the order clears and the sprite returns to idle. Missing walk frames fall back to idle. This is the hook in `assets/art/ASSET_MAP.md`. Do not generate Wave 3b. Do not change `Combat`.
+- `forum-locatio-320` — Docs only. `docs/design/04_forum_locatio.md` locks Forum and Locatio at the Godot viewport (320×180, integer 4×, roles in `docs/design/03_ui_tokens.md`). Stalls from `Game.ForumScreen` (catasta, household, arms, medicus, rumors); locatio from `Game.LocatioScreen`. The 2026-10-01 canvas was 1280×720 and private — this doc replaces it as the spec. Harena stays out. No Godot scenes, no C#.
+
+Human gates — do not claim:
+
+- Godot courtyard editor run — unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored) and open `godot/project.godot`. C# restore / net8 shipped in PR #12. See `godot/README.md`.
+- Enable GitHub Pages Actions for the marketing site (Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
 
 ## Done this cycle
+- Sprint plan courtyard-morning (`sprint-courtyard-morning`, 2026-10-08) — Next sequenced from an empty Now. No sim or scene code.
 - UI tokens v1 (`ui-tokens`, 2026-10-01) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label.
 - PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
 - Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
@@ -47,6 +58,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 
 ## Blocked / Questions
 Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved. Equipment (2026-09-14) is **additive** knobs only — see `docs/design/02_equipment.md`.
+Wave 3b (hit / down / ko) stays blocked until `yard-walk-hook` is Done (`assets/art/ASSET_MAP.md`). Sprint courtyard-morning does not generate it.
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
