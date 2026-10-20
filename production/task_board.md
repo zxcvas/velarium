@@ -1,17 +1,27 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-10-01 (`ui-tokens`)
+**Last Updated:** 2026-10-20 (`banquet-sprint-plan`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
 
 ## Next Up
-- Godot courtyard editor run — C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
-- Enable GitHub Pages Actions for the marketing site (human: Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
+- Rival *cena* quiz — human answers the six questions in `docs/design/04_banquets.md` (Who sits / night poison / the cup / how many houses / kitchen gate / evening). Not a code claim.
+- `banquet-design-lock` — mark `docs/design/04_banquets.md` Locked after the quiz; copy knobs in `production/economy.md` from proposed → live sheet. No C#.
+- `banquet-model-save` — `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip; old saves load.
+- `banquet-host` — Domus invite, pay, refuse, dusk hospitality. No event table, no cup.
+- `banquet-events` — seven-row table; `rumor` seeds the dawn locatio kit (spy-intel law: not flavor-only).
+- `banquet-poison` — optional cup; caught / miss / success; reuse `NextFoePoisoned`; `--report` still never hosts a *cena*.
+- Godot courtyard editor run — **human, do not claim.** C# restore / net8 targeting shipped in PR #12; remaining local step is unzip `Godot_v4.6.3-stable_mono_*.zip` to `tools/godot-editor/` (gitignored). See `godot/README.md`.
+- Enable GitHub Pages Actions for the marketing site (**human:** Settings → Pages → Source = GitHub Actions) so `master` deploys `marketing/site/`.
+
+Parked (not this sprint): courtyard-morning (draft PR #27 — yard familia / day order / walk hook / Forum-Locatio 320). Wave 3b still waits on a walk/palus hook. Do not steal that claim while *cena* is the beat.
 
 ## Done this cycle
-- UI tokens v1 (`ui-tokens`, 2026-10-01) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label.
+- Banquet sprint plan (`banquet-sprint-plan`, 2026-10-20) — `docs/design/04_banquets.md` draft + quiz; proposed *cena* knobs in `production/economy.md`. No C#. Console stays the host. Courtyard-morning (PR #27) parked.
+- Cloud Agent image Python/Pillow (`cloud-agent-env`, 2026-10-08, PR #28) — PixelLab palette writes need Pillow next to the .NET 8 and 10 SDKs.
+- UI tokens v1 (`ui-tokens`, 2026-10-01, PRs #25–#26) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label. Session log: Forum/Locatio private canvas at 1280×720 still needs a 320×180 re-fit before any Godot scene.
 - PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
 - Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
 - Additive equipment combat (`equip-combat`, 2026-09-14, PR #23) — `Combat.Score` tier bonuses / +4 cap / retiarius −2 / mismatch −1; locatio culture dock reuses `LocatioWrongSudoreDock` / `LocatioWrongOccisusDock` (no stack on wrong *armatura*). No virtus / vigor / palmae retune.
@@ -47,6 +57,7 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 
 ## Blocked / Questions
 Playtest **holds** (`production/playtest_m2.md`): no combat virtus / vigor / palmae retune this sitting; no engine switch before the console loop is loved. Equipment (2026-09-14) is **additive** knobs only — see `docs/design/02_equipment.md`.
+Rival *cena* is **not locked** until the quiz in `docs/design/04_banquets.md` is answered. Draft assumes all-A: rival lanista only; gate poison stays; cup sickens the champion not the guest; one named rival; staffed kitchen; feast forces night rest.
 Thermopolium: lv2 street bowls if cook staffed; lv3 dish pick (*puls*, lentil, *moretum*, posca). Forum rumor can move one dish. Knobs in `production/economy.md`.
 Empty purse closes at dusk. `--report --locatio` day-21 ruin ~6% (PR #7; was ~100%). Default `--report` (UpgradeStall) is fine — kitchen stall income. See `production/economy.md`.
 Wave 1 tileset lower is brick-ish (use `sample_dirt` for yard fill).
