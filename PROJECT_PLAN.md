@@ -52,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Kitchen *thermopolium* (lv2 stall / lv3 dishes) is the current systems beat. Godot waits.
+Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Current systems beat: rival *cena* (draft `docs/design/04_banquets.md`). Godot courtyard-morning (PR #27) stays parked until the console loop is loved.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

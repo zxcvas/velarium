@@ -119,6 +119,10 @@ Separate stock from the familia gladiatoria. Bought cheap at the forum. Cannot f
 
 One named rival at Start (already flavor in `Content.RivalLanistae`). Night is a **choice**: Rest (current RNG), Spy, Poison (foe enters `Vulneratus` — Gameplay concession: wine at the gate), Sabotage (rival misses a day / fama hit). Default actor: a household slave. A gladiator is allowed, higher success, you may lose the asset. Caught: fine, hostility, or the agent does not return. Grit line unchanged: no sexual violence, no child fighters.
 
+### Rival *cena* (draft)
+
+Hospitality at the *culina* for the **named rival lanista**, not for editors or magistrates (*infamia* stays a locked door). Optional cup at the table is a separate verb from gate wine. Draft and quiz: [`04_banquets.md`](04_banquets.md). Not a Godot scene.
+
 ### Familia and body
 
 Keep M1 fields: *armatura*, vigor, virtus, palmae, stantes, missiones, pugnat, status. Add:
@@ -142,7 +146,7 @@ Do not import SC 177 sesterce tables into year 1.
 
 Locatio first (M1). Hosted munus when fama + a palma exist. Crowd shouts *mitte* / *iugula*; we do not encode pollice verso as fact.
 
-*Infamia* is a locked door, not a meter you fill to become consul. Duumviri and aediles appear as employers (`Content.EditorOffices`). Rival lanistae = competing familiae on the same circuit.
+*Infamia* is a locked door, not a meter you fill to become consul. Duumviri and aediles appear as employers (`Content.EditorOffices`). Rival lanistae = competing familiae on the same circuit. A *cena* at your mess is that circuit at table, not a way into the curia ([`04_banquets.md`](04_banquets.md)).
 
 ### Architecture
 
