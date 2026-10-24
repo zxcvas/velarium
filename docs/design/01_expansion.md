@@ -119,9 +119,9 @@ Separate stock from the familia gladiatoria. Bought cheap at the forum. Cannot f
 
 One named rival at Start (already flavor in `Content.RivalLanistae`). Night is a **choice**: Rest (current RNG), Spy, Poison (foe enters `Vulneratus` — Gameplay concession: wine at the gate), Sabotage (rival misses a day / fama hit). Default actor: a household slave. A gladiator is allowed, higher success, you may lose the asset. Caught: fine, hostility, or the agent does not return. Grit line unchanged: no sexual violence, no child fighters.
 
-### Rival *cena* (draft)
+### Rival *cena* (v1 lock)
 
-Hospitality at the *culina* for the **named rival lanista**, not for editors or magistrates (*infamia* stays a locked door). Optional cup at the table is a separate verb from gate wine. Draft and quiz: [`04_banquets.md`](04_banquets.md). Not a Godot scene.
+Hospitality at the *culina* for the **named rival lanista**, not for editors or magistrates (*infamia* stays a locked door). Optional cup at the table is a separate verb from gate wine. Lock: [`04_banquets.md`](04_banquets.md); decision [`../../production/decisions/002_rival_cena.md`](../../production/decisions/002_rival_cena.md). Not a Godot scene. Quiz closed all A (2026-10-24).
 
 ### Familia and body
 

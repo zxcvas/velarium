@@ -52,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Current systems beat: rival *cena* (draft `docs/design/04_banquets.md`). Godot courtyard-morning (PR #27) stays parked until the console loop is loved.
+Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Current systems beat: rival *cena* (locked `docs/design/04_banquets.md`). Next claim `banquet-model-save`. Godot courtyard-morning (PR #27) stays parked.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

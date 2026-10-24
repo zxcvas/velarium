@@ -203,21 +203,23 @@ Success is never flavor-only. Miss (dogs, barred porta) and caught (fine / detai
 
 Poison and sabotage are unchanged. Career AI (`--report`) still rests at night.
 
-## Rival *cena* (proposed, not live)
+## Rival *cena* (v1 lock)
 
-Draft: [`docs/design/04_banquets.md`](../docs/design/04_banquets.md). Do not copy these into `Ludus` until `banquet-design-lock`. Night-ops poison (wine at the gate) is a **different** verb.
+Locked 2026-10-24 (Victor, all A). Rules: [`docs/design/04_banquets.md`](../docs/design/04_banquets.md). Decision: [`decisions/002_rival_cena.md`](decisions/002_rival_cena.md). Constants land in `Ludus` on `banquet-host` / `banquet-poison` — names below are the lock. Night-ops poison (wine at the gate) is a **different** verb.
 
-| Knob | Proposed | Notes |
+| Knob | Value | Code |
 |---|---|---|
-| Gate | staffed kitchen, any level | cook required; stall lv2 is unrelated |
-| Cost | 48 + 12 × kitchen level | lv1 60 / lv2 72 / lv3 84; pay on confirm |
-| Cooldown | 4 days | refuse counts |
-| Refuse | hostility ≥ 6 | coin kept (food bought) |
-| Hospitality | hostility −1; 40% fama +1 | never a magistrate dinner |
-| Evening | pending *cena* forces `NightOrder.Rest` | no sneak the same night |
-| Poison catch | 28% + 4 × hostility | new table, not `ResolveNightOps` |
-| Poison miss (not caught) | 35% | guest unharmed |
-| Poison success | `NextFoePoisoned`; 40% also `MissTomorrow` | no guest corpse |
-| Poison caught | hostility +3 (cap 12); fama −2; fine 18–36 | skip hospitality tick |
+| Gate | staffed kitchen, any level | `Staffed(Kitchen)` |
+| Cost | 48 + 12 × kitchen level (lv1 60 / lv2 72 / lv3 84) | `CenaCostBase` / `CenaCostPerKitchenLevel` |
+| Pay | on confirm | `TryPayCena` (name may move) |
+| Cooldown | 4 days; refuse counts | `CenaCooldownDays` |
+| Refuse | hostility ≥ 6; coin kept | `CenaRefuseHostility` |
+| Hospitality | hostility −1; 40% fama +1 | `CenaHospitalityFamaPct` |
+| Evening | pending *cena* forces `NightOrder.Rest` | `CenaPending` |
+| Poison catch | 28% + 4 × hostility | `CenaPoisonCatchBase` / `CenaPoisonCatchPerHostility` |
+| Poison miss (not caught) | 35% | `CenaPoisonMissNeed` |
+| Poison success | `NextFoePoisoned`; 40% also `MissTomorrow` | `CenaPoisonMissMorningPct` |
+| Poison caught | hostility +3 (cap 12); fama −2; fine 18–36 | `CenaPoisonCaughtHostility` / `CenaPoisonCaughtFama` / `CenaPoisonFineMin` / `CenaPoisonFineMaxExclusive` |
+| Watch event fine | 8–18 | `CenaWatchFineMin` / `CenaWatchFineMaxExclusive` |
 | Table event | exactly one if they sat | see the design table |
 | Career AI | never hosts | `--report` stays rest-at-night |
