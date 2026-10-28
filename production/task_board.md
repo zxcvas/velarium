@@ -5,7 +5,6 @@
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
-- `banquet-model-save` — claimed `cursor/banquet-model-save-5522` (this agent). `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip in `amphiteater_save.json`; old saves load false / false / 0. No Domus verb, no event table, no cup. Lock: `docs/design/04_banquets.md`, `production/decisions/002_rival_cena.md`. Do not touch PR #27.
 
 ## Next Up
 - `banquet-host` — Domus invite, pay (`CenaCostBase + 12 × kitchen level`), refuse at hostility ≥ 6 (coin kept), dusk hospitality. Pending feast forces `NightOrder.Rest`. No event table, no cup.
@@ -17,7 +16,8 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 Parked (not this sprint): courtyard-morning (draft PR #27 — yard familia / day order / walk hook / Forum-Locatio 320). Wave 3b still waits on a walk/palus hook. Do not steal that claim while *cena* is the beat.
 
 ## Done this cycle
-- Rival *cena* design lock (`banquet-design-lock`, 2026-10-24) — quiz closed all A (Victor). `docs/design/04_banquets.md` Locked; knobs live in `production/economy.md`; decision `production/decisions/002_rival_cena.md`. No C#. Next claim is `banquet-model-save`.
+- Rival *cena* model + save (`banquet-model-save`, 2026-10-28, PR #32) — `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip in `amphiteater_save.json`; old saves load false / false / 0. `EnsureHouse` does not invent a feast. No Domus verb, no event table, no cup. Courtyard-morning (PR #27) untouched.
+- Rival *cena* design lock (`banquet-design-lock`, 2026-10-24, PR #30) — quiz closed all A (Victor). `docs/design/04_banquets.md` Locked; knobs live in `production/economy.md`; decision `production/decisions/002_rival_cena.md`. No C#. Next claim is `banquet-model-save`.
 - Banquet sprint plan (`banquet-sprint-plan`, 2026-10-20, PR #29) — `docs/design/04_banquets.md` draft + quiz; proposed *cena* knobs in `production/economy.md`. No C#. Console stays the host. Courtyard-morning (PR #27) parked.
 - Cloud Agent image Python/Pillow (`cloud-agent-env`, 2026-10-08, PR #28) — PixelLab palette writes need Pillow next to the .NET 8 and 10 SDKs.
 - UI tokens v1 (`ui-tokens`, 2026-10-01, PRs #25–#26) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label. Session log: Forum/Locatio private canvas at 1280×720 still needs a 320×180 re-fit before any Godot scene.
