@@ -1,11 +1,12 @@
-# Design: Rival *cena* (banquets) — draft
+# Design: Rival *cena* (banquets)
 
-**Status:** Draft 2026-10-20 — **quiz open**; not a lock. No C# until the quiz on this page is answered and the lock is claimed (`banquet-design-lock`).  
+**Status:** Locked 2026-10-24 (Victor) — **docs only**; no invite / dusk / cup code in this PR. Quiz closed **all A**.  
 **Product:** **Velarium**. Amphiteater is historical flavor and the sim folder name (`src/Amphiteater.Sim`).  
 **Audience:** implementers of the console banquet sprint  
 **Holds:** no virtus / vigor / palmae retune. Console stays the playable host (`production/decisions/001_console_ludus.md`). Do not fold this into Godot. Do not retune night-ops catch tables this sitting.
 
-Knobs (proposed, not live): [`../../production/economy.md`](../../production/economy.md) (Rival *cena*).  
+Decision: [`../../production/decisions/002_rival_cena.md`](../../production/decisions/002_rival_cena.md).  
+Knobs: [`../../production/economy.md`](../../production/economy.md) (Rival *cena*).  
 Fantasy frame: [`00_overview_stub.md`](00_overview_stub.md). Night ops / kitchen: [`01_expansion.md`](01_expansion.md). Citations: [`../research/ludus_sources.md`](../research/ludus_sources.md).
 
 ---
@@ -93,7 +94,7 @@ No new `RoomKind`. No triclinium tile. No second rival object.
 
 ---
 
-## Economy (proposed)
+## Economy (locked sheet)
 
 Cheaper than a hosted munus (220), dearer than a sneak (free except risk). About two *pro sudore* purses.
 
@@ -158,36 +159,36 @@ Copy is antique and short. Do not write a romance. Do not write a magistrate at 
 
 ---
 
-## Quiz (close these before `banquet-design-lock`)
+## Quiz (closed 2026-10-24)
 
-Answer A / B / C. Draft above assumes the **bold** pick.
+Victor: **all A**. Locked picks:
 
-1. **Who sits?** A) **named rival lanista only** B) rival + editors C) magistrates if fama is high  
-2. **Night poison?** A) **leave wine-at-the-gate; banquet is additive** B) delete gate poison this sprint C) banquet *is* a night order  
-3. **The cup does what?** A) **sick champion (`NextFoePoisoned`) ± missed morning** B) chance to kill the guest C) only a fama / hostility swing, never the sand  
-4. **How many houses?** A) **one named rival** B) 2–3 Campanian lanistae this sprint C) unlock a circuit after first hosted munus  
-5. **Gate?** A) **staffed kitchen, any level** B) kitchen lv2+ (stall) C) purse only  
-6. **The evening?** A) **feast forces night rest (no sneak the same night)** B) feast and sneak both resolve C) feast is an afternoon menu like locatio, night unchanged  
-
-If every answer stays on A, the draft becomes the lock with only copy edits.
+1. **Who sits?** named rival lanista only  
+2. **Night poison?** leave wine-at-the-gate; banquet is additive  
+3. **The cup?** sick champion (`NextFoePoisoned`) ± missed morning — no guest corpse  
+4. **How many houses?** one named rival  
+5. **Gate?** staffed kitchen, any level  
+6. **The evening?** feast forces night rest (no sneak the same night)  
 
 ---
 
-## PR plan (after lock)
+## Sprint (after this lock)
 
-Each claim is independently playable. Console build required. One claim at a time.
+Each claim is independently playable. Console build required. One claim at a time. Do not start a later claim in the same PR.
 
-### `banquet-design-lock`
-Docs only: this file marked Locked, economy knobs not "proposed". No C#.
+### `banquet-design-lock` (this PR)
+Docs only. This file Locked. Economy knobs are the live sheet (constants named, not yet in `Ludus`). Decision `002_rival_cena.md`. No C#.
 
 ### `banquet-model-save`
-`CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip; old saves load.
+**Files:** `src/Amphiteater.Sim/Models.cs` (`GameState`), `Save.cs` already serializes the DTO.  
+**Accept:** `CenaPending` / `CenaPoison` / `CenaCooldown` round-trip in `amphiteater_save.json`. Old saves load with false / false / 0. `EnsureHouse` does not invent a feast. Tests next to `EquipmentSaveTests`. No Domus verb.
 
 ### `banquet-host`
-Domus invite, pay, refuse, dusk hospitality (hostility / fama). No event table, no cup.
+**Files:** `Ludus` / `Ludus.House.cs`, `Content`, `src/Velarium/Game.cs` (Domus).  
+**Accept:** staffed-kitchen + purse + cooldown gate; pay on confirm (`CenaCostBase + CenaCostPerKitchenLevel × level`); refuse at hostility ≥ `CenaRefuseHostility` keeps the coin; pending feast forces `NightOrder.Rest`; dusk hospitality hostility −1 and 40% fama +1 if they sat. No event table. No cup (ignore `CenaPoison` or do not offer it yet). `--report` still never invites.
 
 ### `banquet-events`
-The seven-row table. `rumor` must seed the dawn offer.
+**Accept:** exactly one row from the table if they sat. `rumor` seeds dawn locatio kit (`SpyIntelKind.TomorrowArmatura`); if already seeded, `toast`. None kill the guest. Poison-caught skip is N/A until the cup PR.
 
 ### `banquet-poison`
-The cup. Caught / miss / success. Tests: poison still outranks spy-weak; `--report` still never hosts a *cena*.
+**Accept:** Domus offers the cup. New catch table (`CenaPoisonCatchBase + CenaPoisonCatchPerHostility × hostility`), not `ResolveNightOps`. Success sets `NextFoePoisoned`, 40% also `MissTomorrow`. Caught: hostility +3, fama −2, fine 18–36, skip hospitality. Miss: guest unharmed. Tests: poison still outranks spy-weak; `--report` still never hosts a *cena*.
