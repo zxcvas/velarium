@@ -261,6 +261,9 @@ public sealed class GameState
     public DishKind FoodRumorDish { get; set; }
     public int FoodRumorDemand { get; set; }
     public int FoodRumorPrice { get; set; }
+    public bool CenaPending { get; set; }
+    public bool CenaPoison { get; set; }
+    public int CenaCooldown { get; set; }
 
     public string FullName => $"{Praenomen} {Nomen} {Cognomen}".Trim();
     public IEnumerable<Gladiator> Living => Familia.Where(g => g.Alive);

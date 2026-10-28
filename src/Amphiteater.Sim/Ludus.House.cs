@@ -139,6 +139,8 @@ public static partial class Ludus
         s.Rival ??= MakeRival(rng);
         if (s.LaborMarket.Count == 0)
             RefreshLaborMarket(s, rng);
+        // CenaPending / CenaPoison / CenaCooldown stay as deserialized
+        // (false / false / 0 when missing). Do not invent a feast.
     }
 
     public static RivalLudus MakeRival(Random rng)

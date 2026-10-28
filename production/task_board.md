@@ -1,13 +1,13 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-10-24 (`banquet-design-lock`)
+**Last Updated:** 2026-10-28 (`banquet-model-save`)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
 
 ## Now
+- `banquet-model-save` — claimed `cursor/banquet-model-save-5522` (this agent). `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip in `amphiteater_save.json`; old saves load false / false / 0. No Domus verb, no event table, no cup. Lock: `docs/design/04_banquets.md`, `production/decisions/002_rival_cena.md`. Do not touch PR #27.
 
 ## Next Up
-- `banquet-model-save` — `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip; old saves load false / false / 0. No Domus verb. Lock: `docs/design/04_banquets.md`.
 - `banquet-host` — Domus invite, pay (`CenaCostBase + 12 × kitchen level`), refuse at hostility ≥ 6 (coin kept), dusk hospitality. Pending feast forces `NightOrder.Rest`. No event table, no cup.
 - `banquet-events` — seven-row table; `rumor` seeds the dawn locatio kit (spy-intel law: not flavor-only). None kill the guest.
 - `banquet-poison` — optional cup; new catch table, not `ResolveNightOps`; reuse `NextFoePoisoned`; `--report` still never hosts a *cena*.
