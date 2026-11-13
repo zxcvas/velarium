@@ -5,7 +5,7 @@
 **Consumers:** later Godot; console stays text.  
 **Style:** `STYLE.md` — NES/SNES, cartoon KO, Pompeii kit.
 
-PixelLab `GET /balance` **200** (2026-08-31): token valid. USD 0; Tier 1 subscription generations pay for pixflux. Run `python tools/pixellab_gen.py --check`.
+PixelLab `GET /balance` without a bearer returns **401** (checked 2026-11-13). This cloud agent has no `PIXELLAB_API_TOKEN` and no `pixellab.env`, so the account balance was not re-read. Last authenticated check on record is **200** on 2026-08-31 (USD 0; Tier 1 generations pay for pixflux). Run `python3 tools/pixellab_gen.py --check` where the token is present.
 
 Session Imagine stills are reference, not the pack.
 
@@ -219,5 +219,6 @@ Crowd is a **tile** of heads, not a sim of pollice verso.
 1. Wave 0–2 idles are generated (murmillo wave 0; thraex / secutor wave 2; retiarius + household recreate 2026-09-12). Soft-fail retiarius kit + secutor crest notes stay.
 2. Wave 3a south idle/walk/attack **shipped with PNGs** — 48 frames under `characters/{slug}_s_{clip}_{00..03}.png` plus recreate 4-dir idles. Jobs in `WAVE3A_SOUTH_LOG.md`. **Hold Wave 3b** until Godot walk/palus hook.
 3. Re-pull zips only if a frame is missing (no create, no `--animate`): `python tools/pixellab_wave3a.py --pull`. Wave 2 still: `python tools/pixellab_gen.py --wave 2 --only char_<id> --from-character-id <uuid>`.
+4. New generation goes through `python3 tools/pixellab_batch.py` (one manifest per artist; several artists only on different manifests). The queued file is `batches/wave3b-south.json` and its gate refuses `--run` until the board lifts Wave 3b.
 
 Imagine `assets/art/style_lock.png` is mood only — never `color_image`.

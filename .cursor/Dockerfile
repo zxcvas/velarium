@@ -8,6 +8,8 @@ RUN apt-get update \
         curl \
         git \
         libicu74 \
+        python3 \
+        python3-pil \
     && rm -rf /var/lib/apt/lists/*
 
 # Godot 4.6 C# still targets net8.0; the console host stays on net10.

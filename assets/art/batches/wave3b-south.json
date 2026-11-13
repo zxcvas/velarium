@@ -1,0 +1,284 @@
+{
+  "id": "wave3b-south",
+  "gate": "wave-3b",
+  "workers": 3,
+  "note": "Held. Hit, down, and ko, south only, four armaturae. Household has no 3b clips. --run refuses until the board lifts the hold.",
+  "jobs": [
+    {
+      "id": "murmillo-hit",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "murmillo",
+        "clip": "hit",
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609"
+      },
+      "body": {
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "hit",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. one flinch when struck, readable impact, feet stay put, not a loop",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 814
+      }
+    },
+    {
+      "id": "murmillo-down",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "murmillo",
+        "clip": "down",
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609"
+      },
+      "body": {
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "down",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. fall to one knee then the ground, not a loop, hold the last pose, no blood",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 824
+      }
+    },
+    {
+      "id": "murmillo-ko",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "murmillo",
+        "clip": "ko",
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609"
+      },
+      "body": {
+        "character_id": "b531be43-c3c1-481d-b7d4-6c2f120e6609",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "ko",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. cartoon knockout, X eyes and tiny stars, no wound, no gore, hold the last pose",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 834
+      }
+    },
+    {
+      "id": "thraex-hit",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "thraex",
+        "clip": "hit",
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c"
+      },
+      "body": {
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "hit",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. one flinch when struck, readable impact, feet stay put, not a loop",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 823
+      }
+    },
+    {
+      "id": "thraex-down",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "thraex",
+        "clip": "down",
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c"
+      },
+      "body": {
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "down",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. fall to one knee then the ground, not a loop, hold the last pose, no blood",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 833
+      }
+    },
+    {
+      "id": "thraex-ko",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "thraex",
+        "clip": "ko",
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c"
+      },
+      "body": {
+        "character_id": "dc9e6a43-a406-45c6-b2e8-3838f3a77c4c",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "ko",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. cartoon knockout, X eyes and tiny stars, no wound, no gore, hold the last pose",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 843
+      }
+    },
+    {
+      "id": "retiarius-hit",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "retiarius",
+        "clip": "hit",
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96"
+      },
+      "body": {
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "hit",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. one flinch when struck, readable impact, feet stay put, not a loop",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 1825
+      }
+    },
+    {
+      "id": "retiarius-down",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "retiarius",
+        "clip": "down",
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96"
+      },
+      "body": {
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "down",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. fall to one knee then the ground, not a loop, hold the last pose, no blood",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 1835
+      }
+    },
+    {
+      "id": "retiarius-ko",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "retiarius",
+        "clip": "ko",
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96"
+      },
+      "body": {
+        "character_id": "e227393a-96ad-4210-aeb6-afb42ff0ae96",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "ko",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. cartoon knockout, X eyes and tiny stars, no wound, no gore, hold the last pose",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 1845
+      }
+    },
+    {
+      "id": "secutor-hit",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "secutor",
+        "clip": "hit",
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e"
+      },
+      "body": {
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "hit",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. one flinch when struck, readable impact, feet stay put, not a loop",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 827
+      }
+    },
+    {
+      "id": "secutor-down",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "secutor",
+        "clip": "down",
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e"
+      },
+      "body": {
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "down",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. fall to one knee then the ground, not a loop, hold the last pose, no blood",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 837
+      }
+    },
+    {
+      "id": "secutor-ko",
+      "path": "/animate-character",
+      "attach_palette": true,
+      "pull": {
+        "slug": "secutor",
+        "clip": "ko",
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e"
+      },
+      "body": {
+        "character_id": "4fb8a6da-eef8-4c8d-a31a-31ca17b3360e",
+        "mode": "v3",
+        "directions": [
+          "south"
+        ],
+        "frame_count": 4,
+        "animation_name": "ko",
+        "action_description": "NES SNES era pixel art, 16 color, chunky pixels, 1px outline, low top-down south facing. cartoon knockout, X eyes and tiny stars, no wound, no gore, hold the last pose",
+        "async_mode": true,
+        "keep_first_frame": false,
+        "seed": 847
+      }
+    }
+  ]
+}

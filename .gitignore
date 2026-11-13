@@ -18,6 +18,9 @@ assets/art/style_lock.png
 .env.local
 pixellab.env
 
+# PixelLab batch claims (job ids). Not the token.
+assets/art/prompts/batch-claims/
+
 # IDE / editor
 .vs/
 .vscode/
