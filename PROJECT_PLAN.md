@@ -52,7 +52,7 @@ Core loops:
 - No major art or audio in M1.
 
 ## Next
-Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Current systems beat: rival *cena* (locked `docs/design/04_banquets.md`). Next claim `banquet-model-save`. Godot courtyard-morning (PR #27) stays parked.
+Playtest holds. Empty purse closes the ludus. Economy knobs: `production/economy.md`. Sprint 2026-11-13 plays the locked rival *cena* (`docs/design/04_banquets.md`): `banquet-host`, then `banquet-events`, then `banquet-poison`. Model/save already shipped (PR #32). Godot courtyard-morning (PR #27) stays parked. PixelLab wave 3b stays held; batches go through `tools/pixellab_batch.py`.
 
 Headless: `.\dist\Amphiteater.exe --report 200`
 

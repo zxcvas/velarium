@@ -30,6 +30,8 @@ When handing a task to a subagent:
 - Point to relevant files/docs.
 - Specify any constraints (e.g. "only placeholder", "keep exe runnable").
 
+Art batches go to the artist (`agents/subagents/artist.md`). One manifest per artist. Several artists may run at once only on different manifests. They dry-run first. They do not pass `--hold-lifted` unless the board says that gate is open.
+
 ## Tools the Organizer Uses
 - All file, terminal, search, and build tools.
 - The todo_write tool for tracking its own multi-step work.

@@ -20,11 +20,7 @@ from pixellab_gen import (
     palette_body,
     print_balance,
     save_image,
-    token,  # noqa: F401 — load/validate token path exists
 )
-
-# Confirm token loads without printing it.
-_ = token()
 
 BACKUP_DIR = Path("/workspace/velarium/wave3a_idle_still_backup")
 ENDPOINT = "/animate-character"

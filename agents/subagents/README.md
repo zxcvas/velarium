@@ -13,7 +13,7 @@ Each file describes:
 - reviewer.md — code review, verification, suggestions
 - designer.md — game design, systems, balance, content outlines
 - writer.md — narrative, flavor text, documentation
-- artist.md — art direction, asset specs (later)
+- artist.md — PixelLab batches; one manifest per agent, several agents only on different manifests
 - qa.md — testing, edge cases, reproducibility
 
 More will be added or split as needed.

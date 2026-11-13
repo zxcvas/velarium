@@ -1,8 +1,20 @@
 # Amphiteater Task Board
 
-**Last Updated:** 2026-10-28 (`banquet-model-save`)
+**Last Updated:** 2026-11-13 (`art-batch-dispatch`, sprint plan)
 
 Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent memory as a second board.
+
+## Sprint — 2026-11-13
+
+Play the locked rival *cena* on the console. One claim, one PR, in this order. No virtus / vigor / palmae retune. No engine switch. `--report` does not host a *cena*.
+
+1. `banquet-host`
+2. `banquet-events`
+3. `banquet-poison`
+
+Spec: `docs/design/04_banquets.md`. Knobs: `production/economy.md`. Decision `002_rival_cena.md`. Model/save already shipped (PR #32).
+
+Art on this sitting does not spend. Wave 3b stays held (Godot walk/palus hook). The artist subagent and `tools/pixellab_batch.py` can dry-run `assets/art/batches/wave3b-south.json`. `--run` stays refused until a human lifts the hold. Authenticated PixelLab `--check` needs `PIXELLAB_API_TOKEN` on the agent (not in the repo). Host `GET /balance` without a bearer is 401 as of 2026-11-13.
 
 ## Now
 
@@ -16,10 +28,11 @@ Now / Next / Blocked here is the queue. Do not treat `TASK_SCHEDULE.md` or agent
 Parked (not this sprint): courtyard-morning (draft PR #27 — yard familia / day order / walk hook / Forum-Locatio 320). Wave 3b still waits on a walk/palus hook. Do not steal that claim while *cena* is the beat.
 
 ## Done this cycle
+- PixelLab batch dispatch (`art-batch-dispatch`, 2026-11-13) — artist subagent; `tools/pixellab_batch.py` runs up to 4 jobs in flight and claims each job before POST so a second agent skips it. Wave 3b manifest is queued and gated. No generation. Master `.cursor/Dockerfile` installs `python3` and `python3-pil` (PR #28 had merged into draft courtyard PR #27, not `master`). The running image picks that up on the next environment build.
 - Rival *cena* model + save (`banquet-model-save`, 2026-10-28, PR #32) — `CenaPending` / `CenaPoison` / `CenaCooldown` on `GameState`; JSON round-trip in `amphiteater_save.json`; old saves load false / false / 0. `EnsureHouse` does not invent a feast. No Domus verb, no event table, no cup. Courtyard-morning (PR #27) untouched.
 - Rival *cena* design lock (`banquet-design-lock`, 2026-10-24, PR #30) — quiz closed all A (Victor). `docs/design/04_banquets.md` Locked; knobs live in `production/economy.md`; decision `production/decisions/002_rival_cena.md`. No C#. Next claim is `banquet-model-save`.
 - Banquet sprint plan (`banquet-sprint-plan`, 2026-10-20, PR #29) — `docs/design/04_banquets.md` draft + quiz; proposed *cena* knobs in `production/economy.md`. No C#. Console stays the host. Courtyard-morning (PR #27) parked.
-- Cloud Agent image Python/Pillow (`cloud-agent-env`, 2026-10-08, PR #28) — PixelLab palette writes need Pillow next to the .NET 8 and 10 SDKs.
+- Cloud Agent image Python/Pillow (`cloud-agent-env`, 2026-10-08, PR #28) — PixelLab palette writes need Pillow next to the .NET 8 and 10 SDKs. That PR merged into draft #27, so `master` did not get the packages until `art-batch-dispatch`.
 - UI tokens v1 (`ui-tokens`, 2026-10-01, PRs #25–#26) — `docs/design/03_ui_tokens.md`; semantic roles in `marketing/site/styles.css`; Godot `ui/UiTokens.cs` + `ui/VelariumTheme.cs` on the courtyard HUD. Contrast fixes: secondary text off `iron_rust` (3.4:1), primary CTA label large/bold (4.3:1). No new palette colours. HUD pixel font: Silkscreen (OFL) Regular/Bold in `godot/fonts/`, AA off — Press Start 2P overflowed the status label. Session log: Forum/Locatio private canvas at 1280×720 still needs a 320×180 re-fit before any Godot scene.
 - PixelLab wave 3a south (`art-wave3a-south`, 2026-09-14, PR #16) — 12 south idle/walk/attack jobs + 48 PNG frames for murmillo/thraex/retiarius/secutor; Wave 2 retiarius/household recreate 4-dir idles; tooling `tools/pixellab_wave3a.py`. Soft-fail retiarius kit + secutor crest notes stay. Household idles only (no 3a anims). No Infected/Latifundium. Hold Wave 3b until Godot walk/palus hook.
 - Forum equipment sprint shipped as PRs #18–#23 (design → model → catalog → forum buy → assign → combat).
